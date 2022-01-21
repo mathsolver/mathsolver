@@ -66,28 +66,6 @@ it('knows its root node', function () {
     expect($child->root())->toBe($root);
 });
 
-it('can get all its children and subschildren', function () {
-    $root = new Node('x');
-    $nested1 = $root->appendChild(new Node('1'));
-    $nested2 = $root->appendChild(new Node('2'));
-    $nested3 = $nested1->appendChild(new Node('3'));
-    $nested4 = $nested3->appendChild(new Node('4'));
-    $nested5 = $nested3->appendChild(new Node('5'));
-
-    expect($root->nestedChildren())->toHaveCount(5);
-    expect($root->nestedChildren())->toEqual(collect([$nested1, $nested3, $nested4, $nested5, $nested2]));
-
-    expect($nested1->nestedChildren())->toHaveCount(3);
-    expect($nested1->nestedChildren())->toEqual(collect([$nested3, $nested4, $nested5]));
-
-    expect($nested3->nestedChildren())->toHaveCount(2);
-    expect($nested3->nestedChildren())->toEqual(collect([$nested4, $nested5]));
-
-    expect($nested2->nestedChildren())->toHaveCount(0);
-    expect($nested4->nestedChildren())->toHaveCount(0);
-    expect($nested5->nestedChildren())->toHaveCount(0);
-});
-
 it('can remove a child', function () {
     $parent = new Node('x');
     $child = $parent->appendChild(new Node(8));

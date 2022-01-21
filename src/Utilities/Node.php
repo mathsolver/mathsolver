@@ -177,38 +177,4 @@ class Node
     {
         $this->setChildren(new Collection());
     }
-
-    /**
-     * @return Collection<Node>
-     */
-    public function nestedChildren(): Collection
-    {
-        $nodes = collect();
-
-        foreach ($this->children as $child) {
-            $nodes->push($child);
-            $nodes->push($child->callChildren());
-        }
-
-        return $nodes->flatten();
-    }
-
-    /**
-     * @return Node[]
-     */
-    protected function callChildren(): array
-    {
-        $nodes = [];
-
-        foreach ($this->children as $child) {
-            if ($child->children()->count() > 0) {
-                $child->callChildren();
-            }
-
-            $nodes[] = $child;
-            $nodes[] = $child->children;
-        }
-
-        return $nodes;
-    }
 }
