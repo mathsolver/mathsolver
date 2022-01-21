@@ -9,6 +9,8 @@ class AddLikeTerms
 {
     /**
      * The key-value pairs of totals. For example: ['x' => 6, 'xy' => 9, 'y' => 4].
+     *
+     * @var Collection<string,integer> $totals
      */
     protected Collection $totals;
 
@@ -61,7 +63,7 @@ class AddLikeTerms
             ->filter(fn ($child) => $child->value() === '*')
             ->each(function (Node $times) {
                 $coefficient = $times->numericChildren()->first()?->value() ?? 1;
-                $terms = $times->nonNumericChildren()->map(fn (Node $child) => $child->toString());
+                $terms = $times->nonNumericChildren()->map(fn (Node $child) => $child->toString()); /** @var Collection<string> $terms */
                 $this->pushToTotals($coefficient, $terms);
             })
             ->each(fn ($times) => $this->node->removeChild($times));
@@ -87,6 +89,8 @@ class AddLikeTerms
 
     /**
      * Add a new item to the $totals array.
+     *
+     * @param Collection<string> $terms
      */
     protected function pushToTotals(int $coefficient, Collection $terms): void
     {
@@ -111,6 +115,8 @@ class AddLikeTerms
 
     /**
      * Append a new child to the parent node.
+     *
+     * @param Collection<string> $terms
      */
     protected function appendChildToNode(int $coefficient, Collection $terms): void
     {

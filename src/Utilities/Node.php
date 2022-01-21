@@ -18,13 +18,15 @@ class Node
 
     /**
      * A collection of all direct children of this node.
+     *
+     * @var Collection<Node>
      */
     protected Collection $children;
 
     /**
      * Instantiate a new node.
      */
-    public function __construct($value)
+    public function __construct(string|int|float $value)
     {
         $this->value = $value;
         $this->children = collect([]);
@@ -56,6 +58,8 @@ class Node
 
     /**
      * Return a collection of all the node's direct children.
+     *
+     * @return Collection<Node>
      */
     public function children(): Collection
     {
@@ -64,6 +68,8 @@ class Node
 
     /**
      * Get all numeric children.
+     *
+     * @return Collection<Node>
      */
     public function numericChildren(): Collection
     {
@@ -72,6 +78,8 @@ class Node
 
     /**
      * Get all non-numeric children.
+     *
+     * @return Collection<Node>
      */
     public function nonNumericChildren(): Collection
     {
@@ -135,6 +143,8 @@ class Node
 
     /**
      * Set the children of this note.
+     *
+     * @param Collection<Node> $children
      */
     public function setChildren(Collection $children): self
     {
@@ -146,7 +156,7 @@ class Node
     /**
      * Set the node's value.
      */
-    public function setValue($value): void
+    public function setValue(string|int|float $value): void
     {
         $this->value = $value;
     }
@@ -154,7 +164,7 @@ class Node
     /**
      * Set the node's parent.
      */
-    public function setParent($parent): self
+    public function setParent(self|null $parent): self
     {
         $this->parent = $parent;
         return $this;
@@ -168,6 +178,9 @@ class Node
         $this->setChildren(new Collection());
     }
 
+    /**
+     * @return Collection<Node>
+     */
     public function nestedChildren(): Collection
     {
         $nodes = collect();
@@ -180,12 +193,15 @@ class Node
         return $nodes->flatten();
     }
 
+    /**
+     * @return Node[]
+     */
     protected function callChildren(): array
     {
         $nodes = [];
 
         foreach ($this->children as $child) {
-            if ($child->children) {
+            if ($child->children()->count() > 0) {
                 $child->callChildren();
             }
 

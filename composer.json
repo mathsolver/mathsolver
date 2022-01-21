@@ -23,7 +23,7 @@
     },
     "scripts": {
         "test": "./vendor/bin/pest",
-        "analyse": "vendor/bin/phpstan analyse src tests --level=5"
+        "analyse": "vendor/bin/phpstan analyse src tests --level=6"
     },
     "require": {
         "illuminate/support": "^8.80",

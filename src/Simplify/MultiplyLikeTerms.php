@@ -31,6 +31,8 @@ class MultiplyLikeTerms
 
     /**
      * Calculate the totals of each term and return that collection.
+     *
+     * @return Collection<string,integer>
      */
     protected function calculateTotals(Node $parentNode): Collection
     {
@@ -57,6 +59,8 @@ class MultiplyLikeTerms
 
     /**
      * Loop over the calculated totals and append them to the parent node.
+     *
+     * @param Collection<string,integer> $totals
      */
     protected function appendCalculatedTotals(Node $parentNode, Collection $totals): Node
     {

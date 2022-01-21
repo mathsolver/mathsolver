@@ -57,7 +57,7 @@ class RemoveBracketsWithPlus
     /**
      * Get two collections of nodes to multiply with eachother.
      *
-     * @return Collection[]
+     * @return Collection<Node>[]
      */
     protected function getChildrenToMultiply(): array
     {
@@ -80,6 +80,9 @@ class RemoveBracketsWithPlus
 
     /**
      * Append all the children as a multiplication.
+     *
+     * @param Collection<Node> $children1
+     * @param Collection<Node> $children2
      */
     protected function multiplyChildren(Collection $children1, Collection $children2): void
     {
