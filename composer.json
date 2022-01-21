@@ -18,10 +18,12 @@
         }
     },
     "require-dev": {
-        "pestphp/pest": "dev-master"
+        "pestphp/pest": "dev-master",
+        "phpstan/phpstan": "^1.4"
     },
     "scripts": {
-        "test": "./vendor/bin/pest"
+        "test": "./vendor/bin/pest",
+        "analyse": "vendor/bin/phpstan analyse src tests --level=5"
     },
     "require": {
         "illuminate/support": "^8.80",
