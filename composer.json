@@ -1,0 +1,19 @@
+{
+    "name": "mathsolver/mathsolver",
+    "description": "PHP package to simplify mathematical expressions and solve equations.",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jeroen van Rensen",
+            "role": "Developer",
+            "homepage": "https://www.jeroenvanrensen.nl"
+        }
+    ],
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-4": {
+            "MathSolver\\": "src/"
+        }
+    }
+}
