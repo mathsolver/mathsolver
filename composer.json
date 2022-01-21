@@ -15,5 +15,11 @@
         "psr-4": {
             "MathSolver\\": "src/"
         }
+    },
+    "require-dev": {
+        "pestphp/pest": "dev-master"
+    },
+    "scripts": {
+        "test": "./vendor/bin/pest"
     }
 }
