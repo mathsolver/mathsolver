@@ -4,14 +4,14 @@ namespace MathSolver\Simplify;
 
 use MathSolver\Utilities\Node;
 
-class ExpandBrackets
+class ExpandBrackets extends Step
 {
     /**
      * Expand all brackets with an exponent.
      *
      * For example: (x + 2)^3 -> (x + 2)(x + 2)(x + 2).
      */
-    public function run(Node $node): Node
+    public function handle(Node $node): Node
     {
         $node->setChildren($node->children()->map(fn ($child) => $this->run($child)));
 

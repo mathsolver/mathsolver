@@ -5,14 +5,14 @@ namespace MathSolver\Simplify;
 use Illuminate\Support\Collection;
 use MathSolver\Utilities\Node;
 
-class MultiplyLikeTerms
+class MultiplyLikeTerms extends Step
 {
     /**
      * Replace all double letters with a power.
      *
      * For example "x * x * x" -> "x^3".
      */
-    public function run(Node $parentNode): Node
+    public function handle(Node $parentNode): Node
     {
         $parentNode->setChildren($parentNode->children()->map(fn ($child) => $this->run($child)));
 

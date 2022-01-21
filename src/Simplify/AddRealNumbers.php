@@ -4,12 +4,12 @@ namespace MathSolver\Simplify;
 
 use MathSolver\Utilities\Node;
 
-class AddRealNumbers
+class AddRealNumbers extends Step
 {
     /**
      * Add all real numbers together. For example 9 + 5 -> 14.
      */
-    public function run(Node $node): Node
+    public function handle(Node $node): Node
     {
         $node->setChildren($node->children()->map(fn ($child) => $this->run($child)));
 

@@ -5,7 +5,7 @@ namespace MathSolver\Simplify;
 use Illuminate\Support\Collection;
 use MathSolver\Utilities\Node;
 
-class AddLikeTerms
+class AddLikeTerms extends Step
 {
     /**
      * The key-value pairs of totals. For example: ['x' => 6, 'xy' => 9, 'y' => 4].
@@ -20,23 +20,17 @@ class AddLikeTerms
     protected Node $node;
 
     /**
-     * The class constructer.
-     */
-    public function __construct()
-    {
-        $this->totals = new Collection();
-    }
-
-    /**
      * Combine like terms in an addition. For example 4x + 5x -> 9x and 3y^3 + 6y^3 -> 9y^3.
      */
-    public function run(Node $node): Node
+    public function handle(Node $node): Node
     {
         $node->setChildren($node->children()->map(fn ($child) => $this->run($child)));
 
         if ($node->value() !== '+') {
             return $node;
         }
+
+        $this->totals = new Collection();
 
         $this->node = $node;
 

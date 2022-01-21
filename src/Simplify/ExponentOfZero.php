@@ -4,14 +4,14 @@ namespace MathSolver\Simplify;
 
 use MathSolver\Utilities\Node;
 
-class ExponentOfZero
+class ExponentOfZero extends Step
 {
     /**
      * Replace all powers with an exponent of zero by a one.
      *
      * For example: 6^0 -> 1, x^0 -> 1.
      */
-    public function run(Node $parentNode): Node
+    public function handle(Node $parentNode): Node
     {
         $parentNode->setChildren($parentNode->children()->map(fn ($child) => $this->run($child)));
 

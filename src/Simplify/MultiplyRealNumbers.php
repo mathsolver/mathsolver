@@ -4,14 +4,14 @@ namespace MathSolver\Simplify;
 
 use MathSolver\Utilities\Node;
 
-class MultiplyRealNumbers
+class MultiplyRealNumbers extends Step
 {
     /**
      * Multiply all real numbers.
      *
      * For example 2 * 3 * 6 -> 36, 2 * 4 * x -> 8 * x.
      */
-    public function run(Node $node): Node
+    public function handle(Node $node): Node
     {
         $node->setChildren($node->children()->map(fn ($child) => $this->run($child)));
 

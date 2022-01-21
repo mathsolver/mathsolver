@@ -4,14 +4,14 @@ namespace MathSolver\Simplify;
 
 use MathSolver\Utilities\Node;
 
-class MultiplyByZero
+class MultiplyByZero extends Step
 {
     /**
      * Replace all multiplications with a zero with a zero.
      *
      * For example: 7 * 0 -> 0, 0 * y -> 0.
      */
-    public function run(Node $parentNode): Node
+    public function handle(Node $parentNode): Node
     {
         $parentNode->setChildren($parentNode->children()->map(fn ($child) => $this->run($child)));
 

@@ -5,7 +5,7 @@ namespace MathSolver\Simplify;
 use Illuminate\Support\Collection;
 use MathSolver\Utilities\Node;
 
-class RemoveBracketsWithPlus
+class RemoveBracketsWithPlus extends Step
 {
     /**
      * The current node to remove the brackets on.
@@ -15,7 +15,7 @@ class RemoveBracketsWithPlus
     /**
      * Remove brackets with a plus. For example 3(p + 4) -> 3p + 3*4 and (x+3)(y-5) -> xy + 5x + 3y + 3*-5.
      */
-    public function run(Node $node): Node
+    public function handle(Node $node): Node
     {
         $node->setChildren($node->children()->map(fn ($child) => $this->run($child)));
         $this->node = $node;
