@@ -11,6 +11,7 @@
         }
     ],
     "minimum-stability": "dev",
+    "prefer-stable": true,
     "autoload": {
         "psr-4": {
             "MathSolver\\": "src/"
@@ -21,5 +22,9 @@
     },
     "scripts": {
         "test": "./vendor/bin/pest"
+    },
+    "require": {
+        "illuminate/support": "^8.80",
+        "illuminate/collections": "^8.80"
     }
 }
