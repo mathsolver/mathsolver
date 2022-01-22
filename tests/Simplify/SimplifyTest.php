@@ -142,3 +142,18 @@ it('removes brackets when the outside presedence is lower', function (string $in
     ['4 - y - (6 + 5)', '-y - 7'],
     ['5 + x - (4 + y)', 'x - y + 1'],
 ]);
+
+it('can calculate powers of real numbers', function (string $input, string $expected) {
+    $tree = StringToTreeConverter::run($input);
+    $result = Simplifier::run($tree);
+    $expected = StringToTreeConverter::run($expected);
+    expect($result)->toEqual($expected);
+})->with([
+    ['5^2', '25'],
+    ['7^3', '343'],
+    ['2^10', '1024'],
+    ['(-5)^2', '25'],
+    ['(-5)^3', '-125'],
+    ['(-7)^4', '2401'],
+    ['-7^4', '-2401'],
+]);

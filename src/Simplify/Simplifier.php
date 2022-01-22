@@ -21,6 +21,7 @@ class Simplifier
         ExponentOfZero::class,
         MultiplyByZero::class,
         AddRealNumbers::class,
+        CalculatePowersOfRealNumbers::class,
     ];
 
     /**
