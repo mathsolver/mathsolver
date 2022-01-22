@@ -19,7 +19,7 @@ class RemoveBracketsWithPlus extends Step
     {
         $this->node = $node;
 
-        if (!$this->shouldRun()) {
+        if (!$this->shouldExecute()) {
             $this->removeNestedOperations();
             return $this->node;
         }
@@ -36,9 +36,17 @@ class RemoveBracketsWithPlus extends Step
     }
 
     /**
-     * Determine whether this check should be run.
+     * This is always true, because this class does its own check.
      */
-    protected function shouldRun(): bool
+    public function shouldRun(Node $node): bool
+    {
+        return true;
+    }
+
+    /**
+     * Determine whether this function should run.
+     */
+    protected function shouldExecute(): bool
     {
         if ($this->node->value() !== '*') {
             return false;

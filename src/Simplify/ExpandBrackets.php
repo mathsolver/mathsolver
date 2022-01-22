@@ -13,7 +13,7 @@ class ExpandBrackets extends Step
      */
     public function handle(Node $node): Node
     {
-        if (!$this->shouldRun($node)) {
+        if (!$this->shouldExecute($node)) {
             return $this->removeDoubleTimes($node);
         }
 
@@ -27,9 +27,17 @@ class ExpandBrackets extends Step
     }
 
     /**
+     * This is always true, because this class does its own check.
+     */
+    public function shouldRun(Node $node): bool
+    {
+        return true;
+    }
+
+    /**
      * Determine whether the function should run.
      */
-    protected function shouldRun(Node $node): bool
+    protected function shouldExecute(Node $node): bool
     {
         if ($node->value() !== '^') {
             return false;

@@ -13,14 +13,14 @@ class MultiplyByZero extends Step
      */
     public function handle(Node $parentNode): Node
     {
-        if ($parentNode->value() !== '*') {
-            return $parentNode;
-        }
+        return new Node(0);
+    }
 
-        if ($parentNode->children()->map(fn ($child) => $child->value())->contains(0)) {
-            return new Node(0);
-        }
-
-        return $parentNode;
+    /**
+     * Determine whether the function should run.
+     */
+    public function shouldRun(Node $node): bool
+    {
+        return $node->value() === '*' && $node->children()->map(fn ($child) => $child->value())->contains(0);
     }
 }

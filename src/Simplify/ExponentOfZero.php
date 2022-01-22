@@ -13,14 +13,14 @@ class ExponentOfZero extends Step
      */
     public function handle(Node $parentNode): Node
     {
-        if ($parentNode->value() !== '^') {
-            return $parentNode;
-        }
+        return new Node(1);
+    }
 
-        if ($parentNode->children()->last()->value() == 0) {
-            return new Node(1);
-        }
-
-        return $parentNode;
+    /**
+     * Determine whether the function should run.
+     */
+    public function shouldRun(Node $node): bool
+    {
+        return $node->value() === '^' && $node->children()->last()->value() == 0;
     }
 }

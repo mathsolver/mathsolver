@@ -11,10 +11,6 @@ class AddRealNumbers extends Step
      */
     public function handle(Node $node): Node
     {
-        if ($node->value() !== '+') {
-            return $node;
-        }
-
         $total = $node->numericChildren()
             ->each(fn ($child) => $node->removeChild($child))
             ->reduce(fn ($total, $number) => $number->value() + $total, 0);
@@ -28,5 +24,13 @@ class AddRealNumbers extends Step
         }
 
         return tap($node)->setChildren($node->children()->values());
+    }
+
+    /**
+     * Determine whether the function should run.
+     */
+    public function shouldRun(Node $node): bool
+    {
+        return $node->value() === '+';
     }
 }

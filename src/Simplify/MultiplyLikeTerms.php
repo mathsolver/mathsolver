@@ -14,10 +14,6 @@ class MultiplyLikeTerms extends Step
      */
     public function handle(Node $parentNode): Node
     {
-        if ($parentNode->value() !== '*') {
-            return $parentNode;
-        }
-
         $totals = $this->calculateTotals($parentNode);
 
         $parentNode->removeAllChildren();
@@ -25,6 +21,14 @@ class MultiplyLikeTerms extends Step
         $parentNode = $this->appendCalculatedTotals($parentNode, $totals);
 
         return $this->getReturnValue($parentNode);
+    }
+
+    /**
+     * Determine whether the function should run.
+     */
+    public function shouldRun(Node $node): bool
+    {
+        return $node->value() === '*';
     }
 
     /**

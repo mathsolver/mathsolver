@@ -24,10 +24,6 @@ class AddLikeTerms extends Step
      */
     public function handle(Node $node): Node
     {
-        if ($node->value() !== '+') {
-            return $node;
-        }
-
         $this->totals = new Collection();
 
         $this->node = $node;
@@ -43,6 +39,14 @@ class AddLikeTerms extends Step
         }
 
         return $this->node;
+    }
+
+    /**
+     * Determine whether the function should run.
+     */
+    public function shouldRun(Node $node): bool
+    {
+        return $node->value() === '+';
     }
 
     /**

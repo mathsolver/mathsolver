@@ -13,10 +13,6 @@ class RemoveBrackets extends Step
      */
     public function handle(Node $node): Node|Collection
     {
-        if ($node->value() !== '(') {
-            return $node;
-        }
-
         // inside brackets is higher than outside
         if (StringToTreeConverter::getPrecedence($node->children()->first()->value()) > StringToTreeConverter::getPrecedence($node->parent()->value())) {
             $node->parent()->removeChild($node);
@@ -31,5 +27,13 @@ class RemoveBrackets extends Step
         }
 
         return $node;
+    }
+
+    /**
+     * Determine whether the function should run.
+     */
+    public function shouldRun(Node $node): bool
+    {
+        return $node->value() === '(';
     }
 }
