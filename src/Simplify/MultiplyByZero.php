@@ -13,8 +13,6 @@ class MultiplyByZero extends Step
      */
     public function handle(Node $parentNode): Node
     {
-        $parentNode->setChildren($parentNode->children()->map(fn ($child) => $this->run($child)));
-
         if ($parentNode->value() !== '*') {
             return $parentNode;
         }

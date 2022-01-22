@@ -17,7 +17,6 @@ class RemoveBracketsWithPlus extends Step
      */
     public function handle(Node $node): Node
     {
-        $node->setChildren($node->children()->map(fn ($child) => $this->run($child)));
         $this->node = $node;
 
         if (!$this->shouldRun()) {

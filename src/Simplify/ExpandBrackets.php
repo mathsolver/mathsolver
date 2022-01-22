@@ -13,8 +13,6 @@ class ExpandBrackets extends Step
      */
     public function handle(Node $node): Node
     {
-        $node->setChildren($node->children()->map(fn ($child) => $this->run($child)));
-
         if (!$this->shouldRun($node)) {
             return $this->removeDoubleTimes($node);
         }

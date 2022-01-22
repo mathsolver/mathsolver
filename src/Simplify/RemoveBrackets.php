@@ -13,8 +13,6 @@ class RemoveBrackets extends Step
      */
     public function handle(Node $node): Node|Collection
     {
-        $node->setChildren($node->children()->map(fn ($child) => $this->run($child))->flatten());
-
         if ($node->value() !== '(') {
             return $node;
         }

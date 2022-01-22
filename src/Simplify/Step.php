@@ -17,6 +17,8 @@ abstract class Step
      */
     public static function run(Node $node): Node|Collection
     {
+        $node->setChildren($node->children()->map(fn ($child) => self::run($child))->flatten());
+
         return (new (get_called_class()))->handle($node); /** @phpstan-ignore-line */
     }
 }

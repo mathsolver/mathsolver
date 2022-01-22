@@ -13,8 +13,6 @@ class MultiplyRealNumbers extends Step
      */
     public function handle(Node $node): Node
     {
-        $node->setChildren($node->children()->map(fn ($child) => $this->run($child)));
-
         if ($node->value() !== '*') {
             return $node;
         }
