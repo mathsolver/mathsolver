@@ -77,7 +77,7 @@ class StringToTreeConverter
     /**
      * Get the precedence of a term or operator.
      */
-    protected static function getPrecedence(string $value, bool $nested = false): int
+    public static function getPrecedence(string $value, bool $nested = false): int
     {
         return match ($value) {
             '+' => 2,

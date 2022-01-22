@@ -13,6 +13,7 @@ class Simplifier
      */
     protected static array $steps = [
         ExpandBrackets::class,
+        RemoveBrackets::class,
         RemoveBracketsWithPlus::class,
         MultiplyRealNumbers::class,
         MultiplyLikeTerms::class,

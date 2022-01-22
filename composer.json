@@ -19,7 +19,8 @@
     },
     "require-dev": {
         "pestphp/pest": "dev-master",
-        "phpstan/phpstan": "^1.4"
+        "phpstan/phpstan": "^1.4",
+        "symfony/var-dumper": "^6.0"
     },
     "scripts": {
         "test": "./vendor/bin/pest",

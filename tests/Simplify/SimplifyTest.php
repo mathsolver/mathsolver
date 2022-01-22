@@ -125,3 +125,20 @@ it('simplifies with double brackets with plus', function (string $input, string 
     ['(x + 3)(3x + y + 6)', '3x^2 + xy + 15x + 3y + 18'],
     ['(a + b)(2a - b - 1)', '2a^2 + ab - a - b^2 - b'],
 ]);
+
+it('removes brackets when the outside presedence is lower', function (string $input, string $expected) {
+    $tree = StringToTreeConverter::run($input);
+    $result = Simplifier::run($tree);
+    $expected = StringToTreeConverter::run($expected);
+    expect($result)->toEqual($expected);
+})->with([
+    ['(7x) + 3', '7x + 3'],
+    ['6(5)', '30'],
+    ['8(2x) - 14x', '2x'],
+    ['5 + (4 * 3)', '17'],
+    ['5x(3)', '15x'],
+    ['7y(3x)', '21xy'],
+    ['5 + 3 + (4 + x)', 'x + 12'],
+    ['4 - y - (6 + 5)', '-y - 7'],
+    ['5 + x - (4 + y)', 'x - y + 1'],
+]);
