@@ -9,6 +9,8 @@ abstract class Step
 {
     /**
      * Handle the actual execution of the simplifying process.
+     *
+     * @return Collection<Node>|Node
      */
     abstract public function handle(Node $node): Node|Collection;
 
@@ -19,6 +21,8 @@ abstract class Step
 
     /**
      * A facade for running simplify steps.
+     *
+     * @return Collection<Node>|Node
      */
     public static function run(Node $node): Node|Collection
     {
