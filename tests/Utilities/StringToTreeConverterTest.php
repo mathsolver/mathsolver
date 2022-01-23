@@ -283,3 +283,10 @@ it('can convert terms with multiply', function () {
     $result = StringToTreeConverter::run('3x + 4');
     expect($result)->toEqual($root);
 });
+
+it('can convert functions into their own nodes', function () {
+    $root = new Node('root');
+    $root->appendChild(new Node(9));
+    $result = StringToTreeConverter::run('root(9)');
+    expect($result)->toEqual($root);
+});

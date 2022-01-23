@@ -17,10 +17,15 @@ class StringToTreeConverter
             ->replaceMatches('/-([^0-9])/', '-1$1') // Replace - with -1
             ->replaceMatches('/([0-9a-z.])\(/', '$1*(') // 5x(3y - 4) -> 5x * (3y - 4)
             ->replace(')(', ')*(')
+            ->replace('root*', 'root')
             ->replaceMatches('/[+|\/|*|^|(|)]/', ' $0 ') // Add spaces to operators
+            ->replace(',', ' , ')
             ->explode(' ') // Explode on spaces
             ->flatMap(function ($term) { // Expand terms like 7xy or abc to 7*y and a*b*c
                 if (!Str::match('/[-]?[0-9.]*[a-z]+/', $term)) {
+                    return [$term];
+                }
+                if (in_array($term, ['root'])) {
                     return [$term];
                 }
                 $terms = array_merge($number = [preg_replace('/[^0-9-.]/', '', $term)], $letters = str_split(preg_replace('/[^a-z]/', '', $term)));
@@ -36,6 +41,7 @@ class StringToTreeConverter
         foreach ($terms as $term) {
             if (self::getPrecedence($term) < self::getPrecedence($node->value())) {
                 $done = false;
+
                 while (!$done) {
                     if ($node->parent()) {
                         if (self::getPrecedence($term, true) > self::getPrecedence($node->parent()->value(), true)) {
@@ -48,6 +54,11 @@ class StringToTreeConverter
                             $done = true;
                         } else {
                             $node = $node->parent();
+
+                            if ($term === ')' && $node->value() === 'root') {
+                                $done = true;
+                                continue;
+                            }
 
                             if ($node->value() == '(') {
                                 $done = true;
@@ -66,6 +77,10 @@ class StringToTreeConverter
                     }
                 }
             } else {
+                if ($term === '(' && $node->value() === 'root') {
+                    continue;
+                }
+
                 $node = $node->appendChild(new Node($term));
             }
         }
@@ -86,7 +101,7 @@ class StringToTreeConverter
             '^' => 5,
             '(' => $nested ? 1 : 19,
             ')' => $nested ? 1 : 18,
-            default => 20,
+            default => in_array($value, ['root']) ? 17 : 20,
         };
     }
 }
