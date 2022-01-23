@@ -7,6 +7,16 @@ use Illuminate\Support\Str;
 class StringToTreeConverter
 {
     /**
+     * A list of functions to parse.
+     *
+     * @var array<string>
+     */
+    protected static array $functions = [
+        'root',
+        'tan',
+    ];
+
+    /**
      * Convert a math expression to a math tree.
      */
     public static function run(string $expression): Node
@@ -17,7 +27,12 @@ class StringToTreeConverter
             ->replaceMatches('/-([^0-9])/', '-1$1') // Replace - with -1
             ->replaceMatches('/([0-9a-z.])\(/', '$1*(') // 5x(3y - 4) -> 5x * (3y - 4)
             ->replace(')(', ')*(')
-            ->replace('root*', 'root')
+            ->pipe(function ($string) { // Replace root* with root, and tan* with tan
+                foreach (self::$functions as $function) {
+                    $string = $string->replace("{$function}*", $function);
+                }
+                return $string;
+            })
             ->replaceMatches('/[+|\/|*|^|(|)]/', ' $0 ') // Add spaces to operators
             ->replace(',', ' , ')
             ->explode(' ') // Explode on spaces
@@ -25,7 +40,7 @@ class StringToTreeConverter
                 if (!Str::match('/[-]?[0-9.]*[a-z]+/', $term)) {
                     return [$term];
                 }
-                if (in_array($term, ['root'])) {
+                if (in_array($term, self::$functions)) {
                     return [$term];
                 }
                 $terms = array_merge($number = [preg_replace('/[^0-9-.]/', '', $term)], $letters = str_split(preg_replace('/[^a-z]/', '', $term)));
@@ -55,7 +70,7 @@ class StringToTreeConverter
                         } else {
                             $node = $node->parent();
 
-                            if ($term === ')' && $node->value() === 'root') {
+                            if ($term === ')' && in_array($node->value(), self::$functions)) {
                                 $done = true;
                                 continue;
                             }
@@ -77,7 +92,7 @@ class StringToTreeConverter
                     }
                 }
             } else {
-                if ($term === '(' && $node->value() === 'root') {
+                if ($term === '(' && in_array($node->value(), self::$functions)) {
                     continue;
                 }
 
@@ -101,7 +116,7 @@ class StringToTreeConverter
             '^' => 5,
             '(' => $nested ? 1 : 19,
             ')' => $nested ? 1 : 18,
-            default => in_array($value, ['root']) ? 17 : 20,
+            default => in_array($value, self::$functions) ? 17 : 20,
         };
     }
 }

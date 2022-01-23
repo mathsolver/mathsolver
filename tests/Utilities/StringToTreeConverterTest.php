@@ -289,4 +289,9 @@ it('can convert functions into their own nodes', function () {
     $root->appendChild(new Node(9));
     $result = StringToTreeConverter::run('root(9)');
     expect($result)->toEqual($root);
+
+    $root = new Node('tan');
+    $root->appendChild(new Node(45));
+    $result = StringToTreeConverter::run('tan(45)');
+    expect($result)->toEqual($root);
 });
