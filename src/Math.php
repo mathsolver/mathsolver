@@ -12,7 +12,7 @@ class Math
     /**
      * The root node of the current math tree.
      */
-    public Node $tree;
+    protected Node $tree;
 
     /**
      * Convert the given string to a tree.
@@ -27,7 +27,23 @@ class Math
      */
     public function __toString(): string
     {
+        return $this->string();
+    }
+
+    /**
+     * Convert the current math tree to a string.
+     */
+    public function string(): string
+    {
         return TreeToStringConverter::run($this->tree);
+    }
+
+    /**
+     * Return the current math tree.
+     */
+    public function tree(): Node
+    {
+        return $this->tree;
     }
 
     /**
