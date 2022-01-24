@@ -313,3 +313,30 @@ it('can convert functions with other operations', function () {
     $result = StringToTreeConverter::run('5sin(90)');
     expect($result)->toEqual($times);
 });
+
+it('can convert functions with brackets outside', function () {
+    $times = new Node('*');
+    $tangent = $times->appendChild(new Node('tan'));
+    $tangent->appendChild(new Node(45));
+    $brackets = $times->appendChild(new Node('('));
+    $plus = $brackets->appendChild(new Node('+'));
+    $plus->appendChild(new Node('3'));
+    $plus->appendChild(new Node('x'));
+
+    $result = StringToTreeConverter::run('tan(45) * (3 + x)');
+    expect($result)->toEqual($times);
+
+    $result = StringToTreeConverter::run('tan(45)(3 + x)');
+    expect($result)->toEqual($times);
+
+    $times = new Node('*');
+    $brackets = $times->appendChild(new Node('('));
+    $plus = $brackets->appendChild(new Node('+'));
+    $plus->appendChild(new Node('3'));
+    $plus->appendChild(new Node('x'));
+    $tangent = $times->appendChild(new Node('tan'));
+    $tangent->appendChild(new Node(45));
+
+    $result = StringToTreeConverter::run('(3 + x)tan(45)');
+    expect($result)->toEqual($times);
+});

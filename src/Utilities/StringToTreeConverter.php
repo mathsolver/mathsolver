@@ -28,6 +28,7 @@ class StringToTreeConverter
             ->replaceMatches('/([a-z0-9)])-/', '$1+-') // Replace - with +-
             ->replaceMatches('/-([^0-9])/', '-1$1') // Replace - with -1
             ->replaceMatches('/([0-9a-z.])\(/', '$1*(') // 5x(3y - 4) -> 5x * (3y - 4)
+            ->replaceMatches('/\)([a-z0-9])/', ')*$1')
             ->replace(')(', ')*(')
             ->pipe(function ($string) { // Replace root* with root, and tan* with tan
                 foreach (self::$functions as $function) {
