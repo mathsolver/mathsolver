@@ -13,6 +13,8 @@ class StringToTreeConverter
      */
     protected static array $functions = [
         'root',
+        'sin',
+        'cos',
         'tan',
     ];
 
@@ -40,9 +42,15 @@ class StringToTreeConverter
                 if (!Str::match('/[-]?[0-9.]*[a-z]+/', $term)) {
                     return [$term];
                 }
-                if (in_array($term, self::$functions)) {
-                    return [$term];
+
+                // check for functions
+                if (in_array(preg_replace('/[0-9]+([a-z]+)/', '$1', $term), self::$functions)) {
+                    if (preg_replace('/[0-9]+([a-z]+)/', '$1', $term) === $term) {
+                        return [$term];
+                    }
+                    return [preg_replace('/([0-9]+)[a-z]+/', '$1', $term), '*', preg_replace('/[0-9]+([a-z]+)/', '$1', $term)];
                 }
+
                 $terms = array_merge($number = [preg_replace('/[^0-9-.]/', '', $term)], $letters = str_split(preg_replace('/[^a-z]/', '', $term)));
                 return collect($terms)->filter(fn ($term) => !empty($term) || $term == '0')->flatMap(fn ($term) => [$term, '*'])->slice(0, -1)->toArray();
             })

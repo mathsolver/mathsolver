@@ -295,3 +295,21 @@ it('can convert functions into their own nodes', function () {
     $result = StringToTreeConverter::run('tan(45)');
     expect($result)->toEqual($root);
 });
+
+it('can convert functions with other operations', function () {
+    $plus = new Node('+');
+    $times = $plus->appendChild(new Node('*'));
+    $plus->appendChild(new Node(3));
+    $times->appendChild(new Node(2));
+    $root = $times->appendChild(new Node('root'));
+    $root->appendChild(new Node(9));
+    $result = StringToTreeConverter::run('2 * root(9) + 3');
+    expect($result)->toEqual($plus);
+
+    $times = new Node('*');
+    $times->appendChild(new Node(5));
+    $sine = $times->appendChild(new Node('sin'));
+    $sine->appendChild(new Node(90));
+    $result = StringToTreeConverter::run('5sin(90)');
+    expect($result)->toEqual($times);
+});
