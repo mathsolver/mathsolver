@@ -157,3 +157,16 @@ it('can calculate powers of real numbers', function (string $input, string $expe
     ['(-7)^4', '2401'],
     ['-7^4', '-2401'],
 ]);
+
+it('can simplify roots', function (string $input, string $expected) {
+    $tree = StringToTreeConverter::run($input);
+    $result = Simplifier::run($tree);
+    $expected = StringToTreeConverter::run($expected);
+    expect($result)->toEqual($expected);
+})->with([
+    ['root(18, 2)', '3root(2, 2)'],
+    ['root(20, 2)', '2root(5, 2)'],
+    ['2 * root(8, 2)', '4root(2,2)'],
+    ['3root(9, 2)', '9'],
+    ['root(512, 3)', '8'],
+]);

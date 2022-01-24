@@ -15,6 +15,7 @@ class Simplifier
         ExpandBrackets::class,
         RemoveBrackets::class,
         RemoveBracketsWithPlus::class,
+        SimplifyRoots::class,
         MultiplyRealNumbers::class,
         MultiplyLikeTerms::class,
         AddLikeTerms::class,
