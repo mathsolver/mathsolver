@@ -79,11 +79,6 @@ class StringToTreeConverter
                         } else {
                             $node = $node->parent();
 
-                            if ($term === ')' && in_array($node->value(), self::$functions)) {
-                                $done = true;
-                                continue;
-                            }
-
                             if ($node->value() == '(') {
                                 $done = true;
                             }
@@ -101,10 +96,6 @@ class StringToTreeConverter
                     }
                 }
             } else {
-                if ($term === '(' && in_array($node->value(), self::$functions)) {
-                    continue;
-                }
-
                 $node = $node->appendChild(new Node($term));
             }
         }

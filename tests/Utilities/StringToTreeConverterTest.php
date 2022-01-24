@@ -286,14 +286,16 @@ it('can convert terms with multiply', function () {
 
 it('can parse functions into their own nodes', function () {
     $root = new Node('root');
-    $root->appendChild(new Node(9));
+    $brackets = $root->appendChild(new Node('('));
+    $brackets->appendChild(new Node(9));
     $result = StringToTreeConverter::run('root(9)');
     expect($result)->toEqual($root);
 
-    $root = new Node('tan');
-    $root->appendChild(new Node(45));
+    $tangent = new Node('tan');
+    $brackets = $tangent->appendChild(new Node('('));
+    $brackets->appendChild(new Node(45));
     $result = StringToTreeConverter::run('tan(45)');
-    expect($result)->toEqual($root);
+    expect($result)->toEqual($tangent);
 });
 
 it('can parse functions with other operations', function () {
@@ -302,14 +304,16 @@ it('can parse functions with other operations', function () {
     $plus->appendChild(new Node(3));
     $times->appendChild(new Node(2));
     $root = $times->appendChild(new Node('root'));
-    $root->appendChild(new Node(9));
+    $brackets = $root->appendChild(new Node('('));
+    $brackets->appendChild(new Node(9));
     $result = StringToTreeConverter::run('2 * root(9) + 3');
     expect($result)->toEqual($plus);
 
     $times = new Node('*');
     $times->appendChild(new Node(5));
     $sine = $times->appendChild(new Node('sin'));
-    $sine->appendChild(new Node(90));
+    $brackets = $sine->appendChild(new Node('('));
+    $brackets->appendChild(new Node(90));
     $result = StringToTreeConverter::run('5sin(90)');
     expect($result)->toEqual($times);
 });
@@ -317,7 +321,8 @@ it('can parse functions with other operations', function () {
 it('can parse functions with brackets outside', function () {
     $times = new Node('*');
     $tangent = $times->appendChild(new Node('tan'));
-    $tangent->appendChild(new Node(45));
+    $nestedBrackets = $tangent->appendChild(new Node('('));
+    $nestedBrackets->appendChild(new Node(45));
     $brackets = $times->appendChild(new Node('('));
     $plus = $brackets->appendChild(new Node('+'));
     $plus->appendChild(new Node('3'));
@@ -335,8 +340,25 @@ it('can parse functions with brackets outside', function () {
     $plus->appendChild(new Node('3'));
     $plus->appendChild(new Node('x'));
     $tangent = $times->appendChild(new Node('tan'));
-    $tangent->appendChild(new Node(45));
+    $nestedBrackets = $tangent->appendChild(new Node('('));
+    $nestedBrackets->appendChild(new Node(45));
 
     $result = StringToTreeConverter::run('(3 + x)tan(45)');
     expect($result)->toEqual($times);
+});
+
+it('can parse functions with brackets inside', function () {
+    $sine = new Node('sin');
+    $brackets = $sine->appendChild(new Node('('));
+    $plus = $brackets->appendChild(new Node('+'));
+    $plus->appendChild(new Node(90));
+    $times = $plus->appendChild(new Node('*'));
+    $times->appendChild(new Node(3));
+    $innerBrackets = $times->appendChild(new Node('('));
+    $innerPlus = $innerBrackets->appendChild(new Node('+'));
+    $innerPlus->appendChild(new Node('x'));
+    $innerPlus->appendChild(new Node(5));
+
+    $result = StringToTreeConverter::run('sin(90 + 3(x + 5))');
+    expect($result)->toEqual($sine);
 });
