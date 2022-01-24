@@ -355,3 +355,21 @@ it('can parse functions with brackets inside', function () {
     $result = StringToTreeConverter::run('sin(90 + 3(x + 5))');
     expect($result)->toEqual($sine);
 });
+
+it('can parse functions with multiple parameters', function () {
+    $root = new Node('root');
+    $root->appendChild(new Node(16));
+    $root->appendChild(new Node(2));
+    $result = StringToTreeConverter::run('root(16, 2)');
+    expect($result)->toEqual($root);
+
+    $times = new Node('*');
+    $times->appendChild(new Node(2));
+    $root = $times->appendChild(new Node('root'));
+    $root->appendChild(new Node(16));
+    $plus = $root->appendChild(new Node('+'));
+    $plus->appendChild(new Node(2));
+    $plus->appendChild(new Node(3));
+    $result = StringToTreeConverter::run('2root(16, 2 + 3)');
+    expect($result)->toEqual($times);
+});

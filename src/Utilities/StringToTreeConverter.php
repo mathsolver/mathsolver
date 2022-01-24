@@ -116,6 +116,7 @@ class StringToTreeConverter
             '^' => 5,
             '(' => $nested ? 1 : 19,
             ')' => $nested ? 1 : 18,
+            ',' => 0,
             default => in_array($value, self::$functions) ? 17 : 20,
         };
     }
@@ -140,6 +141,20 @@ class StringToTreeConverter
 
             // Update the keys of the children array
             $node = $node->setChildren($node->children()->values());
+
+            // Check if the first node is a comma
+            if ($node->children()->first()->value() === ',') {
+                // Move all children of the brackets node to the function node
+                $node->children()->first()->children()->each(function ($child) use ($node) {
+                    $node->appendChild($child);
+                });
+
+                // Remove the brackets node
+                $node->removeChild($node->children()->first());
+
+                // Update the keys of the children array
+                $node = $node->setChildren($node->children()->values());
+            }
         }
 
         return $node;
