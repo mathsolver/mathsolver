@@ -284,7 +284,7 @@ it('can convert terms with multiply', function () {
     expect($result)->toEqual($root);
 });
 
-it('can convert functions into their own nodes', function () {
+it('can parse functions into their own nodes', function () {
     $root = new Node('root');
     $root->appendChild(new Node(9));
     $result = StringToTreeConverter::run('root(9)');
@@ -296,7 +296,7 @@ it('can convert functions into their own nodes', function () {
     expect($result)->toEqual($root);
 });
 
-it('can convert functions with other operations', function () {
+it('can parse functions with other operations', function () {
     $plus = new Node('+');
     $times = $plus->appendChild(new Node('*'));
     $plus->appendChild(new Node(3));
@@ -314,7 +314,7 @@ it('can convert functions with other operations', function () {
     expect($result)->toEqual($times);
 });
 
-it('can convert functions with brackets outside', function () {
+it('can parse functions with brackets outside', function () {
     $times = new Node('*');
     $tangent = $times->appendChild(new Node('tan'));
     $tangent->appendChild(new Node(45));
