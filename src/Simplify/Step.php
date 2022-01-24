@@ -28,10 +28,10 @@ abstract class Step
     {
         $node->setChildren($node->children()->map(fn ($child) => self::run($child))->flatten());
 
-        if (!(new (get_called_class()))->shouldRun($node)) { /** @phpstan-ignore-line */
+        if (!(new (get_called_class()))->shouldRun($node)) {
             return $node;
         }
 
-        return (new (get_called_class()))->handle($node); /** @phpstan-ignore-line */
+        return (new (get_called_class()))->handle($node);
     }
 }
