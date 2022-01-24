@@ -101,7 +101,7 @@ class StringToTreeConverter
         }
 
         // Return the root node
-        return $node->root();
+        return self::cleanFunctionBrackets($node->root());
     }
 
     /**
@@ -118,5 +118,30 @@ class StringToTreeConverter
             ')' => $nested ? 1 : 18,
             default => in_array($value, self::$functions) ? 17 : 20,
         };
+    }
+
+    /**
+     * Remove the brackets inside functions such as sin(90), tan(45) and roo(9, 2).
+     */
+    protected static function cleanFunctionBrackets(Node $node): Node
+    {
+        // Run this function recursively
+        $node->setChildren($node->children()->map(fn ($child) => self::cleanFunctionBrackets($child))->flatten());
+
+        // Check if the node is a function
+        if (in_array($node->value(), self::$functions)) {
+            // Move all children of the brackets node to the function node
+            $node->children()->first()->children()->each(function ($child) use ($node) {
+                $node->appendChild($child);
+            });
+
+            // Remove the brackets node
+            $node->removeChild($node->children()->first());
+
+            // Update the keys of the children array
+            $node = $node->setChildren($node->children()->values());
+        }
+
+        return $node;
     }
 }
