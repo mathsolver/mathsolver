@@ -168,3 +168,20 @@ it('does combine multiplied by zero', function () {
     $result = TreeToStringConverter::run($root);
     expect($result)->toBe('0x');
 });
+
+it('can convert functions to a string', function () {
+    $sine = new Node('sin');
+    $sine->appendChild(new Node(45));
+    $result = TreeToStringConverter::run($sine);
+    expect($result)->toBe('sin(45)');
+
+    $times = new Node('*');
+    $times->appendChild(new Node(2));
+    $root = $times->appendChild(new Node('root'));
+    $root->appendChild(new Node(16));
+    $plus = $root->appendChild(new Node('+'));
+    $plus->appendChild(new Node(2));
+    $plus->appendChild(new Node(3));
+    $result = TreeToStringConverter::run($times);
+    expect($result)->toBe('2*root(16,2+3)');
+});

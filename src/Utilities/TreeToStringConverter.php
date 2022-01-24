@@ -18,10 +18,15 @@ class TreeToStringConverter
             return $node->value();
         }
 
-        $children = $node->children()->map(fn ($child) => $child->value())->sort()->implode('');
+        $children = $node->children()->map(fn ($child) => self::run($child))->sort()->implode('');
 
         if (self::isProduct($node, $children)) {
             return $children;
+        }
+
+        if (in_array($node->value(), StringToTreeConverter::$functions)) {
+            $children = $node->children()->map(fn ($child) => self::run($child))->implode(',');
+            return "{$node->value()}({$children})";
         }
 
         // Return a string of all children when the node is not empty

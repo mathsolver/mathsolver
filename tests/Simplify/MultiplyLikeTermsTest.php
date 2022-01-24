@@ -78,3 +78,9 @@ it('combines with letters with powers', function () {
     $result = MultiplyLikeTerms::run($tree);
     expect($result)->toEqual(StringToTreeConverter::run('(y - 5)^3'));
 });
+
+it('does not combine roots', function () {
+    $tree = StringToTreeConverter::run('3root(2, 2)');
+    $result = MultiplyLikeTerms::run($tree);
+    expect($result)->toEqual(StringToTreeConverter::run('3root(2, 2)'));
+});

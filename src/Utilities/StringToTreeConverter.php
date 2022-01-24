@@ -11,7 +11,7 @@ class StringToTreeConverter
      *
      * @var array<string>
      */
-    protected static array $functions = [
+    public static array $functions = [
         'root',
         'sin',
         'cos',
