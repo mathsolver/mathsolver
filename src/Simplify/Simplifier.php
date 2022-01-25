@@ -13,16 +13,17 @@ class Simplifier
      */
     protected static array $steps = [
         ExpandBrackets::class,
+        ConvertBrokenExponentsIntoRoots::class,
         RemoveBrackets::class,
         RemoveBracketsWithPlus::class,
         SimplifyRoots::class,
+        CalculatePowersOfRealNumbers::class,
         MultiplyRealNumbers::class,
         MultiplyLikeTerms::class,
         AddLikeTerms::class,
         ExponentOfZero::class,
         MultiplyByZero::class,
         AddRealNumbers::class,
-        CalculatePowersOfRealNumbers::class,
     ];
 
     /**
