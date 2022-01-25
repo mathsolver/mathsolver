@@ -47,6 +47,14 @@ class Math
     }
 
     /**
+     * Convert to a mathjax formatted string.
+     */
+    public function mathjax(): string
+    {
+        return TreeToStringConverter::run($this->tree, $mathjax = true);
+    }
+
+    /**
      * Parse a mathematical expression to a math tree.
      */
     public static function from(string $expression): self

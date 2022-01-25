@@ -185,3 +185,37 @@ it('can convert functions to a string', function () {
     $result = TreeToStringConverter::run($times);
     expect($result)->toBe('2*root(16,2+3)');
 });
+
+it('can convert functions to mathjax', function () {
+    $sine = new Node('sin');
+    $sine->appendChild(new Node(45));
+    $result = TreeToStringConverter::run($sine, $mathjax = true);
+    expect($result)->toBe('sin(45)');
+});
+
+it('can convert roots to mathjax', function () {
+    $times = new Node('*');
+    $times->appendChild(new Node(2));
+    $root = $times->appendChild(new Node('root'));
+    $root->appendChild(new Node(16));
+    $plus = $root->appendChild(new Node('+'));
+    $plus->appendChild(new Node(2));
+    $plus->appendChild(new Node(3));
+    $result = TreeToStringConverter::run($times, $mathjax = true);
+    expect($result)->toBe('2*\sqrt[2+3]{16}');
+
+    // square root
+    $root = new Node('root');
+    $root->appendChild(new Node(36));
+    $root->appendChild(new Node(2));
+    $result = TreeToStringConverter::run($root, $mathjax = true);
+    expect($result)->toBe('\sqrt{36}');
+});
+
+it('can convert powers to mathjax', function () {
+    $power = new Node('^');
+    $power->appendChild(new Node(9));
+    $power->appendChild(new Node(3));
+    $result = TreeToStringConverter::run($power, $mathjax = true);
+    expect($result)->toBe('9^{3}');
+});

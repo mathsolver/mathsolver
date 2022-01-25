@@ -23,3 +23,7 @@ it('can output a tree', function () {
 
     expect(Math::from('3 + 5')->tree())->toEqual($plus);
 });
+
+it('can format mathjax output', function () {
+    expect(Math::from('root(25, 2)')->mathjax())->toBe('\sqrt{25}');
+});
