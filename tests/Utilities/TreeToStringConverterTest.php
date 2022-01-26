@@ -49,7 +49,7 @@ it('can convert minus', function () {
     $root->appendChild(new Node(-8));
 
     $result = TreeToStringConverter::run($root);
-    expect($result)->toBe('9+-8');
+    expect($result)->toBe('9-8');
 });
 
 it('can convert divides', function () {
@@ -218,4 +218,12 @@ it('can convert powers to mathjax', function () {
     $power->appendChild(new Node(3));
     $result = TreeToStringConverter::run($power, $mathjax = true);
     expect($result)->toBe('9^{3}');
+});
+
+it('replaces -+ by -', function () {
+    $power = new Node('+');
+    $power->appendChild(new Node(9));
+    $power->appendChild(new Node(-3));
+    $result = TreeToStringConverter::run($power, $mathjax = true);
+    expect($result)->toBe('9-3');
 });

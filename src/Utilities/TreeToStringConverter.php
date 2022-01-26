@@ -50,6 +50,7 @@ class TreeToStringConverter
             ->map(fn ($child) => $child . $node->value()) // Appendd the parent node value
             ->pipe(fn ($children) => Str::of(implode('', $children->toArray()))) // Convert to a string
             ->rtrim($node->value()) // Remove the last parent node value (3+4+ -> 3+4)
+            ->replace('+-', '-')
             ->when($node->value() == '(', fn ($string) => "({$string})"); // Add brackets if necessary
     }
 
