@@ -3,6 +3,7 @@
 namespace MathSolver\Simplify;
 
 use MathSolver\Utilities\Node;
+use MathSolver\Utilities\TreeToStringConverter;
 
 class Simplifier
 {
@@ -31,8 +32,14 @@ class Simplifier
      */
     public static function run(Node $tree): Node
     {
-        foreach (self::$steps as $step) {
-            $tree = $step::run($tree);
+        $oldTree = '';
+
+        while (TreeToStringConverter::run($tree) !== $oldTree) {
+            $oldTree = TreeToStringConverter::run($tree);
+
+            foreach (self::$steps as $step) {
+                $tree = $step::run($tree);
+            }
         }
 
         return $tree;

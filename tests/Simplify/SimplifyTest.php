@@ -169,6 +169,7 @@ it('can simplify roots', function (string $input, string $expected) {
     ['2 * root(8, 2)', '4root(2,2)'],
     ['3root(9, 2)', '9'],
     ['root(512, 3)', '8'],
+    ['2 * root(2 * 8, 2)', '8'],
     ['x^0.5', 'root(x, 2)'],
     ['8^1.5', '16root(2, 2)'],
 ]);
