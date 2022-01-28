@@ -46,7 +46,12 @@ class AddLikeTerms extends Step
      */
     public function shouldRun(Node $node): bool
     {
-        return $node->value() === '+';
+        if ($node->value() !== '+') {
+            return false;
+        }
+
+        $childrenWithChildrenWithMultipleNumberProducts = $node->children()->filter(fn ($child) => $child->numericChildren()->count() < 2);
+        return $childrenWithChildrenWithMultipleNumberProducts->count() === $node->children()->count();
     }
 
     /**

@@ -74,3 +74,9 @@ it('combines with powers without coefficients', function () {
     $result = AddLikeTerms::run($tree);
     expect($result)->toEqual(StringToTreeConverter::run('2 * y^3'));
 });
+
+it('does not run when there are multiple numbers in a product', function () {
+    $tree = StringToTreeConverter::run('3p + 3*5');
+    $result = AddLikeTerms::run($tree);
+    expect($result)->toEqual(StringToTreeConverter::run('3p + 3*5'));
+});
