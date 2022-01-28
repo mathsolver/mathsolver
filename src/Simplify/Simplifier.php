@@ -14,13 +14,13 @@ class Simplifier
      * @var array<class-string<Step>>
      */
     protected static array $steps = [
-        ExpandBrackets::class,
+        CalculatePowersOfRealNumbers::class,
         ConvertBrokenExponentsIntoRoots::class,
+        ExpandBrackets::class,
+        MultiplyRealNumbers::class,
         RemoveBrackets::class,
         RemoveBracketsWithPlus::class,
         SimplifyRoots::class,
-        CalculatePowersOfRealNumbers::class,
-        MultiplyRealNumbers::class,
         MultiplyLikeTerms::class,
         AddLikeTerms::class,
         ExponentOfZero::class,
