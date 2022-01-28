@@ -34,6 +34,18 @@ class RemoveBrackets extends Step
      */
     public function shouldRun(Node $node): bool
     {
-        return $node->value() === '(';
+        if ($node->value() !== '(') {
+            return false;
+        }
+
+        if (!is_numeric($node->children()->first()->value()) || $node->children()->first()->value() % 2 === 1) {
+            return true;
+        }
+
+        if ($node->parent()->value() !== '^') {
+            return true;
+        }
+
+        return is_numeric($node->parent()->children()->last()->value()) && $node->parent()->children()->last()->value() % 2 === 1;
     }
 }

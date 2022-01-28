@@ -20,3 +20,13 @@ it('removes brackets with only one child', function () {
     $result = RemoveBrackets::run($tree);
     expect($result)->toEqual(StringToTreeConverter::run('12x * 4'));
 });
+
+it('does not remove brackets with real negative numbers', function () {
+    $tree = StringToTreeConverter::run('(-5)^4');
+    $result = RemoveBrackets::run($tree);
+    expect($result)->toEqual(StringToTreeConverter::run('(-5)^4'));
+
+    $tree = StringToTreeConverter::run('(-5)^3');
+    $result = RemoveBrackets::run($tree);
+    expect($result)->toEqual(StringToTreeConverter::run('-5^3'));
+});
