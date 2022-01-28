@@ -31,6 +31,6 @@ class AddRealNumbers extends Step
      */
     public function shouldRun(Node $node): bool
     {
-        return $node->value() === '+';
+        return $node->value() === '+' && $node->numericChildren()->count() > 1;
     }
 }

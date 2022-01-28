@@ -38,3 +38,9 @@ it('adds nested real numbers', function () {
     $result = AddRealNumbers::run($tree);
     expect($result)->toEqual(StringToTreeConverter::run('5 * (13)'));
 });
+
+it('does not run when it cannot do anything', function () {
+    $tree = StringToTreeConverter::run('5 + x');
+    $result = AddRealNumbers::run($tree);
+    expect($result)->toEqual(StringToTreeConverter::run('5 + x'));
+});
