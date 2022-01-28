@@ -5,7 +5,7 @@ namespace MathSolver\Simplify;
 use Illuminate\Support\Collection;
 use MathSolver\Utilities\Node;
 
-class MultiplyLikeTerms extends Step
+class MultiplyLikeFactors extends Step
 {
     /**
      * Replace all double letters with a power.
