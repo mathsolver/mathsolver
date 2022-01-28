@@ -5,7 +5,7 @@ namespace MathSolver\Simplify;
 use Illuminate\Support\Collection;
 use MathSolver\Utilities\Node;
 
-class RemoveBracketsWithPlus extends Step
+class ExpandBracketsWithPlus extends Step
 {
     /**
      * The current node to remove the brackets on.
