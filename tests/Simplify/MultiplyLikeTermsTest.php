@@ -84,3 +84,13 @@ it('does not combine roots', function () {
     $result = MultiplyLikeTerms::run($tree);
     expect($result)->toEqual(StringToTreeConverter::run('3root(2, 2)'));
 });
+
+it('adds brackets when it is a real negative number', function () {
+    $tree = StringToTreeConverter::run('-3x * -3x');
+    $result = MultiplyLikeTerms::run($tree);
+    expect($result)->toEqual(StringToTreeConverter::run('(-3)^2 * x^2'));
+
+    $tree = StringToTreeConverter::run('-3x * -3x * -3x');
+    $result = MultiplyLikeTerms::run($tree);
+    expect($result)->toEqual(StringToTreeConverter::run('-3^3 * x^3'));
+});

@@ -73,7 +73,14 @@ class MultiplyLikeTerms extends Step
             }
 
             $power = new Node('^');
-            $power->appendChild(Node::fromString($node));
+
+            if (is_numeric($node) && $node < 0 && $count % 2 === 0) {
+                // add brackets when the base is a negative number
+                tap($power->appendChild(new Node('(')))->appendChild(Node::fromString($node));
+            } else {
+                $power->appendChild(Node::fromString($node));
+            }
+
             $power->appendChild(new Node($count));
             $parentNode->appendChild($power);
         });
