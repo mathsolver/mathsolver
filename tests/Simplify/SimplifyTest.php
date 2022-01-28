@@ -173,3 +173,14 @@ it('can simplify roots', function (string $input, string $expected) {
     ['x^0.5', 'root(x, 2)'],
     ['8^1.5', '16root(2, 2)'],
 ]);
+
+it('can record steps', function () {
+    $tree = StringToTreeConverter::run('6a * 7b');
+    $result = Simplifier::run($tree, $withSteps = true);
+    $expected = StringToTreeConverter::run('42ab');
+
+    expect($result)->toEqual([
+        'tree' => $expected,
+        'steps' => [['name' => 'Multiply real numbers', 'result' => '42ab']],
+    ]);
+});

@@ -10,6 +10,16 @@ use MathSolver\Utilities\TreeToStringConverter;
 class Math
 {
     /**
+     * Whether to record steps.
+     */
+    protected bool $withSteps = false;
+
+    /**
+     * The recorded steps.
+     */
+    protected array $steps = [];
+
+    /**
      * The root node of the current math tree.
      */
     protected Node $tree;
@@ -33,9 +43,11 @@ class Math
     /**
      * Convert the current math tree to a string.
      */
-    public function string(): string
+    public function string(): string|array
     {
-        return TreeToStringConverter::run($this->tree);
+        return $this->withSteps
+            ? ['result' => TreeToStringConverter::run($this->tree), 'steps' => $this->steps]
+            : TreeToStringConverter::run($this->tree);
     }
 
     /**
@@ -49,9 +61,11 @@ class Math
     /**
      * Convert to a mathjax formatted string.
      */
-    public function mathjax(): string
+    public function mathjax(): string|array
     {
-        return TreeToStringConverter::run($this->tree, $mathjax = true);
+        return $this->withSteps
+            ? ['result' => TreeToStringConverter::run($this->tree, $mathjax = true), 'steps' => $this->steps]
+            : TreeToStringConverter::run($this->tree, $mathjax = true);
     }
 
     /**
@@ -67,7 +81,24 @@ class Math
      */
     public function simplify(): self
     {
-        $this->tree = Simplifier::run($this->tree);
+        $result = Simplifier::run($this->tree, $this->withSteps);
+
+        if ($this->withSteps) {
+            $this->tree = $result['tree'];
+            $this->steps = $result['steps'];
+        } else {
+            $this->tree = $result;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Record steps.
+     */
+    public function withSteps(): self
+    {
+        $this->withSteps = true;
         return $this;
     }
 }

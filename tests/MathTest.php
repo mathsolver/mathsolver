@@ -27,3 +27,15 @@ it('can output a tree', function () {
 it('can format mathjax output', function () {
     expect(Math::from('root(25, 2)')->mathjax())->toBe('\sqrt{25}');
 });
+
+it('can return steps', function () {
+    expect(Math::from('7x + 5x')->withSteps()->simplify()->string())->toBe([
+        'result' => '12x',
+        'steps' => [['name' => 'Add like terms', 'result' => '12x']],
+    ]);
+
+    expect(Math::from('7x + 5x')->withSteps()->simplify()->mathjax())->toBe([
+        'result' => '12x',
+        'steps' => [['name' => 'Add like terms', 'result' => '12x']],
+    ]);
+});
