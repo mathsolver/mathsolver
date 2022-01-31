@@ -373,3 +373,14 @@ it('can parse functions with multiple parameters', function () {
     $result = StringToTreeConverter::run('2root(16, 2 + 3)');
     expect($result)->toEqual($times);
 });
+
+it('can parse functions multiplied by a letter', function () {
+    $times = new Node('*');
+    $times->appendChild(new Node('x'));
+    $root = $times->appendChild(new Node('root'));
+    $root->appendChild(new Node(16));
+    $root->appendChild(new Node(2));
+
+    $result = StringToTreeConverter::run('xroot(16, 2)');
+    expect($result)->toEqual($times);
+});

@@ -39,17 +39,19 @@ class StringToTreeConverter
             ->replaceMatches('/[+|\/|*|^|(|)]/', ' $0 ') // Add spaces to operators
             ->replace(',', ' , ')
             ->explode(' ') // Explode on spaces
-            ->flatMap(function ($term) { // Expand terms like 7xy or abc to 7*y and a*b*c
+            ->flatMap(function ($term) { // Expand terms like 7xy to 7*x*y and xtan(45) to x*tan(45)
+                // check if it contains letters
                 if (!Str::match('/[-]?[0-9.]*[a-z]+/', $term)) {
                     return [$term];
                 }
 
                 // check for functions
-                if (in_array(preg_replace('/[0-9]+([a-z]+)/', '$1', $term), self::$functions)) {
-                    if (preg_replace('/[0-9]+([a-z]+)/', '$1', $term) === $term) {
-                        return [$term];
+                foreach (self::$functions as $function) {
+                    if (str_contains($term, $function)) {
+                        return $function === $term
+                            ? [$term]
+                            : [str_replace($function, '', $term), '*', $function];
                     }
-                    return [preg_replace('/([0-9]+)[a-z]+/', '$1', $term), '*', preg_replace('/[0-9]+([a-z]+)/', '$1', $term)];
                 }
 
                 $terms = array_merge($number = [preg_replace('/[^0-9-.]/', '', $term)], $letters = str_split(preg_replace('/[^a-z]/', '', $term)));
