@@ -41,7 +41,7 @@ class Simplifier
 
             foreach (self::$steps as $step) {
                 $previousTree = TreeToStringConverter::run($tree);
-                $tree = $step::run($tree);
+                $tree = SortTerms::run($step::run($tree));
 
                 if (TreeToStringConverter::run($tree) !== $previousTree) {
                     $steps[] = [
