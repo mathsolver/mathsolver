@@ -192,6 +192,16 @@ it('can calculate with fractions', function (string $input, string $expected) {
     ['1 - frac(2, 5)', 'frac(3, 5)'],
 ]);
 
+it('can make conversions between fractions and negative exponents', function (string $input, string $expected) {
+    $tree = StringToTreeConverter::run($input);
+    $result = Simplifier::run($tree);
+    $expected = StringToTreeConverter::run($expected);
+    expect($result)->toEqual($expected);
+})->with([
+    ['4^-2', 'frac(1, 16)'],
+    ['3^-1', 'frac(1, 3)'],
+]);
+
 it('can record steps', function () {
     $tree = StringToTreeConverter::run('6a * 7b');
     $result = Simplifier::run($tree, $withSteps = true);

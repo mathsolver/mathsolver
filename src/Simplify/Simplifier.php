@@ -22,6 +22,7 @@ class Simplifier
         ExpandBrackets::class,
         ExpandBracketsWithPlus::class,
         ExponentOfZero::class,
+        MoveNegativeExponentsIntoFractions::class,
         MultiplyByZero::class,
         MultiplyFractions::class,
         MultiplyLikeFactors::class,
