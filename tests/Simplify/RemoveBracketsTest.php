@@ -36,3 +36,9 @@ it('does remove brackets with letters', function () {
     $result = RemoveBrackets::run($tree);
     expect($result)->toEqual(StringToTreeConverter::run('x^y'));
 });
+
+it('removes brackets with negative exponents', function () {
+    $tree = StringToTreeConverter::run('x^-2');
+    $result = RemoveBrackets::run($tree);
+    expect($result)->toEqual(StringToTreeConverter::run('x^-2'));
+});

@@ -39,15 +39,11 @@ class ExpandBrackets extends Step
      */
     protected function shouldExecute(Node $node): bool
     {
-        if ($node->value() !== '^') {
-            return false;
-        }
-
-        if ($node->children()->first()->value() !== '(') {
-            return false;
-        }
-
-        return !(!is_numeric($node->children()->last()->value()));
+        return $node->value() === '^'
+            && $node->children()->first()->value() === '('
+            && is_numeric($node->children()->last()->value())
+            && $node->children()->last()->value() > 0
+            && floor($node->children()->last()->value()) == $node->children()->last()->value();
     }
 
     /**

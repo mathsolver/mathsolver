@@ -32,3 +32,13 @@ it('expands with a leading minus', function () {
     $result = ExpandBrackets::run($tree);
     expect($result)->toEqual(StringToTreeConverter::run('-(x + 8)(x + 8)'));
 });
+
+it('does not expand with negative or broken exponents', function () {
+    $tree = StringToTreeConverter::run('(2x)^-2');
+    $result = ExpandBrackets::run($tree);
+    expect($result)->toEqual(StringToTreeConverter::run('(2x)^-2'));
+
+    $tree = StringToTreeConverter::run('(5)^0.5');
+    $result = ExpandBrackets::run($tree);
+    expect($result)->toEqual(StringToTreeConverter::run('(5)^0.5'));
+});

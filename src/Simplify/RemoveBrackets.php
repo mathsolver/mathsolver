@@ -43,6 +43,7 @@ class RemoveBrackets extends Step
         }
 
         return is_numeric($node->parent()->children()->last()->value())
-            && $node->parent()->children()->last()->value() % 2 === 1;
+            && ($node->parent()->children()->last()->value() % 2 === 1
+            || $node->parent()->children()->last()->value() < 0);
     }
 }
