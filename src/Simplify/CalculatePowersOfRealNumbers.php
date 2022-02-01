@@ -42,8 +42,8 @@ class CalculatePowersOfRealNumbers extends Step
             }
         }
 
-        // check if the exponent is a real number
-        if (!is_numeric($node->children()->last()->value())) {
+        // check if the exponent is a real and positive number
+        if (!is_numeric($node->children()->last()->value()) || $node->children()->last()->value() < 0) {
             return false;
         }
 

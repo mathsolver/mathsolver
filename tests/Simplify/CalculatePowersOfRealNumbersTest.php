@@ -38,3 +38,13 @@ it('does not calculate powers when the exponent is not a real number', function 
     $result = CalculatePowersOfRealNumbers::run($tree);
     expect($result)->toEqual(StringToTreeConverter::run('5^x'));
 });
+
+it('does not calculate powers when the exponent is broken or negative', function () {
+    $tree = StringToTreeConverter::run('7^0.5');
+    $result = CalculatePowersOfRealNumbers::run($tree);
+    expect($result)->toEqual(StringToTreeConverter::run('7^0.5'));
+
+    $tree = StringToTreeConverter::run('3^-1');
+    $result = CalculatePowersOfRealNumbers::run($tree);
+    expect($result)->toEqual(StringToTreeConverter::run('3^-1'));
+});
