@@ -14,6 +14,7 @@ class Simplifier
      * @var array<class-string<Step>>
      */
     protected static array $steps = [
+        AddFractions::class,
         AddLikeTerms::class,
         AddRealNumbers::class,
         CalculatePowersOfRealNumbers::class,
