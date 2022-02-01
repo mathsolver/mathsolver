@@ -185,6 +185,8 @@ it('can calculate with fractions', function (string $input, string $expected) {
     ['frac(36, 27)', 'frac(4, 3)'],
     ['frac(42, 72)', 'frac(7, 12)'],
     ['5frac(4,2)', '10'],
+    ['frac(2, 8) * frac(1, 4)', 'frac(1, 16)'],
+    ['5frac(1, 3)', 'frac(5, 3)'],
 ]);
 
 it('can record steps', function () {

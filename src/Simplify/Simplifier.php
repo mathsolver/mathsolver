@@ -22,6 +22,7 @@ class Simplifier
         ExpandBracketsWithPlus::class,
         ExponentOfZero::class,
         MultiplyByZero::class,
+        MultiplyFractions::class,
         MultiplyLikeFactors::class,
         MultiplyRealNumbers::class,
         RemoveBrackets::class,
