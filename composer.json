@@ -26,6 +26,7 @@
         "pestphp/pest": "^1.21"
     },
     "scripts": {
-        "test": "./vendor/bin/pest"
+        "test": "./vendor/bin/pest",
+        "coverage": "./vendor/bin/pest --coverage"
     }
 }
