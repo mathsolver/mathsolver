@@ -27,6 +27,6 @@
     },
     "scripts": {
         "test": "./vendor/bin/pest",
-        "coverage": "./vendor/bin/pest --coverage"
+        "coverage": "./vendor/bin/pest --coverage --min=100"
     }
 }
