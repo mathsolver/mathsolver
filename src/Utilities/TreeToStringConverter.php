@@ -34,6 +34,12 @@ class TreeToStringConverter
                     : "\\sqrt[{$degree}]{{$base}}";
             }
 
+            if ($mathjax && $node->value() === 'frac') {
+                $numerator = self::run($node->children()->first(), $mathjax);
+                $denominator = self::run($node->children()->last(), $mathjax);
+                return "\\frac{{$numerator}}{{$denominator}}";
+            }
+
             $children = $node->children()->map(fn ($child) => self::run($child, $mathjax))->implode(',');
             return "{$node->value()}({$children})";
         }

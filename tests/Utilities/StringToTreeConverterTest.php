@@ -384,3 +384,12 @@ it('can parse functions multiplied by a letter', function () {
     $result = StringToTreeConverter::run('xroot(16, 2)');
     expect($result)->toEqual($times);
 });
+
+it('can parse fractions', function () {
+    $fraction = new Node('frac');
+    $fraction->appendChild(new Node(3));
+    $fraction->appendChild(new Node(8));
+
+    $result = StringToTreeConverter::run('frac(3, 8)');
+    expect($result)->toEqual($fraction);
+});

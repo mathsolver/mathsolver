@@ -227,3 +227,11 @@ it('replaces -+ by -', function () {
     $result = TreeToStringConverter::run($power, $mathjax = true);
     expect($result)->toBe('9-3');
 });
+
+it('can convert fractions to mathjax', function () {
+    $power = new Node('frac');
+    $power->appendChild(new Node(3));
+    $power->appendChild(new Node(9));
+    $result = TreeToStringConverter::run($power, $mathjax = true);
+    expect($result)->toBe('\frac{3}{9}');
+});

@@ -13,6 +13,7 @@ class StringToTreeConverter
      */
     public static array $functions = [
         'root',
+        'frac',
         'sin',
         'cos',
         'tan',
