@@ -174,6 +174,19 @@ it('can simplify roots', function (string $input, string $expected) {
     ['8^1.5', '16root(2, 2)'],
 ]);
 
+it('can calculate with fractions', function (string $input, string $expected) {
+    $tree = StringToTreeConverter::run($input);
+    $result = Simplifier::run($tree);
+    $expected = StringToTreeConverter::run($expected);
+    expect($result)->toEqual($expected);
+})->with([
+    ['frac(12, 8)', 'frac(3, 2)'],
+    ['frac(22, 14)', 'frac(11, 7)'],
+    ['frac(36, 27)', 'frac(4, 3)'],
+    ['frac(42, 72)', 'frac(7, 12)'],
+    ['5frac(4,2)', '10'],
+]);
+
 it('can record steps', function () {
     $tree = StringToTreeConverter::run('6a * 7b');
     $result = Simplifier::run($tree, $withSteps = true);
