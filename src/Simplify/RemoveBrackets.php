@@ -20,13 +20,9 @@ class RemoveBrackets extends Step
         }
 
         // inside brackets is equal to outside, only with + and *
-        if (StringToTreeConverter::getPrecedence($node->children()->first()->value()) === StringToTreeConverter::getPrecedence($node->parent()->value()) && in_array($node->parent()->value(), ['+', '*'])) {
-            $nestedChildren = $node->children()->first()->children();
-            $node->parent()->removeChild($node);
-            return $nestedChildren;
-        }
-
-        return $node;
+        $nestedChildren = $node->children()->first()->children();
+        $node->parent()->removeChild($node);
+        return $nestedChildren;
     }
 
     /**
@@ -38,14 +34,15 @@ class RemoveBrackets extends Step
             return false;
         }
 
-        if (!is_numeric($node->children()->first()->value()) || $node->children()->first()->value() % 2 === 1) {
-            return true;
-        }
-
         if ($node->parent()->value() !== '^') {
             return true;
         }
 
-        return is_numeric($node->parent()->children()->last()->value()) && $node->parent()->children()->last()->value() % 2 === 1;
+        if (!is_numeric($node->children()->first()->value())) {
+            return true;
+        }
+
+        return is_numeric($node->parent()->children()->last()->value())
+            && $node->parent()->children()->last()->value() % 2 === 1;
     }
 }
