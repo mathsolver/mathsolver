@@ -32,3 +32,9 @@ it('calculates powers of real negative numbers with brackets', function () {
     $result = CalculatePowersOfRealNumbers::run($tree);
     expect($result)->toEqual(StringToTreeConverter::run('-216'));
 });
+
+it('does not calculate powers when the exponent is not a real number', function () {
+    $tree = StringToTreeConverter::run('5^x');
+    $result = CalculatePowersOfRealNumbers::run($tree);
+    expect($result)->toEqual(StringToTreeConverter::run('5^x'));
+});
