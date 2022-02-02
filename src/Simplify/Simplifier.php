@@ -40,6 +40,8 @@ class Simplifier
         $steps = [];
         $oldTree = '';
 
+        $tree = SortTerms::run($tree);
+
         while (TreeToStringConverter::run($tree) !== $oldTree) {
             $oldTree = TreeToStringConverter::run($tree);
 
