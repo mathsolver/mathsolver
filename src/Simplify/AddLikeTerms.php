@@ -93,7 +93,7 @@ class AddLikeTerms extends Step
      *
      * @param Collection<string> $terms
      */
-    protected function pushToTotals(int $coefficient, Collection $terms): void
+    protected function pushToTotals(float $coefficient, Collection $terms): void
     {
         $total = $this->totals->first(fn ($total) => $total['terms'] == $terms);
 
@@ -119,15 +119,15 @@ class AddLikeTerms extends Step
      *
      * @param Collection<string> $terms
      */
-    protected function appendChildToNode(int $coefficient, Collection $terms): void
+    protected function appendChildToNode(float $coefficient, Collection $terms): void
     {
-        if ($coefficient === 0) {
+        if ($coefficient == 0) {
             return;
         }
 
         $node = new Node('*');
 
-        if ($coefficient !== 1) {
+        if ($coefficient != 1) {
             $node->appendChild(new Node($coefficient));
         }
 

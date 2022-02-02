@@ -80,3 +80,9 @@ it('does not run when there are multiple numbers in a product', function () {
     $result = AddLikeTerms::run($tree);
     expect($result)->toEqual(StringToTreeConverter::run('3p + 3*5'));
 });
+
+it('works with floats', function () {
+    $tree = StringToTreeConverter::run('7.5x + 3.5x');
+    $result = AddLikeTerms::run($tree);
+    expect($result)->toEqual(StringToTreeConverter::run('11x'));
+});
