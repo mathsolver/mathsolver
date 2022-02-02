@@ -79,12 +79,6 @@ it('combines with letters with powers', function () {
     expect($result)->toEqual(StringToTreeConverter::run('(y - 5)^3'));
 });
 
-it('does not combine roots', function () {
-    $tree = StringToTreeConverter::run('3root(2, 2)');
-    $result = MultiplyLikeFactors::run($tree);
-    expect($result)->toEqual(StringToTreeConverter::run('3root(2, 2)'));
-});
-
 it('adds brackets when it is a real negative number', function () {
     $tree = StringToTreeConverter::run('-3x * -3x');
     $result = MultiplyLikeFactors::run($tree);
@@ -93,4 +87,14 @@ it('adds brackets when it is a real negative number', function () {
     $tree = StringToTreeConverter::run('-3x * -3x * -3x');
     $result = MultiplyLikeFactors::run($tree);
     expect($result)->toEqual(StringToTreeConverter::run('-3^3 * x^3'));
+});
+
+it('does not run when there are no double factors', function () {
+    $tree = StringToTreeConverter::run('169 * 15');
+    $result = MultiplyLikeFactors::run($tree);
+    expect($result)->toEqual(StringToTreeConverter::run('169 * 15'));
+
+    $tree = StringToTreeConverter::run('3root(2, 2)');
+    $result = MultiplyLikeFactors::run($tree);
+    expect($result)->toEqual(StringToTreeConverter::run('3root(2, 2)'));
 });

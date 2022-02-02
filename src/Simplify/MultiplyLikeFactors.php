@@ -7,20 +7,26 @@ use MathSolver\Utilities\Node;
 
 class MultiplyLikeFactors extends Step
 {
+    public bool $foundDouble = false;
+
     /**
      * Replace all double letters with a power.
      *
      * For example "x * x * x" -> "x^3".
      */
-    public function handle(Node $parentNode): Node
+    public function handle(Node $node): Node
     {
-        $totals = $this->calculateTotals($parentNode);
+        $totals = $this->calculateTotals($node);
 
-        $parentNode->removeAllChildren();
+        if (!$this->foundDouble) {
+            return $node;
+        }
 
-        $parentNode = $this->appendCalculatedTotals($parentNode, $totals);
+        $node->removeAllChildren();
 
-        return $this->getReturnValue($parentNode);
+        $node = $this->appendCalculatedTotals($node, $totals);
+
+        return $this->getReturnValue($node);
     }
 
     /**
@@ -50,6 +56,7 @@ class MultiplyLikeFactors extends Step
             }
 
             if ($totals->has($string)) {
+                $this->foundDouble = true;
                 $totals->put($string, $totals->get($string) + $increment);
             } else {
                 $totals->put($string, $increment);
