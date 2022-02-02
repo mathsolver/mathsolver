@@ -216,6 +216,7 @@ it('can convert powers to mathjax', function () {
     $power = new Node('^');
     $power->appendChild(new Node(9));
     $power->appendChild(new Node(3));
+
     $result = TreeToStringConverter::run($power, $mathjax = true);
     expect($result)->toBe('9^{3}');
 });
@@ -224,6 +225,7 @@ it('replaces -+ by -', function () {
     $power = new Node('+');
     $power->appendChild(new Node(9));
     $power->appendChild(new Node(-3));
+
     $result = TreeToStringConverter::run($power, $mathjax = true);
     expect($result)->toBe('9-3');
 });
@@ -232,6 +234,7 @@ it('can convert fractions to mathjax', function () {
     $power = new Node('frac');
     $power->appendChild(new Node(3));
     $power->appendChild(new Node(9));
+
     $result = TreeToStringConverter::run($power, $mathjax = true);
     expect($result)->toBe('\frac{3}{9}');
 });

@@ -23,8 +23,8 @@ class TreeToStringConverter
         if ($node->value() === '*') {
             return Str::of($node->children()->map(fn ($child) => self::run($child, $mathjax))->implode('*'))
                 ->replaceMatches('/([0-9])\*(\x5c)sqrt/', '$1$2sqrt') // remove * symbol for roots
-                ->replaceMatches('/([a-z0-9])\*\(/', '$1(')
-                ->replace(')*(', ')(')
+                ->replaceMatches('/([a-z0-9])\*\(/', '$1(') // remove * symbol between numbers/letters and (
+                ->replace(')*(', ')(') // remove * symbol between ) and (
                 ->replaceMatches('/(?<=[a-z])\*(?=[a-z])/', '') // remove * symbol with two letters
                 ->replaceMatches('/([0-9])\*([a-z])/', '$1$2'); // remove * symbol with a number and a letter
         }
