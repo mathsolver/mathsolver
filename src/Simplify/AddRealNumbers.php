@@ -11,7 +11,7 @@ class AddRealNumbers extends Step
      */
     public function handle(Node $node): Node
     {
-        $total = $node->numericChildren()
+        $total = (int) $node->numericChildren()
             ->each(fn ($child) => $node->removeChild($child))
             ->reduce(fn ($total, $number) => $number->value() + $total, 0);
 
@@ -23,7 +23,8 @@ class AddRealNumbers extends Step
             $node->appendChild(new Node($total));
         }
 
-        return tap($node)->setChildren($node->children()->values());
+        $node->setChildren($node->children()->values());
+        return $node;
     }
 
     /**
