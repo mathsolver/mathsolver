@@ -210,7 +210,6 @@ it('can record steps', function () {
     expect($result)->toEqual([
         'tree' => $expected,
         'steps' => [
-            ['name' => 'Multiply like factors', 'result' => '6*7ab'],
             ['name' => 'Multiply real numbers', 'result' => '42ab'],
         ],
     ]);
