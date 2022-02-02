@@ -105,7 +105,7 @@ it('can convert nested brackets', function () {
     $plus->appendChild(new Node(1));
 
     $result = TreeToStringConverter::run($root);
-    expect($result)->toBe('3*(5+1)');
+    expect($result)->toBe('3(5+1)');
 });
 
 it('combines products', function () {
@@ -137,17 +137,17 @@ it('combines products without a number', function () {
     expect($result)->toBe('xy');
 });
 
-it('does not combine products with more than one number', function () {
+it('combines products with more than one number', function () {
     $root = new Node('*');
     $root->appendChild(new Node(7));
     $root->appendChild(new Node(3));
     $root->appendChild(new Node('x'));
 
     $result = TreeToStringConverter::run($root);
-    expect($result)->toBe('7*3*x');
+    expect($result)->toBe('7*3x');
 });
 
-it('does not combine products with nested terms', function () {
+it('does combine products with nested terms', function () {
     $root = new Node('*');
     $root->appendChild(new Node(7));
     $root->appendChild(new Node('x'));
@@ -157,13 +157,13 @@ it('does not combine products with nested terms', function () {
     $plus->appendChild(new Node(7));
 
     $result = TreeToStringConverter::run($root);
-    expect($result)->toBe('7*x*(2+7)');
+    expect($result)->toBe('7x(2+7)');
 });
 
 it('does combine multiplied by zero', function () {
     $root = new Node('*');
-    $root->appendChild(new Node('x'));
     $root->appendChild(new Node(0));
+    $root->appendChild(new Node('x'));
 
     $result = TreeToStringConverter::run($root);
     expect($result)->toBe('0x');
@@ -183,7 +183,7 @@ it('can convert functions to a string', function () {
     $plus->appendChild(new Node(2));
     $plus->appendChild(new Node(3));
     $result = TreeToStringConverter::run($times);
-    expect($result)->toBe('2*root(16,2+3)');
+    expect($result)->toBe('2root(16,2+3)');
 });
 
 it('can convert functions to mathjax', function () {
@@ -202,7 +202,7 @@ it('can convert roots to mathjax', function () {
     $plus->appendChild(new Node(2));
     $plus->appendChild(new Node(3));
     $result = TreeToStringConverter::run($times, $mathjax = true);
-    expect($result)->toBe('2*\sqrt[2+3]{16}');
+    expect($result)->toBe('2\sqrt[2+3]{16}');
 
     // square root
     $root = new Node('root');

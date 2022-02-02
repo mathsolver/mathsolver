@@ -20,8 +20,13 @@ class TreeToStringConverter
 
         $children = $node->children()->map(fn ($child) => self::run($child, $mathjax))->sort()->implode('');
 
-        if (self::isProduct($node, $children)) {
-            return $children;
+        if ($node->value() === '*') {
+            return Str::of($node->children()->map(fn ($child) => self::run($child, $mathjax))->implode('*'))
+                ->replaceMatches('/([0-9])\*(\x5c)sqrt/', '$1$2sqrt') // remove * symbol for roots
+                ->replaceMatches('/([a-z0-9])\*\(/', '$1(')
+                ->replace(')*(', ')(')
+                ->replaceMatches('/(?<=[a-z])\*(?=[a-z])/', '') // remove * symbol with two letters
+                ->replaceMatches('/([0-9])\*([a-z])/', '$1$2'); // remove * symbol with a number and a letter
         }
 
         if (in_array($node->value(), StringToTreeConverter::$functions)) {
@@ -58,21 +63,5 @@ class TreeToStringConverter
             ->rtrim($node->value()) // Remove the last parent node value (3+4+ -> 3+4)
             ->replace('+-', '-')
             ->when($node->value() == '(', fn ($string) => "({$string})"); // Add brackets if necessary
-    }
-
-    /**
-     * Determine whether a string is a product.
-     */
-    protected static function isProduct(Node $node, string $children): bool
-    {
-        if (Str::match('/[0-9a-z-]+/', $children) !== $children) {
-            return false;
-        }
-
-        if ($node->numericChildren()->count() > 1) {
-            return false;
-        }
-
-        return !($node->value() !== '*');
     }
 }
