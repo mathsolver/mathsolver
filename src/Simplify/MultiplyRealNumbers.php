@@ -25,7 +25,7 @@ class MultiplyRealNumbers extends Step
             $node->appendChild(new Node($total), $top = true);
         }
 
-        return tap($node)->setChildren($node->children()->sortBy(fn ($child) => $child->value(), SORT_NATURAL)->values());
+        return $node;
     }
 
     /**
@@ -33,6 +33,7 @@ class MultiplyRealNumbers extends Step
      */
     public function shouldRun(Node $node): bool
     {
-        return $node->value() === '*';
+        return $node->value() === '*'
+            && $node->numericChildren()->count() > 0;
     }
 }

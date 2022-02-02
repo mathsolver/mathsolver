@@ -88,20 +88,20 @@ it('does multiply nested numbers but keeps letters', function () {
     expect($result)->toEqual(StringToTreeConverter::run('5 + 30 * x + 9'));
 });
 
-it('sorts letters', function () {
-    $tree = StringToTreeConverter::run('3c * 8a');
-    $result = MultiplyRealNumbers::run($tree);
-    expect($result)->toEqual(StringToTreeConverter::run('24ac'));
-});
-
 it('does not multiply with an coefficient of one', function () {
     $tree = StringToTreeConverter::run('ab + ab');
     $result = MultiplyRealNumbers::run($tree);
     expect($result)->toEqual(StringToTreeConverter::run('ab+ab'));
 });
 
-it('does multiply with powers', function () {
-    $tree = StringToTreeConverter::run('x^3 * x * x^2');
+it('does not multiply when there are no real numbers', function () {
+    $tree = StringToTreeConverter::run('x * x^2');
     $result = MultiplyRealNumbers::run($tree);
-    expect($result)->toEqual(StringToTreeConverter::run('x^3 * x^2 * x'));
+    expect($result)->toEqual(StringToTreeConverter::run('x * x^2'));
+});
+
+it('does not sort letters', function () {
+    $tree = StringToTreeConverter::run('3c * 8a');
+    $result = MultiplyRealNumbers::run($tree);
+    expect($result)->toEqual(StringToTreeConverter::run('24ca'));
 });
