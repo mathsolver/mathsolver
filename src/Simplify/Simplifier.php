@@ -40,14 +40,14 @@ class Simplifier
         $steps = [];
         $oldTree = '';
 
-        $tree = SortTerms::run($tree);
+        $tree = self::sortTree($tree);
 
         while (TreeToStringConverter::run($tree) !== $oldTree) {
             $oldTree = TreeToStringConverter::run($tree);
 
             foreach (self::$steps as $step) {
                 $previousTree = TreeToStringConverter::run($tree);
-                $tree = SortTerms::run($step::run($tree));
+                $tree = self::sortTree($step::run($tree));
 
                 if (TreeToStringConverter::run($tree) !== $previousTree) {
                     $steps[] = [
@@ -61,5 +61,13 @@ class Simplifier
         return $withSteps
             ? ['tree' => $tree, 'steps' => $steps]
             : $tree;
+    }
+
+    /**
+     * Sort all factors and terms in a tree.
+     */
+    protected static function sortTree(Node $tree): Node
+    {
+        return SortTerms::run(SortFactors::run($tree));
     }
 }
