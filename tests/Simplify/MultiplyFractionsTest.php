@@ -19,7 +19,7 @@ it('leaves letters in the multiplication', function () {
     expect($result)->toEqual(StringToTreeConverter::run('xfrac(6, 25)'));
 });
 
-it('multiplies with numbers', function () {
+it('multiplies with whole numbers', function () {
     $tree = StringToTreeConverter::run('7frac(3, 5)');
     $result = MultiplyFractions::run($tree);
     expect($result)->toEqual(StringToTreeConverter::run('frac(21, 5)'));
@@ -29,4 +29,10 @@ it('does not run when the fraction has something else than numbers', function ()
     $tree = StringToTreeConverter::run('3frac(x, 5)');
     $result = MultiplyFractions::run($tree);
     expect($result)->toEqual(StringToTreeConverter::run('3frac(x, 5)'));
+});
+
+it('does not run when there is only one fractions', function () {
+    $tree = StringToTreeConverter::run('frac(2, 5) * x');
+    $result = MultiplyFractions::run($tree);
+    expect($result)->toEqual(StringToTreeConverter::run('frac(2, 5) * x'));
 });

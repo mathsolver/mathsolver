@@ -19,6 +19,11 @@ class MultiplyFractions extends Step
             return $node;
         }
 
+        // don't run when there is only one fraction
+        if ($fractions->count() === 1 && $node->numericChildren()->count() === 0) {
+            return $node;
+        }
+
         $numerator = 1;
         $denominator = 1;
 
