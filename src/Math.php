@@ -49,7 +49,7 @@ class Math
     public function string(): string|array
     {
         return $this->withSteps
-            ? ['result' => TreeToStringConverter::run($this->tree), 'steps' => $this->steps]
+            ? ['result' => TreeToStringConverter::run($this->tree), 'steps' => $this->steps->flatten(1)]
             : TreeToStringConverter::run($this->tree);
     }
 
@@ -67,7 +67,7 @@ class Math
     public function mathjax(): string|array
     {
         return $this->withSteps
-            ? ['result' => TreeToStringConverter::run($this->tree, $mathjax = true), 'steps' => $this->steps]
+            ? ['result' => TreeToStringConverter::run($this->tree, $mathjax = true), 'steps' => $this->steps->flatten(1)]
             : TreeToStringConverter::run($this->tree, $mathjax = true);
     }
 
@@ -88,7 +88,6 @@ class Math
 
         $this->tree = $result['tree'];
         $this->steps->push($result['steps']);
-        $this->steps = $this->steps->flatten(1);
 
         return $this;
     }
