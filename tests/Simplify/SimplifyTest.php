@@ -5,7 +5,7 @@ use MathSolver\Utilities\StringToTreeConverter;
 
 it('simplifies products', function (string $input, string $expected) {
     $tree = StringToTreeConverter::run($input);
-    $result = Simplifier::run($tree);
+    $result = Simplifier::run($tree)['tree'];
     $expected = StringToTreeConverter::run($expected);
     expect($result)->toEqual($expected);
 })->with([
@@ -25,7 +25,7 @@ it('simplifies products', function (string $input, string $expected) {
 
 it('combines like terms', function (string $input, string $expected) {
     $tree = StringToTreeConverter::run($input);
-    $result = Simplifier::run($tree);
+    $result = Simplifier::run($tree)['tree'];
     $expected = StringToTreeConverter::run($expected);
     expect($result)->toEqual($expected);
 })->with([
@@ -46,7 +46,7 @@ it('combines like terms', function (string $input, string $expected) {
 
 it('simplifies with multiplications and additions', function (string $input, string $expected) {
     $tree = StringToTreeConverter::run($input);
-    $result = Simplifier::run($tree);
+    $result = Simplifier::run($tree)['tree'];
     $expected = StringToTreeConverter::run($expected);
     expect($result)->toEqual($expected);
 })->with([
@@ -69,7 +69,7 @@ it('simplifies with multiplications and additions', function (string $input, str
 
 it('simplifies with single brackets with plus', function (string $input, string $expected) {
     $tree = StringToTreeConverter::run($input);
-    $result = Simplifier::run($tree);
+    $result = Simplifier::run($tree)['tree'];
     $expected = StringToTreeConverter::run($expected);
     expect($result)->toEqual($expected);
 })->with([
@@ -91,7 +91,7 @@ it('simplifies with single brackets with plus', function (string $input, string 
 
 it('simplifies with double brackets with plus', function (string $input, string $expected) {
     $tree = StringToTreeConverter::run($input);
-    $result = Simplifier::run($tree);
+    $result = Simplifier::run($tree)['tree'];
     $expected = StringToTreeConverter::run($expected);
     expect($result)->toEqual($expected);
 })->with([
@@ -128,7 +128,7 @@ it('simplifies with double brackets with plus', function (string $input, string 
 
 it('removes brackets when the outside presedence is lower', function (string $input, string $expected) {
     $tree = StringToTreeConverter::run($input);
-    $result = Simplifier::run($tree);
+    $result = Simplifier::run($tree)['tree'];
     $expected = StringToTreeConverter::run($expected);
     expect($result)->toEqual($expected);
 })->with([
@@ -145,7 +145,7 @@ it('removes brackets when the outside presedence is lower', function (string $in
 
 it('can calculate powers of real numbers', function (string $input, string $expected) {
     $tree = StringToTreeConverter::run($input);
-    $result = Simplifier::run($tree);
+    $result = Simplifier::run($tree)['tree'];
     $expected = StringToTreeConverter::run($expected);
     expect($result)->toEqual($expected);
 })->with([
@@ -160,7 +160,7 @@ it('can calculate powers of real numbers', function (string $input, string $expe
 
 it('can simplify roots', function (string $input, string $expected) {
     $tree = StringToTreeConverter::run($input);
-    $result = Simplifier::run($tree);
+    $result = Simplifier::run($tree)['tree'];
     $expected = StringToTreeConverter::run($expected);
     expect($result)->toEqual($expected);
 })->with([
@@ -176,7 +176,7 @@ it('can simplify roots', function (string $input, string $expected) {
 
 it('can calculate with fractions', function (string $input, string $expected) {
     $tree = StringToTreeConverter::run($input);
-    $result = Simplifier::run($tree);
+    $result = Simplifier::run($tree)['tree'];
     $expected = StringToTreeConverter::run($expected);
     expect($result)->toEqual($expected);
 })->with([
@@ -194,7 +194,7 @@ it('can calculate with fractions', function (string $input, string $expected) {
 
 it('can make conversions between fractions and negative exponents', function (string $input, string $expected) {
     $tree = StringToTreeConverter::run($input);
-    $result = Simplifier::run($tree);
+    $result = Simplifier::run($tree)['tree'];
     $expected = StringToTreeConverter::run($expected);
     expect($result)->toEqual($expected);
 })->with([

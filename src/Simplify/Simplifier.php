@@ -35,7 +35,7 @@ class Simplifier
     /**
      * Simplify the expression as much as possible.
      */
-    public static function run(Node $tree, bool $withSteps = false): array|Node
+    public static function run(Node $tree): array|Node
     {
         $steps = [];
         $oldTree = '';
@@ -58,9 +58,7 @@ class Simplifier
             }
         }
 
-        return $withSteps
-            ? ['tree' => $tree, 'steps' => $steps]
-            : $tree;
+        return ['tree' => $tree, 'steps' => $steps];
     }
 
     /**

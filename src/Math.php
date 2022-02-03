@@ -82,14 +82,10 @@ class Math
      */
     public function simplify(): self
     {
-        $result = Simplifier::run($this->tree, $this->withSteps);
+        $result = Simplifier::run($this->tree);
 
-        if ($this->withSteps) {
-            $this->tree = $result['tree'];
-            $this->steps = $result['steps'];
-        } else {
-            $this->tree = $result;
-        }
+        $this->tree = $result['tree'];
+        $this->steps = $result['steps'];
 
         return $this;
     }
