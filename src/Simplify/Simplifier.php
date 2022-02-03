@@ -51,6 +51,7 @@ class Simplifier
 
                 if (TreeToStringConverter::run($tree) !== $previousTree) {
                     $steps[] = [
+                        'type' => 'simplify',
                         'name' => (string) Str::of($step)->classBasename()->headline()->lower()->ucfirst(),
                         'result' => TreeToStringConverter::run($tree, $mathjax = true),
                     ];

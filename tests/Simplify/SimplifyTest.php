@@ -203,14 +203,14 @@ it('can make conversions between fractions and negative exponents', function (st
 ]);
 
 it('can record steps', function () {
-    $tree = StringToTreeConverter::run('6a * 7b');
-    $result = Simplifier::run($tree, $withSteps = true);
-    $expected = StringToTreeConverter::run('42ab');
+    $tree = StringToTreeConverter::run('6a * 7b + 5ab');
+    $result = Simplifier::run($tree);
 
     expect($result)->toEqual([
-        'tree' => $expected,
+        'tree' => StringToTreeConverter::run('47ab'),
         'steps' => [
-            ['name' => 'Multiply real numbers', 'result' => '42ab'],
+            ['type' => 'simplify', 'name' => 'Multiply real numbers', 'result' => '42ab+5ab'],
+            ['type' => 'simplify', 'name' => 'Add like terms', 'result' => '47ab'],
         ],
     ]);
 });

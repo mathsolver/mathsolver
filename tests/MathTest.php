@@ -29,17 +29,28 @@ it('can format mathjax output', function () {
 });
 
 it('can return steps', function () {
-    expect(Math::from('7x + 5x')->withSteps()->simplify()->string())->toBe([
+    expect(Math::from('7x + 5x')->withSteps()->simplify()->string())->toEqual([
         'result' => '12x',
-        'steps' => [['name' => 'Add like terms', 'result' => '12x']],
+        'steps' => collect([['type' => 'simplify', 'name' => 'Add like terms', 'result' => '12x']]),
     ]);
 
-    expect(Math::from('7x + 5x')->withSteps()->simplify()->mathjax())->toBe([
+    expect(Math::from('7x + 5x')->withSteps()->simplify()->mathjax())->toEqual([
         'result' => '12x',
-        'steps' => [['name' => 'Add like terms', 'result' => '12x']],
+        'steps' => collect([['type' => 'simplify', 'name' => 'Add like terms', 'result' => '12x']]),
     ]);
 });
 
 it('can substitute', function () {
     expect(Math::from('x + y')->substitute(['x' => '3', 'y' => '5'])->simplify()->string())->toBe('8');
+});
+
+it('records steps for substitution', function () {
+    expect(Math::from('x + y')->withSteps()->substitute(['x' => '3', 'y' => '5'])->simplify()->string())->toEqual([
+        'result' => '8',
+        'steps' => collect([
+            ['type' => 'substitute', 'name' => 'Substitute \( x \) for \( 3 \) and \( y \) for \( 5 \)', 'result' => '(3)+(5)'],
+            ['type' => 'simplify', 'name' => 'Remove brackets', 'result' => '3+5'],
+            ['type' => 'simplify', 'name' => 'Add real numbers', 'result' => '8'],
+        ]),
+    ]);
 });

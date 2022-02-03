@@ -2,6 +2,7 @@
 
 namespace MathSolver;
 
+use Illuminate\Support\Collection;
 use MathSolver\Simplify\Simplifier;
 use MathSolver\Utilities\Node;
 use MathSolver\Utilities\StringToTreeConverter;
@@ -18,7 +19,7 @@ class Math
     /**
      * The recorded steps.
      */
-    protected array $steps = [];
+    protected Collection $steps;
 
     /**
      * The root node of the current math tree.
@@ -31,6 +32,7 @@ class Math
     public function __construct(string $expression)
     {
         $this->tree = StringToTreeConverter::run($expression);
+        $this->steps = new Collection();
     }
 
     /**
@@ -85,7 +87,8 @@ class Math
         $result = Simplifier::run($this->tree);
 
         $this->tree = $result['tree'];
-        $this->steps = $result['steps'];
+        $this->steps->push($result['steps']);
+        $this->steps = $this->steps->flatten(1);
 
         return $this;
     }
@@ -96,6 +99,18 @@ class Math
     public function substitute(array $replacements): self
     {
         $this->tree = Substitutor::run($this->tree, $replacements);
+
+        $name = 'Substitute ';
+        foreach ($replacements as $search => $replace) {
+            $name .= "\\( {$search} \\) for \\( {$replace} \\) and ";
+        }
+
+        $this->steps->push([[
+            'type' => 'substitute',
+            'name' => substr($name, 0, -5),
+            'result' => TreeToStringConverter::run($this->tree),
+        ]]);
+
         return $this;
     }
 
