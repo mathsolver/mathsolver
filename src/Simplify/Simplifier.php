@@ -35,7 +35,7 @@ class Simplifier
     /**
      * Simplify the expression as much as possible.
      */
-    public static function run(Node $tree): array|Node
+    public static function run(Node $tree): array
     {
         $steps = [];
         $oldTree = '';
