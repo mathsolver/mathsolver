@@ -39,3 +39,7 @@ it('can return steps', function () {
         'steps' => [['name' => 'Add like terms', 'result' => '12x']],
     ]);
 });
+
+it('can substitute', function () {
+    expect(Math::from('x + y')->substitute(['x' => '3', 'y' => '5'])->simplify()->string())->toBe('8');
+});

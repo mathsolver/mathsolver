@@ -5,6 +5,7 @@ namespace MathSolver;
 use MathSolver\Simplify\Simplifier;
 use MathSolver\Utilities\Node;
 use MathSolver\Utilities\StringToTreeConverter;
+use MathSolver\Utilities\Substitutor;
 use MathSolver\Utilities\TreeToStringConverter;
 
 class Math
@@ -90,6 +91,15 @@ class Math
             $this->tree = $result;
         }
 
+        return $this;
+    }
+
+    /**
+     * Substitute a value for another value.
+     */
+    public function substitute(array $replacements): self
+    {
+        $this->tree = Substitutor::run($this->tree, $replacements);
         return $this;
     }
 
