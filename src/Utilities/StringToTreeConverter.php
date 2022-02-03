@@ -37,7 +37,7 @@ class StringToTreeConverter
                 }
                 return $string;
             })
-            ->replaceMatches('/[+|\/|*|^|(|)]/', ' $0 ') // Add spaces to operators
+            ->replaceMatches('/[=|+|\/|*|^|(|)]/', ' $0 ') // Add spaces to operators
             ->replace(',', ' , ')
             ->explode(' ') // Explode on spaces
             ->flatMap(function ($term) { // Expand terms like 7xy to 7*x*y and xtan(45) to x*tan(45)
@@ -113,14 +113,15 @@ class StringToTreeConverter
     public static function getPrecedence(string $value, bool $nested = false): int
     {
         return match ($value) {
-            '+' => 2,
-            '*' => 4,
-            '/' => 4,
-            '^' => 5,
-            '(' => $nested ? 1 : 19,
-            ')' => $nested ? 1 : 18,
-            ',' => 0,
-            default => in_array($value, self::$functions) ? 17 : 20,
+            '=' => 0,
+            '+' => 6,
+            '*' => 8,
+            '/' => 8,
+            '^' => 10,
+            '(' => $nested ? 4 : 16,
+            ')' => $nested ? 4 : 14,
+            ',' => 2,
+            default => in_array($value, self::$functions) ? 12 : 18,
         };
     }
 

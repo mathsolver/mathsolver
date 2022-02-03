@@ -393,3 +393,12 @@ it('can parse fractions', function () {
     $result = StringToTreeConverter::run('frac(3, 8)');
     expect($result)->toEqual($fraction);
 });
+
+it('can parse equations', function () {
+    $equal = new Node('=');
+    $equal->appendChild(new Node('x'));
+    $equal->appendChild(new Node(3));
+
+    $result = StringToTreeConverter::run('x = 3');
+    expect($result)->toEqual($equal);
+});
