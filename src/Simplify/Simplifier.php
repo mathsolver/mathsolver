@@ -60,7 +60,7 @@ class Simplifier
             }
         }
 
-        return ['tree' => $tree, 'steps' => $steps];
+        return ['result' => $tree, 'steps' => $steps];
     }
 
     /**

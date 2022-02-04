@@ -105,7 +105,7 @@ class Math
     {
         $result = Simplifier::run($this->tree, $this->options['mathjax']);
 
-        $this->tree = $result['tree'];
+        $this->tree = $result['result'];
 
         $this->steps = collect($result['steps']);
 

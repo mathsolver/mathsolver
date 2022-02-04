@@ -53,7 +53,7 @@ class Solver
         $leftMemberChildren->each(fn ($child) => $leftPlus->appendChild(clone $child));
         $leftMemberChildren->each(fn ($child) => $rightPlus->appendChild(clone $child));
 
-        return Simplifier::run($equation)['tree'];
+        return Simplifier::run($equation)['result'];
     }
 
     protected static function divideFromBothSides(Node $equation, string $solveFor): Node
@@ -87,7 +87,7 @@ class Solver
         $leftMemberChildren->each(fn ($child) => $leftPlus->appendChild(clone $child));
         $leftMemberChildren->each(fn ($child) => $rightPlus->appendChild(clone $child));
 
-        return Simplifier::run($equation)['tree'];
+        return Simplifier::run($equation)['result'];
     }
 
     protected static function containsLetter(Node $node, string $solveFor): bool
