@@ -54,7 +54,7 @@ class Simplifier
                     $steps[] = [
                         'type' => 'simplify',
                         'name' => (string) Str::of($step)->classBasename()->headline()->lower()->ucfirst(),
-                        'result' => TreeToStringConverter::run($tree, $mathjax = true),
+                        'result' => TreeToStringConverter::run($tree),
                     ];
                 }
             }

@@ -2,6 +2,7 @@
 
 namespace MathSolver;
 
+use Illuminate\Support\Collection;
 use MathSolver\Simplify\Simplifier;
 use MathSolver\Solve\Solver;
 use MathSolver\Utilities\Node;
@@ -21,7 +22,15 @@ class Math
      */
     public array $options = [
         'mathjax' => false,
+        'withSteps' => false,
     ];
+
+    /**
+     * The recorded steps.
+     *
+     * @var Collection<array>
+     */
+    public Collection $steps;
 
     /**
      * Create a new Math instance.
@@ -31,6 +40,7 @@ class Math
     public function __construct(string $expression)
     {
         $this->tree = StringToTreeConverter::run($expression);
+        $this->steps = new Collection();
     }
 
     /**
@@ -44,9 +54,13 @@ class Math
     /**
      * Convert the expression to a string.
      */
-    public function string(): string
+    public function string(): string|array
     {
-        return TreeToStringConverter::run($this->tree, $this->options['mathjax']);
+        $result = TreeToStringConverter::run($this->tree, $this->options['mathjax']);
+
+        return $this->options['withSteps']
+            ? ['result' => $result, 'steps' => $this->steps->toArray()]
+            : $result;
     }
 
     /**
@@ -62,10 +76,14 @@ class Math
      *
      * Available options:
      * - `mathjax (bool)` whether to use mathjax output
+     * - `withSteps (bool)` whether to record steps
      */
     public function config(array $options): self
     {
-        $this->options = $options;
+        foreach ($options as $key => $value) {
+            $this->options[$key] = $value;
+        }
+
         return $this;
     }
 
@@ -85,7 +103,12 @@ class Math
      */
     public function simplify(): self
     {
-        $this->tree = Simplifier::run($this->tree)['tree'];
+        $result = Simplifier::run($this->tree);
+
+        $this->tree = $result['tree'];
+
+        $this->steps = collect($result['steps']);
+
         return $this;
     }
 

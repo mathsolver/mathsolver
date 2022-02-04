@@ -49,3 +49,16 @@ it('can solve equations', function () {
     $result = Math::from('2x = 10')->solveFor('x')->string();
     expect($result)->toBe('5');
 });
+
+it('can record steps with simplifications', function () {
+    $result = Math::from('4x^2 + 5x * 6x')->config(['withSteps' => true])->simplify()->string();
+
+    expect($result)->toBe([
+        'result' => '34x^2',
+        'steps' => [
+            ['type' => 'simplify', 'name' => 'Multiply like factors', 'result' => '4x^2+5*6x^2'],
+            ['type' => 'simplify', 'name' => 'Multiply real numbers', 'result' => '4x^2+30x^2'],
+            ['type' => 'simplify', 'name' => 'Add like terms', 'result' => '34x^2'],
+        ],
+    ]);
+});
