@@ -62,3 +62,19 @@ it('can record steps with simplifications', function () {
         ],
     ]);
 });
+
+it('can record steps with mathjax', function () {
+    // without mathjax
+    $result = Math::from('root(8,2)')->config(['withSteps' => true, 'mathjax' => false])->simplify()->string();
+    expect($result)->toBe([
+        'result' => '2root(2,2)',
+        'steps' => [['type' => 'simplify', 'name' => 'Simplify roots', 'result' => '2root(2,2)']],
+    ]);
+
+    // with mathjax
+    $result = Math::from('root(8,2)')->config(['withSteps' => true, 'mathjax' => true])->simplify()->string();
+    expect($result)->toBe([
+        'result' => '2\sqrt{2}',
+        'steps' => [['type' => 'simplify', 'name' => 'Simplify roots', 'result' => '2\sqrt{2}']],
+    ]);
+});
