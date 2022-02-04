@@ -36,7 +36,7 @@ class Simplifier
     /**
      * Simplify the expression as much as possible.
      */
-    public static function run(Node $tree): array
+    public static function run(Node $tree, bool $mathjax = false): array
     {
         $steps = [];
         $oldTree = '';
@@ -54,7 +54,7 @@ class Simplifier
                     $steps[] = [
                         'type' => 'simplify',
                         'name' => (string) Str::of($step)->classBasename()->headline()->lower()->ucfirst(),
-                        'result' => TreeToStringConverter::run($tree),
+                        'result' => TreeToStringConverter::run($tree, $mathjax),
                     ];
                 }
             }
