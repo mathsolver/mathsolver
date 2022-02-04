@@ -16,6 +16,11 @@ class SimplifyFractions extends Step
 
         $greatestCommonDivisor = (int) gmp_gcd($numerator, $denominator);
 
+        // remove double negative numbers
+        if ($numerator < 0 && $denominator < 0) {
+            $greatestCommonDivisor = $greatestCommonDivisor * -1;
+        }
+
         $node->children()->first()->setValue($numerator / $greatestCommonDivisor);
         $node->children()->last()->setValue($denominator / $greatestCommonDivisor);
 

@@ -35,8 +35,19 @@ it('simplifies harder fractions', function ($input, $output) {
     ['frac(64, 148)', 'frac(16, 37)'],
     ['frac(114, 228)', 'frac(1, 2)'],
     ['frac(96, 135)', 'frac(32, 45)'],
-    ['frac(4, -2)', '-2'],
 ]);
+
+it('divides by negative numbers', function () {
+    $tree = StringToTreeConverter::run('frac(4, -2)');
+    $result = SimplifyFractions::run($tree);
+    expect($result)->toEqual(StringToTreeConverter::run('-2'));
+});
+
+it('removes negative divided by negative', function () {
+    $tree = StringToTreeConverter::run('frac(-1, -3)');
+    $result = SimplifyFractions::run($tree);
+    expect($result)->toEqual(StringToTreeConverter::run('frac(1, 3)'));
+});
 
 it('simplifies fractions in an already existing multiplication', function () {
     $tree = StringToTreeConverter::run('5 * frac(6, 2)');
