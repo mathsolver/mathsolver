@@ -3,7 +3,7 @@
 use MathSolver\Solve\Solver;
 use MathSolver\Utilities\StringToTreeConverter;
 
-it('can solve linear equations by adding', function (string $input, string $expected) {
+it('can solve linear equations by subtracting', function (string $input, string $expected) {
     $tree = StringToTreeConverter::run($input);
     $result = Solver::run($tree, 'x');
     $expected = StringToTreeConverter::run($expected);
@@ -18,4 +18,18 @@ it('can solve linear equations by adding', function (string $input, string $expe
     ['x + 3 = y + 4', 'y + 1'],
     ['x + 7 = 10', '3'],
     ['x + 1 = 0', '-1'],
+    ['9 + x = 11', '2'],
+]);
+
+it('can solve linear equations by dividing', function (string $input, string $expected) {
+    $tree = StringToTreeConverter::run($input);
+    $result = Solver::run($tree, 'x');
+    $expected = StringToTreeConverter::run($expected);
+    expect($result)->toEqual($expected);
+})->with([
+    ['5x = 25', '5'],
+    ['3x = 27', '9'],
+    ['8x = 40', '5'],
+    ['28x = 1316', '47'],
+    ['-2x = 4', '-2'],
 ]);
