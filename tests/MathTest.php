@@ -44,3 +44,8 @@ it('can substitute multiple values', function () {
     $result = Math::from('3x + 5y')->substitute(['x' => 4, 'y' => 2])->simplify()->string();
     expect($result)->toBe('22');
 });
+
+it('can solve equations', function () {
+    $result = Math::from('2x = 10')->solveFor('x')->string();
+    expect($result)->toBe('5');
+});

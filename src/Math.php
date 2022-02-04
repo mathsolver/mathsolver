@@ -3,6 +3,7 @@
 namespace MathSolver;
 
 use MathSolver\Simplify\Simplifier;
+use MathSolver\Solve\Solver;
 use MathSolver\Utilities\Node;
 use MathSolver\Utilities\StringToTreeConverter;
 use MathSolver\Utilities\Substitutor;
@@ -38,6 +39,14 @@ class Math
     public function __toString(): string
     {
         return $this->string();
+    }
+
+    /**
+     * Convert the expression to a string.
+     */
+    public function string(): string
+    {
+        return TreeToStringConverter::run($this->tree, $this->options['mathjax']);
     }
 
     /**
@@ -81,10 +90,11 @@ class Math
     }
 
     /**
-     * Convert the expression to a string.
+     * Solve an equation for a letter.
      */
-    public function string(): string
+    public function solveFor(string $letter): self
     {
-        return TreeToStringConverter::run($this->tree, $this->options['mathjax']);
+        $this->tree = Solver::run($this->tree, $letter);
+        return $this;
     }
 }
