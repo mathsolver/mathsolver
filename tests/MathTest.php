@@ -111,3 +111,16 @@ it('can record steps for substitution with mathjax', function () {
         ],
     ]);
 });
+
+it('can record steps for substitution and simplification', function () {
+    $result = Math::from('2x')->config(['steps' => true, 'mathjax' => true])->substitute(['x' => 3])->simplify()->string();
+
+    expect($result)->toBe([
+        'result' => '6',
+        'steps' => [
+            ['type' => 'substitute', 'name' => 'Substitute \( x \) for \( 3 \)', 'result' => '2(3)'],
+            ['type' => 'simplify', 'name' => 'Remove brackets', 'result' => '2*3'],
+            ['type' => 'simplify', 'name' => 'Multiply real numbers', 'result' => '6'],
+        ],
+    ]);
+});

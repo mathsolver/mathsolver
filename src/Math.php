@@ -114,7 +114,7 @@ class Math
 
         $this->tree = $result['result'];
 
-        $this->steps = collect($result['steps']);
+        collect($result['steps'])->each(fn ($step) => $this->steps->push($step));
 
         return $this;
     }
