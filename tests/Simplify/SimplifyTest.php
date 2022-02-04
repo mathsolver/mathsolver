@@ -213,7 +213,7 @@ it('removes redundant numbers', function (string $input, string $expected) {
     ['0 + 2y', '2y'],
 ]);
 
-it('can record steps', function () {
+it('records steps', function () {
     $tree = StringToTreeConverter::run('6a * 7b + 5ab');
     $result = Simplifier::run($tree);
 
