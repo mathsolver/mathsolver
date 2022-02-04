@@ -126,9 +126,16 @@ class Math
     /**
      * Solve an equation.
      */
-    public function solveFor(string $letter, $mathjax = false): string
+    public function solveFor(string $letter): self
     {
-        $solution = Solver::run($this->tree, $letter);
-        return TreeToStringConverter::run($solution, $mathjax);
+        $this->tree = Solver::run($this->tree, $letter);
+
+        $this->steps->push([[
+            'type' => 'solve',
+            'name' => "Solve for \\( {$letter} \\)",
+            'result' => $letter . ' = ' . TreeToStringConverter::run($this->tree),
+        ]]);
+
+        return $this;
     }
 }
