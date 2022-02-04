@@ -4,6 +4,7 @@ namespace MathSolver;
 
 use Illuminate\Support\Collection;
 use MathSolver\Simplify\Simplifier;
+use MathSolver\Solve\Solver;
 use MathSolver\Utilities\Node;
 use MathSolver\Utilities\StringToTreeConverter;
 use MathSolver\Utilities\Substitutor;
@@ -120,5 +121,14 @@ class Math
     {
         $this->withSteps = true;
         return $this;
+    }
+
+    /**
+     * Solve an equation.
+     */
+    public function solveFor(string $letter, $mathjax = false): string
+    {
+        $solution = Solver::run($this->tree, $letter);
+        return TreeToStringConverter::run($solution, $mathjax);
     }
 }

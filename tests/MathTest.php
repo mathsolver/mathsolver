@@ -54,3 +54,7 @@ it('records steps for substitution', function () {
         ]),
     ]);
 });
+
+it('can solve equations', function () {
+    expect(Math::from('2x = 16')->solveFor('x'))->toBe('8');
+});
