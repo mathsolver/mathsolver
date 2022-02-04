@@ -22,7 +22,7 @@ class Math
      */
     public array $options = [
         'mathjax' => false,
-        'withSteps' => false,
+        'steps' => false,
     ];
 
     /**
@@ -58,7 +58,7 @@ class Math
     {
         $result = TreeToStringConverter::run($this->tree, $this->options['mathjax']);
 
-        return $this->options['withSteps']
+        return $this->options['steps']
             ? ['result' => $result, 'steps' => $this->steps->toArray()]
             : $result;
     }
@@ -76,7 +76,7 @@ class Math
      *
      * Available options:
      * - `mathjax (bool)` whether to use mathjax output
-     * - `withSteps (bool)` whether to record steps
+     * - `steps (bool)` whether to record steps
      */
     public function config(array $options): self
     {
@@ -95,6 +95,13 @@ class Math
     public function substitute(array $replacements): self
     {
         $this->tree = Substitutor::run($this->tree, $replacements);
+
+        $this->steps->push([
+            'type' => 'substitute',
+            'name' => 'Substitute ' . collect($replacements)->map(fn ($replace, $search) => $this->options['mathjax'] ? "\\( {$search} \\) for \\( {$replace} \\)" : "{$search} for {$replace}")->implode(' and '),
+            'result' => TreeToStringConverter::run($this->tree),
+        ]);
+
         return $this;
     }
 

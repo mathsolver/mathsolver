@@ -51,7 +51,7 @@ it('can solve equations', function () {
 });
 
 it('can record steps with simplifications', function () {
-    $result = Math::from('4x^2 + 5x * 6x')->config(['withSteps' => true])->simplify()->string();
+    $result = Math::from('4x^2 + 5x * 6x')->config(['steps' => true])->simplify()->string();
 
     expect($result)->toBe([
         'result' => '34x^2',
@@ -65,16 +65,49 @@ it('can record steps with simplifications', function () {
 
 it('can record steps with mathjax', function () {
     // without mathjax
-    $result = Math::from('root(8,2)')->config(['withSteps' => true, 'mathjax' => false])->simplify()->string();
+    $result = Math::from('root(8,2)')->config(['steps' => true, 'mathjax' => false])->simplify()->string();
     expect($result)->toBe([
         'result' => '2root(2,2)',
         'steps' => [['type' => 'simplify', 'name' => 'Simplify roots', 'result' => '2root(2,2)']],
     ]);
 
     // with mathjax
-    $result = Math::from('root(8,2)')->config(['withSteps' => true, 'mathjax' => true])->simplify()->string();
+    $result = Math::from('root(8,2)')->config(['steps' => true, 'mathjax' => true])->simplify()->string();
     expect($result)->toBe([
         'result' => '2\sqrt{2}',
         'steps' => [['type' => 'simplify', 'name' => 'Simplify roots', 'result' => '2\sqrt{2}']],
+    ]);
+});
+
+it('can record steps for substitution', function () {
+    $result = Math::from('2x')->config(['steps' => true])->substitute(['x' => 3])->string();
+
+    expect($result)->toBe([
+        'result' => '2(3)',
+        'steps' => [
+            ['type' => 'substitute', 'name' => 'Substitute x for 3', 'result' => '2(3)'],
+        ],
+    ]);
+});
+
+it('can record steps for substitution with multiple replacements', function () {
+    $result = Math::from('2xy')->config(['steps' => true])->substitute(['x' => 3, 'y' => 4])->string();
+
+    expect($result)->toBe([
+        'result' => '2(3)(4)',
+        'steps' => [
+            ['type' => 'substitute', 'name' => 'Substitute x for 3 and y for 4', 'result' => '2(3)(4)'],
+        ],
+    ]);
+});
+
+it('can record steps for substitution with mathjax', function () {
+    $result = Math::from('2xy')->config(['steps' => true, 'mathjax' => true])->substitute(['x' => 3, 'y' => 4])->string();
+
+    expect($result)->toBe([
+        'result' => '2(3)(4)',
+        'steps' => [
+            ['type' => 'substitute', 'name' => 'Substitute \( x \) for \( 3 \) and \( y \) for \( 4 \)', 'result' => '2(3)(4)'],
+        ],
     ]);
 });
