@@ -28,6 +28,7 @@ class Simplifier
         MultiplyLikeFactors::class,
         MultiplyRealNumbers::class,
         RemoveBrackets::class,
+        RemoveRedundantNumbers::class,
         SimplifyFractions::class,
         SimplifyRoots::class,
     ];

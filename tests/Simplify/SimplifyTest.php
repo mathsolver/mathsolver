@@ -202,6 +202,17 @@ it('can make conversions between fractions and negative exponents', function (st
     ['3^-1', 'frac(1, 3)'],
 ]);
 
+it('removes redundant numbers', function (string $input, string $expected) {
+    $tree = StringToTreeConverter::run($input);
+    $result = Simplifier::run($tree)['tree'];
+    $expected = StringToTreeConverter::run($expected);
+    expect($result)->toEqual($expected);
+})->with([
+    ['4a + 0', '4a'],
+    ['5x - 0', '5x'],
+    ['0 + 2y', '2y'],
+]);
+
 it('can record steps', function () {
     $tree = StringToTreeConverter::run('6a * 7b + 5ab');
     $result = Simplifier::run($tree);
