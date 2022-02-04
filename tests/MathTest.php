@@ -1,60 +1,46 @@
 <?php
 
 use MathSolver\Math;
-use MathSolver\Utilities\Node;
 
-it('can simplify expressions', function ($input, $output) {
-    $result = (string) Math::from($input)->simplify();
-    expect($result)->toBe(str_replace(' ', '', $output));
-})->with([
-    ['5x * 4', '20x'],
-    ['7x + 5x', '12x'],
-    ['2a + 7b + 3a + 4b', '5a + 11b'],
-]);
-
-it('can output a string', function () {
-    expect(Math::from('3 + 5')->string())->toBe('3+5');
+it('can simplify expressions', function () {
+    $result = (new Math('2x + 9x'))->simplify()->string();
+    expect($result)->toBe('11x');
 });
 
-it('can output a tree', function () {
-    $plus = new Node('+');
-    $plus->appendChild(new Node(3));
-    $plus->appendChild(new Node(5));
-
-    expect(Math::from('3 + 5')->tree())->toEqual($plus);
+it('can be instantiated from a static method', function () {
+    $result = Math::from('2x + 3x')->simplify()->string();
+    expect($result)->toBe('5x');
 });
 
-it('can format mathjax output', function () {
-    expect(Math::from('root(25, 2)')->mathjax())->toBe('\sqrt{25}');
+it('converts automatically to a string', function () {
+    $result = (string) Math::from('7x * 3')->simplify();
+    expect($result)->toBe('21x');
 });
 
-it('can return steps', function () {
-    expect(Math::from('7x + 5x')->withSteps()->simplify()->string())->toEqual([
-        'result' => '12x',
-        'steps' => collect([['type' => 'simplify', 'name' => 'Add like terms', 'result' => '12x']]),
-    ]);
-
-    expect(Math::from('7x + 5x')->withSteps()->simplify()->mathjax())->toEqual([
-        'result' => '12x',
-        'steps' => collect([['type' => 'simplify', 'name' => 'Add like terms', 'result' => '12x']]),
-    ]);
+it('has mathjax disabled by default', function () {
+    $result = Math::from('root(18, 2)')->simplify()->string();
+    expect($result)->toBe('3root(2,2)');
 });
 
-it('can substitute', function () {
-    expect(Math::from('x + y')->substitute(['x' => '3', 'y' => '5'])->simplify()->string())->toBe('8');
+it('can use mathjax', function () {
+    $result = Math::from('root(20, 2)')->config(['mathjax' => true])->simplify()->string();
+    expect($result)->toBe('2\sqrt{5}');
 });
 
-it('records steps for substitution', function () {
-    expect(Math::from('x + y')->withSteps()->substitute(['x' => '3', 'y' => '5'])->simplify()->string())->toEqual([
-        'result' => '8',
-        'steps' => collect([
-            ['type' => 'substitute', 'name' => 'Substitute \( x \) for \( 3 \) and \( y \) for \( 5 \)', 'result' => '(3)+(5)'],
-            ['type' => 'simplify', 'name' => 'Remove brackets', 'result' => '3+5'],
-            ['type' => 'simplify', 'name' => 'Add real numbers', 'result' => '8'],
-        ]),
-    ]);
+it('can substitute values', function () {
+    $result = Math::from('2x')->substitute(['x' => 5])->string();
+    expect($result)->toBe('2(5)');
 });
 
-it('can solve equations', function () {
-    expect(Math::from('2x = 16')->solveFor('x')->mathjax())->toBe('8');
+it('can substitute and simplify values', function () {
+    $result = Math::from('3y')->substitute(['y' => 4])->simplify()->string();
+    expect($result)->toBe('12');
+});
+
+it('can substitute multiple values', function () {
+    $result = Math::from('3x + 5y')->substitute(['x' => 4, 'y' => 2])->string();
+    expect($result)->toBe('3(4)+5(2)');
+
+    $result = Math::from('3x + 5y')->substitute(['x' => 4, 'y' => 2])->simplify()->string();
+    expect($result)->toBe('22');
 });

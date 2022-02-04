@@ -2,9 +2,7 @@
 
 namespace MathSolver;
 
-use Illuminate\Support\Collection;
 use MathSolver\Simplify\Simplifier;
-use MathSolver\Solve\Solver;
 use MathSolver\Utilities\Node;
 use MathSolver\Utilities\StringToTreeConverter;
 use MathSolver\Utilities\Substitutor;
@@ -13,31 +11,29 @@ use MathSolver\Utilities\TreeToStringConverter;
 class Math
 {
     /**
-     * Whether to record steps.
+     * The current math tree to work with.
      */
-    protected bool $withSteps = false;
+    public Node $tree;
 
     /**
-     * The recorded steps.
+     * The configuration options.
      */
-    protected Collection $steps;
+    public array $options = [
+        'mathjax' => false,
+    ];
 
     /**
-     * The root node of the current math tree.
-     */
-    protected Node $tree;
-
-    /**
-     * Convert the given string to a tree.
+     * Create a new Math instance.
+     *
+     * @return Math
      */
     public function __construct(string $expression)
     {
         $this->tree = StringToTreeConverter::run($expression);
-        $this->steps = new Collection();
     }
 
     /**
-     * Convert the current math tree to a string.
+     * Convert the expression to a string.
      */
     public function __toString(): string
     {
@@ -45,35 +41,7 @@ class Math
     }
 
     /**
-     * Convert the current math tree to a string.
-     */
-    public function string(): string|array
-    {
-        return $this->withSteps
-            ? ['result' => TreeToStringConverter::run($this->tree), 'steps' => $this->steps->flatten(1)]
-            : TreeToStringConverter::run($this->tree);
-    }
-
-    /**
-     * Return the current math tree.
-     */
-    public function tree(): Node
-    {
-        return $this->tree;
-    }
-
-    /**
-     * Convert to a mathjax formatted string.
-     */
-    public function mathjax(): string|array
-    {
-        return $this->withSteps
-            ? ['result' => TreeToStringConverter::run($this->tree, $mathjax = true), 'steps' => $this->steps->flatten(1)]
-            : TreeToStringConverter::run($this->tree, $mathjax = true);
-    }
-
-    /**
-     * Parse a mathematical expression to a math tree.
+     * Initialize a Math instance from an expression.
      */
     public static function from(string $expression): self
     {
@@ -81,61 +49,42 @@ class Math
     }
 
     /**
-     * Simplify the expression as much as possible.
+     * Specify the options for further operations.
+     *
+     * Available options:
+     * - `mathjax (bool)` whether to use mathjax output
      */
-    public function simplify(): self
+    public function config(array $options): self
     {
-        $result = Simplifier::run($this->tree);
-
-        $this->tree = $result['tree'];
-        $this->steps->push($result['steps']);
-
+        $this->options = $options;
         return $this;
     }
 
     /**
-     * Substitute a value for another value.
+     * Substitute values.
+     *
+     * For example `['x' => 5, 'y' => '3z']`.
      */
     public function substitute(array $replacements): self
     {
         $this->tree = Substitutor::run($this->tree, $replacements);
-
-        $name = 'Substitute ';
-        foreach ($replacements as $search => $replace) {
-            $name .= "\\( {$search} \\) for \\( {$replace} \\) and ";
-        }
-
-        $this->steps->push([[
-            'type' => 'substitute',
-            'name' => substr($name, 0, -5),
-            'result' => TreeToStringConverter::run($this->tree),
-        ]]);
-
         return $this;
     }
 
     /**
-     * Record steps.
+     * Simplify the expression.
      */
-    public function withSteps(): self
+    public function simplify(): self
     {
-        $this->withSteps = true;
+        $this->tree = Simplifier::run($this->tree)['tree'];
         return $this;
     }
 
     /**
-     * Solve an equation.
+     * Convert the expression to a string.
      */
-    public function solveFor(string $letter): self
+    public function string(): string
     {
-        $this->tree = Solver::run($this->tree, $letter);
-
-        $this->steps->push([[
-            'type' => 'solve',
-            'name' => "Solve for \\( {$letter} \\)",
-            'result' => $letter . ' = ' . TreeToStringConverter::run($this->tree),
-        ]]);
-
-        return $this;
+        return TreeToStringConverter::run($this->tree, $this->options['mathjax']);
     }
 }
