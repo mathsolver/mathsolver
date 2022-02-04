@@ -33,3 +33,14 @@ it('can solve linear equations by dividing', function (string $input, string $ex
     ['28x = 1316', '47'],
     ['-2x = 4', '-2'],
 ]);
+
+it('can solve linear equations by substracting and dividing', function (string $input, string $expected) {
+    $tree = StringToTreeConverter::run($input);
+    $result = Solver::run($tree, 'x');
+    $expected = StringToTreeConverter::run($expected);
+    expect($result)->toEqual($expected);
+})->with([
+    ['2x + 5 = 15', '5'],
+    ['-5x + 8 = 53', '-9'],
+    ['6 - x = 4', '2'],
+]);

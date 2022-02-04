@@ -28,7 +28,7 @@ class Solver
             ->children()
             ->first()
             ->children()
-            ->filter(fn ($child) => $child->value() !== $solveFor)
+            ->filter(fn ($child) => !self::containsLetter($child, $solveFor))
             ->map(function ($child) {
                 $times = new Node('*');
                 $times->appendChild(new Node(-1));
@@ -62,7 +62,7 @@ class Solver
             ->children()
             ->first()
             ->children()
-            ->filter(fn ($child) => $child->value() !== $solveFor)
+            ->filter(fn ($child) => !self::containsLetter($child, $solveFor))
             ->map(function ($child) {
                 $power = new Node('^');
                 $power->appendChild($child);
@@ -88,5 +88,14 @@ class Solver
         $leftMemberChildren->each(fn ($child) => $rightPlus->appendChild(clone $child));
 
         return Simplifier::run($equation)['tree'];
+    }
+
+    protected static function containsLetter(Node $node, string $solveFor): bool
+    {
+        if ($node->value() === $solveFor) {
+            return true;
+        }
+
+        return $node->children()->filter(fn ($child) => self::containsLetter($child, $solveFor))->count() > 0;
     }
 }
