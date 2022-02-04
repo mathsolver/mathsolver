@@ -35,6 +35,7 @@ it('simplifies harder fractions', function ($input, $output) {
     ['frac(64, 148)', 'frac(16, 37)'],
     ['frac(114, 228)', 'frac(1, 2)'],
     ['frac(96, 135)', 'frac(32, 45)'],
+    ['frac(4, -2)', '-2'],
 ]);
 
 it('simplifies fractions in an already existing multiplication', function () {

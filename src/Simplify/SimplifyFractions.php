@@ -24,6 +24,11 @@ class SimplifyFractions extends Step
             return new Node($node->children()->first()->value());
         }
 
+        // check if the denominator equals -1
+        if ($node->children()->last()->value() == -1) {
+            return new Node(-1 * $node->children()->first()->value());
+        }
+
         return $node;
     }
 
