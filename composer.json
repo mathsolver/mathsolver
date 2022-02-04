@@ -23,10 +23,11 @@
     },
     "require-dev": {
         "symfony/var-dumper": "^6.0",
-        "pestphp/pest": "^1.21"
+        "pestphp/pest": "^1.21",
+        "pestphp/pest-plugin-parallel": "^1.0"
     },
     "scripts": {
-        "test": "./vendor/bin/pest",
-        "coverage": "./vendor/bin/pest --coverage --min=100"
+        "test": "./vendor/bin/pest --parallel",
+        "coverage": "./vendor/bin/pest --parallel --coverage --min=100"
     }
 }
