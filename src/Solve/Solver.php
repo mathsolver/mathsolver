@@ -74,21 +74,17 @@ class Solver
             });
 
         $leftMember = $this->equation->children()->first();
-        $this->equation->removeChild($leftMember);
-
         $rightMember = $this->equation->children()->last();
-        $this->equation->removeChild($rightMember);
 
-        $leftPlus = $this->equation->appendChild(new Node('+'));
-        $leftBrackets = $leftPlus->appendChild(new Node('('));
-        $leftBrackets->appendChild($leftMember);
+        if ($rightMember->value() !== '+') {
+            $this->equation->removeChild($rightMember);
+            $rightPlus = $this->equation->appendChild(new Node('+'));
+            $rightPlus->appendChild($rightMember);
+            $rightMember = $rightPlus;
+        }
 
-        $rightPlus = $this->equation->appendChild(new Node('+'));
-        $rightBrackets = $rightPlus->appendChild(new Node('('));
-        $rightBrackets->appendChild($rightMember);
-
-        $leftMemberChildren->each(fn ($child) => $leftPlus->appendChild(clone $child));
-        $leftMemberChildren->each(fn ($child) => $rightPlus->appendChild(clone $child));
+        $leftMemberChildren->each(fn ($child) => $leftMember->appendChild(clone $child));
+        $leftMemberChildren->each(fn ($child) => $rightMember->appendChild(clone $child));
 
         $this->steps->push([
             'type' => 'solve',
