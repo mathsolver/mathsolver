@@ -115,8 +115,7 @@ it('records steps when dividing', function () {
     expect($result)->toEqual([
         'result' => StringToTreeConverter::run('x = 8'),
         'steps' => [
-            ['type' => 'solve', 'name' => 'Divide', 'result' => '(2x)*frac(1,2)=(16)*frac(1,2)'],
-            ['type' => 'simplify', 'name' => 'Remove brackets', 'result' => '2frac(1,2)*x=16frac(1,2)'],
+            ['type' => 'solve', 'name' => 'Divide', 'result' => '2xfrac(1,2)=16frac(1,2)'],
             ['type' => 'simplify', 'name' => 'Multiply fractions', 'result' => 'frac(2,2)*x=frac(16,2)'],
             ['type' => 'simplify', 'name' => 'Simplify fractions', 'result' => '1x=8'],
             ['type' => 'simplify', 'name' => 'Multiply real numbers', 'result' => 'x=8'],
@@ -134,8 +133,7 @@ it('records steps when subtracting and dividing', function () {
         'steps' => [
             ['type' => 'solve', 'name' => 'Add -7 to both sides', 'result' => '5x+7-7=22-7'],
             ['type' => 'simplify', 'name' => 'Add real numbers', 'result' => '5x=15'],
-            ['type' => 'solve', 'name' => 'Divide', 'result' => '(5x)*frac(1,5)=(15)*frac(1,5)'],
-            ['type' => 'simplify', 'name' => 'Remove brackets', 'result' => '5frac(1,5)*x=15frac(1,5)'],
+            ['type' => 'solve', 'name' => 'Divide', 'result' => '5xfrac(1,5)=15frac(1,5)'],
             ['type' => 'simplify', 'name' => 'Multiply fractions', 'result' => 'frac(5,5)*x=frac(15,5)'],
             ['type' => 'simplify', 'name' => 'Simplify fractions', 'result' => '1x=3'],
             ['type' => 'simplify', 'name' => 'Remove redundant numbers', 'result' => 'x=3'],
@@ -151,8 +149,7 @@ it('records steps when subtracting and dividing', function () {
         'steps' => [
             ['type' => 'solve', 'name' => 'Add \( -7 \) to both sides', 'result' => '5x+7-7=22-7'],
             ['type' => 'simplify', 'name' => 'Add real numbers', 'result' => '5x=15'],
-            ['type' => 'solve', 'name' => 'Divide', 'result' => '(5x)*\frac{1}{5}=(15)*\frac{1}{5}'],
-            ['type' => 'simplify', 'name' => 'Remove brackets', 'result' => '5*\frac{1}{5}*x=15*\frac{1}{5}'],
+            ['type' => 'solve', 'name' => 'Divide', 'result' => '5x*\frac{1}{5}=15*\frac{1}{5}'],
             ['type' => 'simplify', 'name' => 'Multiply fractions', 'result' => '\frac{5}{5}*x=\frac{15}{5}'],
             ['type' => 'simplify', 'name' => 'Simplify fractions', 'result' => '1x=3'],
             ['type' => 'simplify', 'name' => 'Remove redundant numbers', 'result' => 'x=3'],
