@@ -124,7 +124,7 @@ class Math
      */
     public function solveFor(string $letter): self
     {
-        $result = Solver::run($this->tree, $letter);
+        $result = Solver::run($this->tree, $letter, $this->options['mathjax']);
 
         $this->tree = $result['result'];
 
