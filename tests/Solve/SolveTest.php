@@ -90,8 +90,7 @@ it('records steps when subtracting', function () {
     expect($result)->toEqual([
         'result' => StringToTreeConverter::run('x = 6'),
         'steps' => [
-            ['type' => 'solve', 'name' => 'Subtract', 'result' => '(x+4)-1*4=(10)-1*4'],
-            ['type' => 'simplify', 'name' => 'Multiply real numbers', 'result' => '(x+4)-4=(10)-4'],
+            ['type' => 'solve', 'name' => 'Subtract', 'result' => '(x+4)-4=(10)-4'],
             ['type' => 'simplify', 'name' => 'Remove brackets', 'result' => 'x+4-4=10-4'],
             ['type' => 'simplify', 'name' => 'Add real numbers', 'result' => 'x=6'],
         ],
@@ -122,8 +121,7 @@ it('records steps when subtracting and dividing', function () {
     expect($result)->toEqual([
         'result' => StringToTreeConverter::run('x = 3'),
         'steps' => [
-            ['type' => 'solve', 'name' => 'Subtract', 'result' => '(5x+7)-1*7=(22)-1*7'],
-            ['type' => 'simplify', 'name' => 'Multiply real numbers', 'result' => '(5x+7)-7=(22)-7'],
+            ['type' => 'solve', 'name' => 'Subtract', 'result' => '(5x+7)-7=(22)-7'],
             ['type' => 'simplify', 'name' => 'Remove brackets', 'result' => '5x+7-7=22-7'],
             ['type' => 'simplify', 'name' => 'Add real numbers', 'result' => '5x=15'],
             ['type' => 'solve', 'name' => 'Divide', 'result' => '(5x)*5^-1=(15)*5^-1'],

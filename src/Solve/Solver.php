@@ -63,6 +63,10 @@ class Solver
             ->children()
             ->filter(fn ($child) => !$this->containsLetter($child))
             ->map(function ($child) {
+                if (is_numeric($child->value())) {
+                    return new Node($child->value() * -1);
+                }
+
                 $times = new Node('*');
                 $times->appendChild(new Node(-1));
                 $times->appendChild($child);
