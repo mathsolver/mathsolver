@@ -108,6 +108,13 @@ class Solver
             ->children()
             ->filter(fn ($child) => !$this->containsLetter($child))
             ->map(function ($child) {
+                if (is_numeric($child->value())) {
+                    $fraction = new Node('frac');
+                    $fraction->appendChild(new Node(1));
+                    $fraction->appendChild($child);
+                    return $fraction;
+                }
+
                 $power = new Node('^');
                 $power->appendChild($child);
                 $power->appendChild(new Node(-1));

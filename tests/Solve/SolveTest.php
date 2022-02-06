@@ -115,8 +115,7 @@ it('records steps when dividing', function () {
     expect($result)->toEqual([
         'result' => StringToTreeConverter::run('x = 8'),
         'steps' => [
-            ['type' => 'solve', 'name' => 'Divide', 'result' => '(2x)*2^-1=(16)*2^-1'],
-            ['type' => 'simplify', 'name' => 'Move negative exponents into fractions', 'result' => 'frac(1,2)(2x)=frac(1,2)(16)'],
+            ['type' => 'solve', 'name' => 'Divide', 'result' => '(2x)*frac(1,2)=(16)*frac(1,2)'],
             ['type' => 'simplify', 'name' => 'Remove brackets', 'result' => '2frac(1,2)*x=16frac(1,2)'],
             ['type' => 'simplify', 'name' => 'Multiply fractions', 'result' => 'frac(2,2)*x=frac(16,2)'],
             ['type' => 'simplify', 'name' => 'Simplify fractions', 'result' => '1x=8'],
