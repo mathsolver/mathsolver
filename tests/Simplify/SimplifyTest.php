@@ -211,6 +211,8 @@ it('removes redundant numbers', function (string $input, string $expected) {
     ['4a + 0', '4a'],
     ['5x - 0', '5x'],
     ['0 + 2y', '2y'],
+    ['2x * 1', '2x'],
+    ['1 * 7', '7'],
 ]);
 
 it('records steps', function () {
