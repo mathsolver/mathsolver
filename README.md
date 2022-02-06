@@ -11,7 +11,7 @@ Math::from('3x^2 + 2x * 4x')->simplify()->string(); // 11x^2
 
 Math::from('2x + 3')->substitute(['x' => 5])->simplify()->string(); // 13
 
-Math::from('2x + 16')->solveFor('x')->string(); // 8
+Math::from('2x + 16')->solveFor('x')->string(); // x = 8
 ```
 
 ## Table of contents
@@ -79,7 +79,7 @@ Solve the equation for a given letter.
 ```php
 use MathSolver\Math;
 
-Math::from('2x + 3 = 11')->solveFor('x')->string(); // 4
+Math::from('2x + 3 = 11')->solveFor('x')->string(); // x = 4
 ```
 
 ## Configuration

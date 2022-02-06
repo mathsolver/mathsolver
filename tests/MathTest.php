@@ -47,7 +47,7 @@ it('can substitute multiple values', function () {
 
 it('can solve equations', function () {
     $result = Math::from('2x = 10')->solveFor('x')->string();
-    expect($result)->toBe('5');
+    expect($result)->toBe('x=5');
 });
 
 it('can record steps with simplifications', function () {

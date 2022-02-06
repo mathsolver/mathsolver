@@ -17,9 +17,7 @@ class Solver
             $equation = self::divideFromBothSides($equation, $solveFor);
         }
 
-        $solution = $equation->children()->last();
-        $solution->setParent(null);
-        return $solution;
+        return $equation;
     }
 
     protected static function subtractFromBothSides(Node $equation, string $solveFor): Node

@@ -1,13 +1,12 @@
 <?php
 
 use MathSolver\Solve\Solver;
-use MathSolver\Utilities\Node;
 use MathSolver\Utilities\StringToTreeConverter;
 
 it('can solve linear equations', function (string $input, string $expected) {
     $tree = StringToTreeConverter::run($input);
     $result = Solver::run($tree, 'x');
-    $expected = StringToTreeConverter::run($expected);
+    $expected = StringToTreeConverter::run("x = {$expected}");
     expect($result)->toEqual($expected);
 })->with([
     ['x + 3 = 6', '3'],
@@ -77,9 +76,9 @@ it('can solve linear equations', function (string $input, string $expected) {
 it('can solve for other letters', function () {
     $tree = StringToTreeConverter::run('2a + 4 = 10');
     $result = Solver::run($tree, 'a');
-    expect($result)->toEqual(new Node(3));
+    expect($result)->toEqual(StringToTreeConverter::run('a = 3'));
 
     $tree = StringToTreeConverter::run('7b + 3 = 31');
     $result = Solver::run($tree, 'b');
-    expect($result)->toEqual(new Node(4));
+    expect($result)->toEqual(StringToTreeConverter::run('b = 4'));
 });
