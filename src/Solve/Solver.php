@@ -2,8 +2,10 @@
 
 namespace MathSolver\Solve;
 
+use Illuminate\Support\Collection;
 use MathSolver\Simplify\Simplifier;
 use MathSolver\Utilities\Node;
+use MathSolver\Utilities\TreeToStringConverter;
 
 class Solver
 {
@@ -17,10 +19,12 @@ class Solver
      */
     public Node $equation;
 
+    public Collection $steps;
+
     /**
      * Solve equations.
      */
-    public static function run(Node $equation, string $solveFor): Node
+    public static function run(Node $equation, string $solveFor): array
     {
         return (new self())->handle($equation, $solveFor);
     }
@@ -28,10 +32,11 @@ class Solver
     /**
      * Bring everything except the searched letter to the right side.
      */
-    public function handle(Node $equation, string $solveFor): Node
+    public function handle(Node $equation, string $solveFor): array
     {
         $this->solveFor = $solveFor;
         $this->equation = $equation;
+        $this->steps = new Collection();
 
         if ($this->equation->children()->first()->value() === '+') {
             $equation = $this->subtractFromBothSides();
@@ -41,7 +46,10 @@ class Solver
             $equation = $this->divideFromBothSides();
         }
 
-        return $this->equation;
+        return [
+            'result' => $this->equation,
+            'steps' => $this->steps->toArray(),
+        ];
     }
 
     /**
@@ -78,7 +86,15 @@ class Solver
         $leftMemberChildren->each(fn ($child) => $leftPlus->appendChild(clone $child));
         $leftMemberChildren->each(fn ($child) => $rightPlus->appendChild(clone $child));
 
-        return Simplifier::run($this->equation)['result'];
+        $this->steps->push([
+            'type' => 'solve',
+            'name' => 'Subtract',
+            'result' => TreeToStringConverter::run($this->equation),
+        ]);
+
+        $result = Simplifier::run($this->equation);
+        collect($result['steps'])->each(fn ($step) => $this->steps->push($step));
+        return $result['result'];
     }
 
     /**
@@ -115,7 +131,15 @@ class Solver
         $leftMemberChildren->each(fn ($child) => $leftPlus->appendChild(clone $child));
         $leftMemberChildren->each(fn ($child) => $rightPlus->appendChild(clone $child));
 
-        return Simplifier::run($this->equation)['result'];
+        $this->steps->push([
+            'type' => 'solve',
+            'name' => 'Divide',
+            'result' => TreeToStringConverter::run($this->equation),
+        ]);
+
+        $result = Simplifier::run($this->equation);
+        collect($result['steps'])->each(fn ($step) => $this->steps->push($step));
+        return $result['result'];
     }
 
     /**

@@ -124,7 +124,12 @@ class Math
      */
     public function solveFor(string $letter): self
     {
-        $this->tree = Solver::run($this->tree, $letter);
+        $result = Solver::run($this->tree, $letter);
+
+        $this->tree = $result['result'];
+
+        collect($result['steps'])->each(fn ($step) => $this->steps->push($step));
+
         return $this;
     }
 }

@@ -5,7 +5,7 @@ use MathSolver\Utilities\StringToTreeConverter;
 
 it('can solve linear equations', function (string $input, string $expected) {
     $tree = StringToTreeConverter::run($input);
-    $result = Solver::run($tree, 'x');
+    $result = Solver::run($tree, 'x')['result'];
     $expected = StringToTreeConverter::run("x = {$expected}");
     expect($result)->toEqual($expected);
 })->with([
@@ -75,10 +75,63 @@ it('can solve linear equations', function (string $input, string $expected) {
 
 it('can solve for other letters', function () {
     $tree = StringToTreeConverter::run('2a + 4 = 10');
-    $result = Solver::run($tree, 'a');
+    $result = Solver::run($tree, 'a')['result'];
     expect($result)->toEqual(StringToTreeConverter::run('a = 3'));
 
     $tree = StringToTreeConverter::run('7b + 3 = 31');
-    $result = Solver::run($tree, 'b');
+    $result = Solver::run($tree, 'b')['result'];
     expect($result)->toEqual(StringToTreeConverter::run('b = 4'));
+});
+
+it('records steps when subtracting', function () {
+    $tree = StringToTreeConverter::run('x + 4 = 10');
+    $result = Solver::run($tree, 'x');
+
+    expect($result)->toEqual([
+        'result' => StringToTreeConverter::run('x = 6'),
+        'steps' => [
+            ['type' => 'solve', 'name' => 'Subtract', 'result' => '(x+4)-1*4=(10)-1*4'],
+            ['type' => 'simplify', 'name' => 'Multiply real numbers', 'result' => '(x+4)-4=(10)-4'],
+            ['type' => 'simplify', 'name' => 'Remove brackets', 'result' => 'x+4-4=10-4'],
+            ['type' => 'simplify', 'name' => 'Add real numbers', 'result' => 'x=6'],
+        ],
+    ]);
+});
+
+it('records steps when dividing', function () {
+    $tree = StringToTreeConverter::run('2x = 16');
+    $result = Solver::run($tree, 'x');
+
+    expect($result)->toEqual([
+        'result' => StringToTreeConverter::run('x = 8'),
+        'steps' => [
+            ['type' => 'solve', 'name' => 'Divide', 'result' => '(2x)*2^-1=(16)*2^-1'],
+            ['type' => 'simplify', 'name' => 'Move negative exponents into fractions', 'result' => 'frac(1,2)(2x)=frac(1,2)(16)'],
+            ['type' => 'simplify', 'name' => 'Remove brackets', 'result' => '2frac(1,2)*x=16frac(1,2)'],
+            ['type' => 'simplify', 'name' => 'Multiply fractions', 'result' => 'frac(2,2)*x=frac(16,2)'],
+            ['type' => 'simplify', 'name' => 'Simplify fractions', 'result' => '1x=8'],
+            ['type' => 'simplify', 'name' => 'Multiply real numbers', 'result' => 'x=8'],
+        ],
+    ]);
+});
+
+it('records steps when subtracting and dividing', function () {
+    $tree = StringToTreeConverter::run('5x + 7 = 22');
+    $result = Solver::run($tree, 'x');
+
+    expect($result)->toEqual([
+        'result' => StringToTreeConverter::run('x = 3'),
+        'steps' => [
+            ['type' => 'solve', 'name' => 'Subtract', 'result' => '(5x+7)-1*7=(22)-1*7'],
+            ['type' => 'simplify', 'name' => 'Multiply real numbers', 'result' => '(5x+7)-7=(22)-7'],
+            ['type' => 'simplify', 'name' => 'Remove brackets', 'result' => '5x+7-7=22-7'],
+            ['type' => 'simplify', 'name' => 'Add real numbers', 'result' => '5x=15'],
+            ['type' => 'solve', 'name' => 'Divide', 'result' => '(5x)*5^-1=(15)*5^-1'],
+            ['type' => 'simplify', 'name' => 'Move negative exponents into fractions', 'result' => 'frac(1,5)(5x)=frac(1,5)(15)'],
+            ['type' => 'simplify', 'name' => 'Remove brackets', 'result' => '5frac(1,5)*x=15frac(1,5)'],
+            ['type' => 'simplify', 'name' => 'Multiply fractions', 'result' => 'frac(5,5)*x=frac(15,5)'],
+            ['type' => 'simplify', 'name' => 'Simplify fractions', 'result' => '1x=3'],
+            ['type' => 'simplify', 'name' => 'Remove redundant numbers', 'result' => 'x=3'],
+        ],
+    ]);
 });
