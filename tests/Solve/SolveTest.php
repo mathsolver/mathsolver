@@ -90,8 +90,20 @@ it('records steps when subtracting', function () {
     expect($result)->toEqual([
         'result' => StringToTreeConverter::run('x = 6'),
         'steps' => [
-            ['type' => 'solve', 'name' => 'Subtract', 'result' => 'x+4-4=10-4'],
+            ['type' => 'solve', 'name' => 'Add -4 to both sides', 'result' => 'x+4-4=10-4'],
             ['type' => 'simplify', 'name' => 'Add real numbers', 'result' => 'x=6'],
+        ],
+    ]);
+
+    $tree = StringToTreeConverter::run('x + 4 + y = 10');
+    $result = Solver::run($tree, 'x');
+
+    expect($result)->toEqual([
+        'result' => StringToTreeConverter::run('x = -y + 6'),
+        'steps' => [
+            ['type' => 'solve', 'name' => 'Add -4 and -1y to both sides', 'result' => 'x+4+y-4-1y=10-4-1y'],
+            ['type' => 'simplify', 'name' => 'Add like terms', 'result' => 'x+4-4=-1y+10-4'],
+            ['type' => 'simplify', 'name' => 'Add real numbers', 'result' => 'x=-1y+6'],
         ],
     ]);
 });
@@ -120,7 +132,7 @@ it('records steps when subtracting and dividing', function () {
     expect($result)->toEqual([
         'result' => StringToTreeConverter::run('x = 3'),
         'steps' => [
-            ['type' => 'solve', 'name' => 'Subtract', 'result' => '5x+7-7=22-7'],
+            ['type' => 'solve', 'name' => 'Add -7 to both sides', 'result' => '5x+7-7=22-7'],
             ['type' => 'simplify', 'name' => 'Add real numbers', 'result' => '5x=15'],
             ['type' => 'solve', 'name' => 'Divide', 'result' => '(5x)*5^-1=(15)*5^-1'],
             ['type' => 'simplify', 'name' => 'Move negative exponents into fractions', 'result' => 'frac(1,5)(5x)=frac(1,5)(15)'],

@@ -88,7 +88,7 @@ class Solver
 
         $this->steps->push([
             'type' => 'solve',
-            'name' => 'Subtract',
+            'name' => 'Add ' . $leftMemberChildren->map(fn ($child) => TreeToStringConverter::run($child))->implode(' and ') . ' to both sides',
             'result' => TreeToStringConverter::run($this->equation),
         ]);
 
