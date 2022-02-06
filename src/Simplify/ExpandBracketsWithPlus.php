@@ -52,10 +52,6 @@ class ExpandBracketsWithPlus extends Step
             return false;
         }
 
-        if ($this->node->children()->count() <= 1) {
-            return false;
-        }
-
         return $this->node->children()->filter(function (Node $brackets) {
             return $brackets->value() === '(' && $brackets->children()->first()->value() === '+';
         })->count() > 0;
