@@ -147,7 +147,9 @@ class Solver
 
         $this->steps->push([
             'type' => 'solve',
-            'name' => 'Divide',
+            'name' => $this->mathjax
+                ? 'Multiply both sides by \( ' . $leftMemberChildren->map(fn ($child) => TreeToStringConverter::run($child, true))->implode(' \) and \( ') . ' \)'
+                : 'Multiply both sides by ' . $leftMemberChildren->map(fn ($child) => TreeToStringConverter::run($child))->implode(' and '),
             'result' => TreeToStringConverter::run($this->equation, $this->mathjax),
         ]);
 
