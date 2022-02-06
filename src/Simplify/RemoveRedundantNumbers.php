@@ -7,18 +7,18 @@ use MathSolver\Utilities\Node;
 class RemoveRedundantNumbers extends Step
 {
     /**
-     * Remove all 0's in additions.
+     * Remove all 0's in additions and 1's in multiplication.
      */
     public function handle(Node $node): Node
     {
-        // Remove all zeros
+        // Remove all zeros or ones
         $node->children()
-            ->filter(fn ($child) => $child->value() == 0)
+            ->filter(fn ($child) => $node->value() === '+' ? $child->value() == 0 : $child->value() == 1)
             ->each(fn ($child) => $node->removeChild($child));
 
-        // Return a zero is no other children are left
+        // Return a zero or one if no other children are left
         if ($node->children()->count() === 0) {
-            return new Node(0);
+            return $node->value() === '+' ? new Node(0) : new Node(1);
         }
 
         // Remove the first child if no other children are left
@@ -27,7 +27,7 @@ class RemoveRedundantNumbers extends Step
             $node->setParent(null);
         }
 
-        // Return the + node
+        // Return the parent node
         return $node;
     }
 
@@ -36,6 +36,6 @@ class RemoveRedundantNumbers extends Step
      */
     public function shouldRun(Node $node): bool
     {
-        return $node->value() === '+';
+        return $node->value() === '+' || $node->value() === '*';
     }
 }
