@@ -7,26 +7,53 @@ use MathSolver\Utilities\Node;
 
 class Solver
 {
+    /**
+     * The letter to solve for and thus keep at the left side.
+     */
+    public string $solveFor;
+
+    /**
+     * The root node of the equation.
+     */
+    public Node $equation;
+
+    /**
+     * Solve equations.
+     */
     public static function run(Node $equation, string $solveFor): Node
     {
-        if ($equation->children()->first()->value() === '+') {
-            $equation = self::subtractFromBothSides($equation, $solveFor);
-        }
-
-        if ($equation->children()->first()->value() === '*') {
-            $equation = self::divideFromBothSides($equation, $solveFor);
-        }
-
-        return $equation;
+        return (new self())->handle($equation, $solveFor);
     }
 
-    protected static function subtractFromBothSides(Node $equation, string $solveFor): Node
+    /**
+     * Bring everything except the searched letter to the right side.
+     */
+    public function handle(Node $equation, string $solveFor): Node
     {
-        $leftMemberChildren = $equation
+        $this->solveFor = $solveFor;
+        $this->equation = $equation;
+
+        if ($this->equation->children()->first()->value() === '+') {
+            $equation = $this->subtractFromBothSides();
+        }
+
+        if ($this->equation->children()->first()->value() === '*') {
+            $equation = $this->divideFromBothSides();
+        }
+
+        return $this->equation;
+    }
+
+    /**
+     * Subtract everything except $solveFor from both sides and simplify.
+     */
+    protected function subtractFromBothSides(): Node
+    {
+        $leftMemberChildren = $this->equation
             ->children()
             ->first()
             ->children()
-            ->filter(fn ($child) => !self::containsLetter($child, $solveFor))
+            ->filter(fn ($child) => !$this->containsLetter($child))
             ->map(function ($child) {
                 $times = new Node('*');
                 $times->appendChild(new Node(-1));
@@ -34,33 +61,36 @@ class Solver
                 return $times;
             });
 
-        $leftMember = $equation->children()->first();
-        $equation->removeChild($leftMember);
+        $leftMember = $this->equation->children()->first();
+        $this->equation->removeChild($leftMember);
 
-        $rightMember = $equation->children()->last();
-        $equation->removeChild($rightMember);
+        $rightMember = $this->equation->children()->last();
+        $this->equation->removeChild($rightMember);
 
-        $leftPlus = $equation->appendChild(new Node('+'));
+        $leftPlus = $this->equation->appendChild(new Node('+'));
         $leftBrackets = $leftPlus->appendChild(new Node('('));
         $leftBrackets->appendChild($leftMember);
 
-        $rightPlus = $equation->appendChild(new Node('+'));
+        $rightPlus = $this->equation->appendChild(new Node('+'));
         $rightBrackets = $rightPlus->appendChild(new Node('('));
         $rightBrackets->appendChild($rightMember);
 
         $leftMemberChildren->each(fn ($child) => $leftPlus->appendChild(clone $child));
         $leftMemberChildren->each(fn ($child) => $rightPlus->appendChild(clone $child));
 
-        return Simplifier::run($equation)['result'];
+        return Simplifier::run($this->equation)['result'];
     }
 
-    protected static function divideFromBothSides(Node $equation, string $solveFor): Node
+    /**
+     * Divide everything except $solveFor from both sides and simplify.
+     */
+    protected function divideFromBothSides(): Node
     {
-        $leftMemberChildren = $equation
+        $leftMemberChildren = $this->equation
             ->children()
             ->first()
             ->children()
-            ->filter(fn ($child) => !self::containsLetter($child, $solveFor))
+            ->filter(fn ($child) => !$this->containsLetter($child))
             ->map(function ($child) {
                 $power = new Node('^');
                 $power->appendChild($child);
@@ -68,32 +98,35 @@ class Solver
                 return $power;
             });
 
-        $leftMember = $equation->children()->first();
-        $equation->removeChild($leftMember);
+        $leftMember = $this->equation->children()->first();
+        $this->equation->removeChild($leftMember);
 
-        $rightMember = $equation->children()->last();
-        $equation->removeChild($rightMember);
+        $rightMember = $this->equation->children()->last();
+        $this->equation->removeChild($rightMember);
 
-        $leftPlus = $equation->appendChild(new Node('*'));
+        $leftPlus = $this->equation->appendChild(new Node('*'));
         $leftBrackets = $leftPlus->appendChild(new Node('('));
         $leftBrackets->appendChild($leftMember);
 
-        $rightPlus = $equation->appendChild(new Node('*'));
+        $rightPlus = $this->equation->appendChild(new Node('*'));
         $rightBrackets = $rightPlus->appendChild(new Node('('));
         $rightBrackets->appendChild($rightMember);
 
         $leftMemberChildren->each(fn ($child) => $leftPlus->appendChild(clone $child));
         $leftMemberChildren->each(fn ($child) => $rightPlus->appendChild(clone $child));
 
-        return Simplifier::run($equation)['result'];
+        return Simplifier::run($this->equation)['result'];
     }
 
-    protected static function containsLetter(Node $node, string $solveFor): bool
+    /**
+     * Check if a node or its children contains the searched letter.
+     */
+    protected function containsLetter(Node $node): bool
     {
-        if ($node->value() === $solveFor) {
+        if ($node->value() === $this->solveFor) {
             return true;
         }
 
-        return $node->children()->filter(fn ($child) => self::containsLetter($child, $solveFor))->count() > 0;
+        return $node->children()->filter(fn ($child) => $this->containsLetter($child))->count() > 0;
     }
 }
