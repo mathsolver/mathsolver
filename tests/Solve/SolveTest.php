@@ -125,6 +125,7 @@ it('records steps when dividing', function () {
 });
 
 it('records steps when subtracting and dividing', function () {
+    // without mathjax
     $tree = StringToTreeConverter::run('5x + 7 = 22');
     $result = Solver::run($tree, 'x');
 
@@ -133,10 +134,26 @@ it('records steps when subtracting and dividing', function () {
         'steps' => [
             ['type' => 'solve', 'name' => 'Add -7 to both sides', 'result' => '5x+7-7=22-7'],
             ['type' => 'simplify', 'name' => 'Add real numbers', 'result' => '5x=15'],
-            ['type' => 'solve', 'name' => 'Divide', 'result' => '(5x)*5^-1=(15)*5^-1'],
-            ['type' => 'simplify', 'name' => 'Move negative exponents into fractions', 'result' => 'frac(1,5)(5x)=frac(1,5)(15)'],
+            ['type' => 'solve', 'name' => 'Divide', 'result' => '(5x)*frac(1,5)=(15)*frac(1,5)'],
             ['type' => 'simplify', 'name' => 'Remove brackets', 'result' => '5frac(1,5)*x=15frac(1,5)'],
             ['type' => 'simplify', 'name' => 'Multiply fractions', 'result' => 'frac(5,5)*x=frac(15,5)'],
+            ['type' => 'simplify', 'name' => 'Simplify fractions', 'result' => '1x=3'],
+            ['type' => 'simplify', 'name' => 'Remove redundant numbers', 'result' => 'x=3'],
+        ],
+    ]);
+
+    // with mathjax
+    $tree = StringToTreeConverter::run('5x + 7 = 22');
+    $result = Solver::run($tree, 'x', $mathjax = true);
+
+    expect($result)->toEqual([
+        'result' => StringToTreeConverter::run('x = 3'),
+        'steps' => [
+            ['type' => 'solve', 'name' => 'Add \( -7 \) to both sides', 'result' => '5x+7-7=22-7'],
+            ['type' => 'simplify', 'name' => 'Add real numbers', 'result' => '5x=15'],
+            ['type' => 'solve', 'name' => 'Divide', 'result' => '(5x)*\frac{1}{5}=(15)*\frac{1}{5}'],
+            ['type' => 'simplify', 'name' => 'Remove brackets', 'result' => '5*\frac{1}{5}*x=15*\frac{1}{5}'],
+            ['type' => 'simplify', 'name' => 'Multiply fractions', 'result' => '\frac{5}{5}*x=\frac{15}{5}'],
             ['type' => 'simplify', 'name' => 'Simplify fractions', 'result' => '1x=3'],
             ['type' => 'simplify', 'name' => 'Remove redundant numbers', 'result' => 'x=3'],
         ],

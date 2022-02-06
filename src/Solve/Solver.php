@@ -19,23 +19,32 @@ class Solver
      */
     public Node $equation;
 
+    /**
+     * A collection with all recorded steps.
+     */
     public Collection $steps;
+
+    /**
+     * Whether to use Mathjax for output.
+     */
+    public bool $mathjax;
 
     /**
      * Solve equations.
      */
-    public static function run(Node $equation, string $solveFor): array
+    public static function run(Node $equation, string $solveFor, bool $mathjax = false): array
     {
-        return (new self())->handle($equation, $solveFor);
+        return (new self())->handle($equation, $solveFor, $mathjax);
     }
 
     /**
      * Bring everything except the searched letter to the right side.
      */
-    public function handle(Node $equation, string $solveFor): array
+    public function handle(Node $equation, string $solveFor, bool $mathjax): array
     {
         $this->solveFor = $solveFor;
         $this->equation = $equation;
+        $this->mathjax = $mathjax;
         $this->steps = new Collection();
 
         if ($this->equation->children()->first()->value() === '+') {
@@ -88,11 +97,13 @@ class Solver
 
         $this->steps->push([
             'type' => 'solve',
-            'name' => 'Add ' . $leftMemberChildren->map(fn ($child) => TreeToStringConverter::run($child))->implode(' and ') . ' to both sides',
-            'result' => TreeToStringConverter::run($this->equation),
+            'name' => $this->mathjax
+                ? 'Add \( ' . $leftMemberChildren->map(fn ($child) => TreeToStringConverter::run($child, $this->mathjax))->implode(' and ') . ' \) to both sides'
+                : 'Add ' . $leftMemberChildren->map(fn ($child) => TreeToStringConverter::run($child, $this->mathjax))->implode(' and ') . ' to both sides',
+            'result' => TreeToStringConverter::run($this->equation, $this->mathjax),
         ]);
 
-        $result = Simplifier::run($this->equation);
+        $result = Simplifier::run($this->equation, $this->mathjax);
         collect($result['steps'])->each(fn ($step) => $this->steps->push($step));
         return $result['result'];
     }
@@ -141,10 +152,10 @@ class Solver
         $this->steps->push([
             'type' => 'solve',
             'name' => 'Divide',
-            'result' => TreeToStringConverter::run($this->equation),
+            'result' => TreeToStringConverter::run($this->equation, $this->mathjax),
         ]);
 
-        $result = Simplifier::run($this->equation);
+        $result = Simplifier::run($this->equation, $this->mathjax);
         collect($result['steps'])->each(fn ($step) => $this->steps->push($step));
         return $result['result'];
     }
