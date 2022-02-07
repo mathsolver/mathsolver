@@ -42,19 +42,23 @@ class Solver
      */
     public function handle(Node $equation, string $solveFor, bool $mathjax): array
     {
+        // setup this class
         $this->solveFor = $solveFor;
         $this->equation = $equation;
         $this->mathjax = $mathjax;
         $this->steps = new Collection();
 
+        // subtract everything except the searched letter
         if ($this->equation->children()->first()->value() === '+') {
             $equation = $this->subtractFromBothSides();
         }
 
+        // divide everything except the searched letter
         if ($this->equation->children()->first()->value() === '*') {
             $equation = $this->divideFromBothSides();
         }
 
+        // return results
         return [
             'result' => $this->equation,
             'steps' => $this->steps->toArray(),
@@ -107,6 +111,7 @@ class Solver
      */
     protected function wrapInInverseForSubstraction(Node $node): Node
     {
+        // multiply directly if the node is a number
         if (is_numeric($node->value())) {
             return new Node($node->value() * -1);
         }
@@ -134,20 +139,7 @@ class Solver
         $leftMember = $this->equation->children()->first();
         $rightMember = $this->equation->children()->last();
 
-        if ($rightMember->value() !== '*') {
-            if ($rightMember->value() === '+') {
-                $this->equation->removeChild($rightMember);
-                $rightTimes = $this->equation->appendChild(new Node('*'));
-                $rightBrackets = $rightTimes->appendChild(new Node('('));
-                $rightBrackets->appendChild($rightMember);
-                $rightMember = $rightTimes;
-            } else {
-                $this->equation->removeChild($rightMember);
-                $rightTimes = $this->equation->appendChild(new Node('*'));
-                $rightTimes->appendChild($rightMember);
-                $rightMember = $rightTimes;
-            }
-        }
+        $rightMember = $this->wrapRightMemberInMultiplication($rightMember);
 
         $factorsToAdd
             ->each(fn ($child) => $leftMember->appendChild(clone $child))
@@ -173,6 +165,7 @@ class Solver
      */
     protected function wrapInInverseForDivision(Node $node): Node
     {
+        // wrap in fraction if the node is a number
         if (is_numeric($node->value())) {
             $fraction = new Node('frac');
 
@@ -188,6 +181,31 @@ class Solver
         $power->appendChild(new Node(-1));
 
         return $power;
+    }
+
+    /**
+     * Make sure the right member of the equation is a multiplication.
+     *
+     * If not, wrap it in a multiplication.
+     */
+    protected function wrapRightMemberInMultiplication(Node $rightMember): Node
+    {
+        if ($rightMember->value() !== '*') {
+            if ($rightMember->value() === '+') {
+                $this->equation->removeChild($rightMember);
+                $rightTimes = $this->equation->appendChild(new Node('*'));
+                $rightBrackets = $rightTimes->appendChild(new Node('('));
+                $rightBrackets->appendChild($rightMember);
+                $rightMember = $rightTimes;
+            } else {
+                $this->equation->removeChild($rightMember);
+                $rightTimes = $this->equation->appendChild(new Node('*'));
+                $rightTimes->appendChild($rightMember);
+                $rightMember = $rightTimes;
+            }
+        }
+
+        return $rightMember;
     }
 
     /**
