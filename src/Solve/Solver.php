@@ -66,7 +66,7 @@ class Solver
      */
     protected function subtractFromBothSides(): Node
     {
-        $leftMemberChildren = $this->equation
+        $termsToAdd = $this->equation
             ->children()
             ->first()
             ->children()
@@ -92,14 +92,14 @@ class Solver
             $rightMember = $rightPlus;
         }
 
-        $leftMemberChildren->each(fn ($child) => $leftMember->appendChild(clone $child));
-        $leftMemberChildren->each(fn ($child) => $rightMember->appendChild(clone $child));
+        $termsToAdd->each(fn ($child) => $leftMember->appendChild(clone $child));
+        $termsToAdd->each(fn ($child) => $rightMember->appendChild(clone $child));
 
         $this->steps->push([
             'type' => 'solve',
             'name' => $this->mathjax
-                ? 'Add \( ' . $leftMemberChildren->map(fn ($child) => TreeToStringConverter::run($child, $this->mathjax))->implode(' and ') . ' \) to both sides'
-                : 'Add ' . $leftMemberChildren->map(fn ($child) => TreeToStringConverter::run($child, $this->mathjax))->implode(' and ') . ' to both sides',
+                ? 'Add \( ' . $termsToAdd->map(fn ($child) => TreeToStringConverter::run($child, $this->mathjax))->implode(' and ') . ' \) to both sides'
+                : 'Add ' . $termsToAdd->map(fn ($child) => TreeToStringConverter::run($child, $this->mathjax))->implode(' and ') . ' to both sides',
             'result' => TreeToStringConverter::run($this->equation, $this->mathjax),
         ]);
 
@@ -113,7 +113,7 @@ class Solver
      */
     protected function divideFromBothSides(): Node
     {
-        $leftMemberChildren = $this->equation
+        $factorsToAdd = $this->equation
             ->children()
             ->first()
             ->children()
@@ -150,14 +150,14 @@ class Solver
             }
         }
 
-        $leftMemberChildren->each(fn ($child) => $leftMember->appendChild(clone $child));
-        $leftMemberChildren->each(fn ($child) => $rightMember->appendChild(clone $child));
+        $factorsToAdd->each(fn ($child) => $leftMember->appendChild(clone $child));
+        $factorsToAdd->each(fn ($child) => $rightMember->appendChild(clone $child));
 
         $this->steps->push([
             'type' => 'solve',
             'name' => $this->mathjax
-                ? 'Multiply both sides by \( ' . $leftMemberChildren->map(fn ($child) => TreeToStringConverter::run($child, true))->implode(' \) and \( ') . ' \)'
-                : 'Multiply both sides by ' . $leftMemberChildren->map(fn ($child) => TreeToStringConverter::run($child))->implode(' and '),
+                ? 'Multiply both sides by \( ' . $factorsToAdd->map(fn ($child) => TreeToStringConverter::run($child, true))->implode(' \) and \( ') . ' \)'
+                : 'Multiply both sides by ' . $factorsToAdd->map(fn ($child) => TreeToStringConverter::run($child))->implode(' and '),
             'result' => TreeToStringConverter::run($this->equation, $this->mathjax),
         ]);
 
