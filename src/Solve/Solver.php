@@ -190,10 +190,13 @@ class Solver
      */
     protected function wrapRightMemberInMultiplication(Node $topNode): Node
     {
+        // if it is a multiplication already, do nothing
         if ($topNode->value() === '*') {
             return $topNode;
         }
 
+        // if it is an addition, wrap the addition in brackets,
+        // for example: `5` multiplied by `x + 4` becomes `5(x + 4)`
         if ($topNode->value() === '+') {
             $this->equation->removeChild($topNode);
             $times = $this->equation->appendChild(new Node('*'));
@@ -202,6 +205,8 @@ class Solver
             return $times;
         }
 
+        // if it is something else, just make the multiplication
+        // the top node and return it
         $this->equation->removeChild($topNode);
         $times = $this->equation->appendChild(new Node('*'));
         $times->appendChild($topNode);
