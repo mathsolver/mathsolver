@@ -137,9 +137,7 @@ class Solver
             ->map(fn ($child) => $this->wrapInInverseForDivision($child));
 
         $leftMember = $this->equation->children()->first();
-        $rightMember = $this->equation->children()->last();
-
-        $rightMember = $this->wrapRightMemberInMultiplication($rightMember);
+        $rightMember = $this->wrapRightMemberInMultiplication($this->equation->children()->last());
 
         $factorsToAdd
             ->each(fn ($child) => $leftMember->appendChild(clone $child))
