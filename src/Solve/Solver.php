@@ -188,24 +188,24 @@ class Solver
      *
      * If not, wrap it in a multiplication.
      */
-    protected function wrapRightMemberInMultiplication(Node $rightMember): Node
+    protected function wrapRightMemberInMultiplication(Node $topNode): Node
     {
-        if ($rightMember->value() === '*') {
-            return $rightMember;
+        if ($topNode->value() === '*') {
+            return $topNode;
         }
 
-        if ($rightMember->value() === '+') {
-            $this->equation->removeChild($rightMember);
-            $rightTimes = $this->equation->appendChild(new Node('*'));
-            $rightBrackets = $rightTimes->appendChild(new Node('('));
-            $rightBrackets->appendChild($rightMember);
-            return $rightTimes;
+        if ($topNode->value() === '+') {
+            $this->equation->removeChild($topNode);
+            $times = $this->equation->appendChild(new Node('*'));
+            $brackets = $times->appendChild(new Node('('));
+            $brackets->appendChild($topNode);
+            return $times;
         }
 
-        $this->equation->removeChild($rightMember);
-        $rightTimes = $this->equation->appendChild(new Node('*'));
-        $rightTimes->appendChild($rightMember);
-        return $rightTimes;
+        $this->equation->removeChild($topNode);
+        $times = $this->equation->appendChild(new Node('*'));
+        $times->appendChild($topNode);
+        return $times;
     }
 
     /**
