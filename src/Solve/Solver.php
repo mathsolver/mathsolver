@@ -83,8 +83,9 @@ class Solver
             $rightMember = $rightPlus;
         }
 
-        $termsToAdd->each(fn ($child) => $leftMember->appendChild(clone $child));
-        $termsToAdd->each(fn ($child) => $rightMember->appendChild(clone $child));
+        $termsToAdd
+            ->each(fn ($child) => $leftMember->appendChild(clone $child))
+            ->each(fn ($child) => $rightMember->appendChild(clone $child));
 
         $this->steps->push([
             'type' => 'solve',
@@ -148,8 +149,9 @@ class Solver
             }
         }
 
-        $factorsToAdd->each(fn ($child) => $leftMember->appendChild(clone $child));
-        $factorsToAdd->each(fn ($child) => $rightMember->appendChild(clone $child));
+        $factorsToAdd
+            ->each(fn ($child) => $leftMember->appendChild(clone $child))
+            ->each(fn ($child) => $rightMember->appendChild(clone $child));
 
         $this->steps->push([
             'type' => 'solve',
