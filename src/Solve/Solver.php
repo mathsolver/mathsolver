@@ -215,7 +215,7 @@ class Solver
      */
     protected function recordSteps(Collection $terms, string $sentence): void
     {
-        $name = $terms
+        $name = (string) $terms
             ->map(fn ($child) => TreeToStringConverter::run($child, $this->mathjax)) // convert each term to mathjax
             ->pipe(fn ($terms) => Str::of(implode($this->mathjax ? ' \) and \( ' : ' and ', $terms->toArray()))) // implode the terms with "and"
             ->when($this->mathjax, fn ($string) => Str::of($sentence)->replace('{terms}', "\\( {$string} \\)")) // insert the terms into the given $sentence
