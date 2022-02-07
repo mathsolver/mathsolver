@@ -205,12 +205,15 @@ class Solver
      */
     protected function recordSteps(Collection $terms, string $sentence): void
     {
-        $name = $terms->map(fn ($child) => TreeToStringConverter::run($child, $this->mathjax))->implode($this->mathjax ? ' \) and \( ' : ' and ');
-        $sentence = $this->mathjax ? Str::replace('{terms}', "\\( {$name} \\)", $sentence) : Str::replace('{terms}', $name, $sentence);
+        $name = $terms
+            ->map(fn ($child) => TreeToStringConverter::run($child, $this->mathjax))
+            ->pipe(fn ($terms) => Str::of(implode($this->mathjax ? ' \) and \( ' : ' and ', $terms->toArray())))
+            ->when($this->mathjax, fn ($string) => Str::of($sentence)->replace('{terms}', "\\( {$string} \\)"))
+            ->when(!$this->mathjax, fn ($string) => Str::of($sentence)->replace('{terms}', $string));
 
         $this->steps->push([
             'type' => 'solve',
-            'name' => $sentence,
+            'name' => $name,
             'result' => TreeToStringConverter::run($this->equation, $this->mathjax),
         ]);
     }
