@@ -168,7 +168,7 @@ it('records steps when subtracting and dividing', function () {
             ['type' => 'solve', 'name' => 'Add \( -7 \) to both sides', 'result' => '5x+7-7=22-7'],
             ['type' => 'simplify', 'name' => 'Add real numbers', 'result' => '5x=15'],
             ['type' => 'solve', 'name' => 'Multiply both sides by \( \frac{1}{5} \)', 'result' => '5x*\frac{1}{5}=15*\frac{1}{5}'],
-            ['type' => 'simplify', 'name' => 'Multiply fractions', 'result' => '\frac{5}{5}*x=\frac{15}{5}'],
+            ['type' => 'simplify', 'name' => 'Multiply fractions', 'result' => '\frac{5}{5}x=\frac{15}{5}'],
             ['type' => 'simplify', 'name' => 'Simplify fractions', 'result' => '1x=3'],
             ['type' => 'simplify', 'name' => 'Remove redundant numbers', 'result' => 'x=3'],
         ],
