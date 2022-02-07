@@ -72,6 +72,7 @@ it('can solve linear equations', function (string $input, string $expected) {
     ['-8 - x = -2', '-6'],
     ['7x + 18 = 60', '6'],
     ['2x = y + 1', 'frac(1,2) + frac(1,2) * y'],
+    ['2x = 2y', 'y'],
 ]);
 
 it('can solve for other letters', function () {
