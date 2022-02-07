@@ -118,19 +118,7 @@ class Solver
             ->first()
             ->children()
             ->filter(fn ($child) => !$this->containsLetter($child))
-            ->map(function ($child) {
-                if (is_numeric($child->value())) {
-                    $fraction = new Node('frac');
-                    $fraction->appendChild(new Node(1));
-                    $fraction->appendChild($child);
-                    return $fraction;
-                }
-
-                $power = new Node('^');
-                $power->appendChild($child);
-                $power->appendChild(new Node(-1));
-                return $power;
-            });
+            ->map(fn ($child) => $this->wrapInInverseForDivision($child));
 
         $leftMember = $this->equation->children()->first();
         $rightMember = $this->equation->children()->last();
@@ -164,6 +152,30 @@ class Solver
         $result = Simplifier::run($this->equation, $this->mathjax);
         collect($result['steps'])->each(fn ($step) => $this->steps->push($step));
         return $result['result'];
+    }
+
+    /**
+     * Wrap a node in its inverse for division.
+     *
+     * Do this by taking the power of -1 of the node.
+     */
+    protected function wrapInInverseForDivision(Node $node): Node
+    {
+        if (is_numeric($node->value())) {
+            $fraction = new Node('frac');
+
+            $fraction->appendChild(new Node(1));
+            $fraction->appendChild($node);
+
+            return $fraction;
+        }
+
+        $power = new Node('^');
+
+        $power->appendChild($node);
+        $power->appendChild(new Node(-1));
+
+        return $power;
     }
 
     /**
