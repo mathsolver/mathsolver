@@ -71,16 +71,7 @@ class Solver
             ->first()
             ->children()
             ->filter(fn ($child) => !$this->containsLetter($child))
-            ->map(function ($child) {
-                if (is_numeric($child->value())) {
-                    return new Node($child->value() * -1);
-                }
-
-                $times = new Node('*');
-                $times->appendChild(new Node(-1));
-                $times->appendChild($child);
-                return $times;
-            });
+            ->map(fn ($child) => $this->wrapInInverseForSubstraction($child));
 
         $leftMember = $this->equation->children()->first();
         $rightMember = $this->equation->children()->last();
@@ -106,6 +97,25 @@ class Solver
         $result = Simplifier::run($this->equation, $this->mathjax);
         collect($result['steps'])->each(fn ($step) => $this->steps->push($step));
         return $result['result'];
+    }
+
+    /**
+     * Wrap a node in its inverse for subtraction.
+     *
+     * Do this by multiplying the node by -1.
+     */
+    protected function wrapInInverseForSubstraction(Node $node): Node
+    {
+        if (is_numeric($node->value())) {
+            return new Node($node->value() * -1);
+        }
+
+        $times = new Node('*');
+
+        $times->appendChild(new Node(-1));
+        $times->appendChild($node);
+
+        return $times;
     }
 
     /**
