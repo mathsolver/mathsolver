@@ -71,6 +71,7 @@ class Solver
      */
     protected function subtractFromBothSides(): Node
     {
+        // find all terms and reverse them
         $termsToAdd = $this->equation
             ->children()
             ->first()
@@ -78,9 +79,11 @@ class Solver
             ->filter(fn ($child) => !$this->containsLetter($child))
             ->map(fn ($child) => $this->wrapInInverseForSubstraction($child));
 
+        // get the left and right addition node
         $leftMember = $this->equation->children()->first();
         $rightMember = $this->equation->children()->last();
 
+        // make the right node an addition
         if ($rightMember->value() !== '+') {
             $this->equation->removeChild($rightMember);
             $rightPlus = $this->equation->appendChild(new Node('+'));
@@ -88,12 +91,15 @@ class Solver
             $rightMember = $rightPlus;
         }
 
+        // append the terms to each side
         $termsToAdd
             ->each(fn ($child) => $leftMember->appendChild(clone $child))
             ->each(fn ($child) => $rightMember->appendChild(clone $child));
 
+        // record a step
         $this->recordSteps($termsToAdd, 'Add {terms} to both sides');
 
+        // simplify the equation
         $result = Simplifier::run($this->equation, $this->mathjax);
         collect($result['steps'])->each(fn ($step) => $this->steps->push($step));
         return $result['result'];
@@ -124,6 +130,7 @@ class Solver
      */
     protected function divideFromBothSides(): Node
     {
+        // find all factors and reverse them
         $factorsToAdd = $this->equation
             ->children()
             ->first()
@@ -131,15 +138,19 @@ class Solver
             ->filter(fn ($child) => !$this->containsLetter($child))
             ->map(fn ($child) => $this->wrapInInverseForDivision($child));
 
+        // get the left and right multiplication node
         $leftMember = $this->equation->children()->first();
         $rightMember = $this->wrapRightMemberInMultiplication($this->equation->children()->last());
 
+        // append the inversed factors to both sides
         $factorsToAdd
             ->each(fn ($child) => $leftMember->appendChild(clone $child))
             ->each(fn ($child) => $rightMember->appendChild(clone $child));
 
+        // record a step
         $this->recordSteps($factorsToAdd, 'Multiply both sides by {terms}');
 
+        // simplify the equation
         $result = Simplifier::run($this->equation, $this->mathjax);
         collect($result['steps'])->each(fn ($step) => $this->steps->push($step));
         return $result['result'];
@@ -152,7 +163,6 @@ class Solver
      */
     protected function wrapInInverseForDivision(Node $node): Node
     {
-        // wrap in fraction if the node is a number
         if (is_numeric($node->value())) {
             $fraction = new Node('frac');
 
