@@ -190,19 +190,21 @@ class Solver
      */
     protected function wrapRightMemberInMultiplication(Node $rightMember): Node
     {
-        if ($rightMember->value() !== '*') {
-            if ($rightMember->value() === '+') {
-                $this->equation->removeChild($rightMember);
-                $rightTimes = $this->equation->appendChild(new Node('*'));
-                $rightBrackets = $rightTimes->appendChild(new Node('('));
-                $rightBrackets->appendChild($rightMember);
-                $rightMember = $rightTimes;
-            } else {
-                $this->equation->removeChild($rightMember);
-                $rightTimes = $this->equation->appendChild(new Node('*'));
-                $rightTimes->appendChild($rightMember);
-                $rightMember = $rightTimes;
-            }
+        if ($rightMember->value() === '*') {
+            return $rightMember;
+        }
+
+        if ($rightMember->value() === '+') {
+            $this->equation->removeChild($rightMember);
+            $rightTimes = $this->equation->appendChild(new Node('*'));
+            $rightBrackets = $rightTimes->appendChild(new Node('('));
+            $rightBrackets->appendChild($rightMember);
+            $rightMember = $rightTimes;
+        } else {
+            $this->equation->removeChild($rightMember);
+            $rightTimes = $this->equation->appendChild(new Node('*'));
+            $rightTimes->appendChild($rightMember);
+            $rightMember = $rightTimes;
         }
 
         return $rightMember;
