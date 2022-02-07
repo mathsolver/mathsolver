@@ -238,3 +238,14 @@ it('can convert fractions to mathjax', function () {
     $result = TreeToStringConverter::run($power, $mathjax = true);
     expect($result)->toBe('\frac{3}{9}');
 });
+
+it('removes times between fractions and letters', function () {
+    $times = new Node('*');
+    $fraction = $times->appendChild(new Node('frac'));
+    $fraction->appendChild(new Node(1));
+    $fraction->appendChild(new Node(2));
+    $times->appendChild(new Node('y'));
+
+    $result = TreeToStringConverter::run($times, $mathjax = true);
+    expect($result)->toBe('\frac{1}{2}y');
+});
