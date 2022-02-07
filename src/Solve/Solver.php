@@ -3,6 +3,7 @@
 namespace MathSolver\Solve;
 
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 use MathSolver\Simplify\Simplifier;
 use MathSolver\Utilities\Node;
 use MathSolver\Utilities\TreeToStringConverter;
@@ -91,13 +92,7 @@ class Solver
             ->each(fn ($child) => $leftMember->appendChild(clone $child))
             ->each(fn ($child) => $rightMember->appendChild(clone $child));
 
-        $this->steps->push([
-            'type' => 'solve',
-            'name' => $this->mathjax
-                ? 'Add \( ' . $termsToAdd->map(fn ($child) => TreeToStringConverter::run($child, $this->mathjax))->implode(' and ') . ' \) to both sides'
-                : 'Add ' . $termsToAdd->map(fn ($child) => TreeToStringConverter::run($child, $this->mathjax))->implode(' and ') . ' to both sides',
-            'result' => TreeToStringConverter::run($this->equation, $this->mathjax),
-        ]);
+        $this->recordSteps($termsToAdd, 'Add {terms} to both sides');
 
         $result = Simplifier::run($this->equation, $this->mathjax);
         collect($result['steps'])->each(fn ($step) => $this->steps->push($step));
@@ -143,13 +138,7 @@ class Solver
             ->each(fn ($child) => $leftMember->appendChild(clone $child))
             ->each(fn ($child) => $rightMember->appendChild(clone $child));
 
-        $this->steps->push([
-            'type' => 'solve',
-            'name' => $this->mathjax
-                ? 'Multiply both sides by \( ' . $factorsToAdd->map(fn ($child) => TreeToStringConverter::run($child, true))->implode(' \) and \( ') . ' \)'
-                : 'Multiply both sides by ' . $factorsToAdd->map(fn ($child) => TreeToStringConverter::run($child))->implode(' and '),
-            'result' => TreeToStringConverter::run($this->equation, $this->mathjax),
-        ]);
+        $this->recordSteps($factorsToAdd, 'Multiply both sides by {terms}');
 
         $result = Simplifier::run($this->equation, $this->mathjax);
         collect($result['steps'])->each(fn ($step) => $this->steps->push($step));
@@ -209,6 +198,21 @@ class Solver
         $times = $this->equation->appendChild(new Node('*'));
         $times->appendChild($topNode);
         return $times;
+    }
+
+    /**
+     * Record steps for subtraction or division.
+     */
+    protected function recordSteps(Collection $terms, string $sentence): void
+    {
+        $name = $terms->map(fn ($child) => TreeToStringConverter::run($child, $this->mathjax))->implode($this->mathjax ? ' \) and \( ' : ' and ');
+        $sentence = $this->mathjax ? Str::replace('{terms}', "\\( {$name} \\)", $sentence) : Str::replace('{terms}', $name, $sentence);
+
+        $this->steps->push([
+            'type' => 'solve',
+            'name' => $sentence,
+            'result' => TreeToStringConverter::run($this->equation, $this->mathjax),
+        ]);
     }
 
     /**
