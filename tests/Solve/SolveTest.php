@@ -75,6 +75,67 @@ it('can solve linear equations', function (string $input, string $expected) {
     ['2x = 2y', 'y'],
 ]);
 
+it('can solve linear equations with the searched letter at the right', function (string $input, string $expected) {
+    $tree = StringToTreeConverter::run($input);
+    $result = Solver::run($tree, 'x')['result'];
+    $expected = StringToTreeConverter::run("x = {$expected}");
+    expect($result)->toEqual($expected);
+})->with([
+    ['7x - 15 = 5x + 5', '10'],
+    ['-3x + 18 = x + 26', '-2'],
+    ['8x - 15 = 3x', '3'],
+    ['1.1x + 2.7 = 2.1x + 3.7', '-1'],
+    ['7x + 5 = -3x - 15', '-2'],
+    ['5x - 4 = -x - 4', '0'],
+    ['4 + 2x = x + 3', '-1'],
+    ['-5x + 17 = -4 - 2x', '7'],
+    ['21 = 7x - 35', '8'],
+    ['21x + 4 = 19x - 34', '-19'],
+    ['14x - 11 = 11x + 14', 'frac(25, 3)'],
+    ['17 - x = -9 + x', '13'],
+    ['5(x - 1) = 2x + 4', '3'],
+    ['3(x - 4) + 2 = 5x + 1', 'frac(-26, 5)'],
+    ['-3(x + 1) - 7 = 2x', '-2'],
+    ['4x + 2x = x + 7', 'frac(7, 5)'],
+    ['5(x - 2) = 3(2x + 2) + 2', '-18'],
+    ['4 - 3x = 5 - (x - 2)', 'frac(-3, 2)'],
+    ['2(x - 3) = 3(2x + 10)', '-9'],
+    ['3(x + 6) = 6(x - 3) + x', '9'],
+    ['-2(4 - x) + 1 = 9x', '-1'],
+    ['6x - 3 + 2x = 21', '3'],
+    ['-3(x - 2) = 2(x + 8.5)', 'frac(-11, 5)'],
+    ['4 - (x + 7) = 2', '-5'],
+    ['5(x - 1) - 3x = 3(x - 5)', '10'],
+    ['4(2x - 1) - (3x - 1) = -3', '0'],
+    ['12 - 3(5 - 4x) = 14x - 7', '2'],
+    ['(x - 2)(x + 5) = (x + 1)^2 - 10', 'frac(-1, 5)'],
+    ['15(x - 2) - 5(3 - x) = 7(2 - 3x)', 'frac(59, 41)'],
+    ['(x - 3)(x + 2) + 5 = x(x - 4) + 11', '4'],
+    ['6(frac(2,3)x + 4) + 5 = 1', '-7'],
+    ['frac(1,2)(x + 4) - frac(5, 9)x = frac(-1, 6)x + 5', '27'],
+    ['frac(1, 3)x = 5', '15'],
+    ['frac(3, 5)x = -9', '-15'],
+    ['frac(1, 4)x + 6 = 15', '36'],
+    ['frac(2, 3)x = 5', 'frac(15, 2)'],
+    ['x - frac(1, 3)x = 4', '6'],
+    ['2x + frac(1, 2) = 5', '6'],
+    ['frac(1, 6)x = 6', '36'],
+    ['frac(1, 3)(x + 21) = 4', '-9'],
+    ['frac(1, 2)x + 4x = -9', '-2'],
+    ['frac(1, 4)x - 2 = frac(1, 2)x + 6', '-32'],
+    ['frac(1, 4)x - 2 = frac(1, 3)x + 6', '-96'],
+    ['frac(1, 2)x = frac(2, 3)x + 4', '-24'],
+    ['frac(1, 3)x + 6 = frac(13, 6)', 'frac(-23, 2)'],
+    ['frac(1, 2)x - frac(1, 3) = frac(1, 3)(x - 2)', '-2'],
+    ['frac(4, 3)x - frac(1, 2)x = frac(1, 6)(x - 12)', '-3'],
+    ['frac(1, 3)(x - 1) = frac(1, 4)(x - 2)', '-2'],
+    ['2 - frac(1, 3)(x - 1) = frac(1, 4)x - 2', 'frac(52, 7)'],
+    ['frac(1, 2)(frac(2, 3)x + 4) + frac(5, 12) = frac(1, 12)'],
+    ['frac(1, 5)x - 7 = frac(1, 4)(x + 2)', '-7'],
+    ['frac(2, 3)(1 - x) = frac(3, 4)(x - 3)', 'frac(35, 17)'],
+    ['frac(3, 4)(frac(1, 5)x + 7) + 1 = 0', 'frac(-125, 3)'],
+]);
+
 it('can solve for other letters', function () {
     $tree = StringToTreeConverter::run('2a + 4 = 10');
     $result = Solver::run($tree, 'a')['result'];
