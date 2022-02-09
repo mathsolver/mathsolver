@@ -18,8 +18,8 @@
         }
     },
     "require": {
-        "illuminate/support": "^8.80",
-        "illuminate/collections": "^8.80"
+        "illuminate/support": "^9.0",
+        "illuminate/collections": "^9.0"
     },
     "require-dev": {
         "symfony/var-dumper": "^6.0",
