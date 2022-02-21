@@ -45,11 +45,6 @@ it('can substitute multiple values', function () {
     expect($result)->toBe('22');
 });
 
-it('can solve equations', function () {
-    $result = Math::from('2x = 10')->solveFor('x')->string();
-    expect($result)->toBe('x=5');
-});
-
 it('can record steps with simplifications', function () {
     $result = Math::from('4x^2 + 5x * 6x')->config(['steps' => true])->simplify()->string();
 
@@ -121,32 +116,6 @@ it('can record steps for substitution and simplification', function () {
             ['type' => 'substitute', 'name' => 'Substitute \( x \) for \( 3 \)', 'result' => '2(3)'],
             ['type' => 'simplify', 'name' => 'Remove brackets', 'result' => '2*3'],
             ['type' => 'simplify', 'name' => 'Multiply real numbers', 'result' => '6'],
-        ],
-    ]);
-});
-
-it('can record steps for solving equations', function () {
-    $result = Math::from('2x = 10')->config(['steps' => true])->solveFor('x')->string();
-
-    expect($result)->toBe([
-        'result' => 'x=5',
-        'steps' => [
-            ['type' => 'solve', 'name' => 'Multiply both sides by frac(1,2)', 'result' => '2xfrac(1,2)=10frac(1,2)'],
-            ['type' => 'simplify', 'name' => 'Multiply fractions', 'result' => 'frac(2,2)*x=frac(10,2)'],
-            ['type' => 'simplify', 'name' => 'Simplify fractions', 'result' => '1x=5'],
-            ['type' => 'simplify', 'name' => 'Multiply real numbers', 'result' => 'x=5'],
-        ],
-    ]);
-});
-
-it('can record steps for solving equations with mathjax', function () {
-    $result = Math::from('x + 5 = 20')->config(['steps' => true, 'mathjax' => true])->solveFor('x')->string();
-
-    expect($result)->toBe([
-        'result' => 'x=15',
-        'steps' => [
-            ['type' => 'solve', 'name' => 'Add \( -5 \) to both sides', 'result' => 'x+5-5=20-5'],
-            ['type' => 'simplify', 'name' => 'Add real numbers', 'result' => 'x=15'],
         ],
     ]);
 });

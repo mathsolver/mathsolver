@@ -4,7 +4,6 @@ namespace MathSolver;
 
 use Illuminate\Support\Collection;
 use MathSolver\Simplify\Simplifier;
-use MathSolver\Solve\Solver;
 use MathSolver\Utilities\Node;
 use MathSolver\Utilities\StringToTreeConverter;
 use MathSolver\Utilities\Substitutor;
@@ -111,20 +110,6 @@ class Math
     public function simplify(): self
     {
         $result = Simplifier::run($this->tree, $this->options['mathjax']);
-
-        $this->tree = $result['result'];
-
-        collect($result['steps'])->each(fn ($step) => $this->steps->push($step));
-
-        return $this;
-    }
-
-    /**
-     * Solve an equation for a letter.
-     */
-    public function solveFor(string $letter): self
-    {
-        $result = Solver::run($this->tree, $letter, $this->options['mathjax']);
 
         $this->tree = $result['result'];
 
