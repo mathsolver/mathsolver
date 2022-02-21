@@ -10,8 +10,6 @@ use MathSolver\Math;
 Math::from('3x^2 + 2x * 4x')->simplify()->string(); // 11x^2
 
 Math::from('2x + 3')->substitute(['x' => 5])->simplify()->string(); // 13
-
-Math::from('2x + 16')->solveFor('x')->string(); // x = 8
 ```
 
 ## Table of contents
@@ -22,7 +20,6 @@ Math::from('2x + 16')->solveFor('x')->string(); // x = 8
 -   [Usage](#usage)
     -   [Simplify](#simplify)
     -   [Substitute values](#substitute-values)
-    -   [Solve for a letter](#solve-for-a-letter)
 -   [Configuration](#configuration)
     -   [Mathjax](#mathjax)
     -   [Steps](#steps)
@@ -70,16 +67,6 @@ The `substitute` methods pairs nicely with the `simplify` method.
 use MathSolver\Math;
 
 Math::from('2x + 3x')->substitute(['x' => 4])->simplify()->string(); // 20
-```
-
-### Solve for a letter
-
-Solve the equation for a given letter.
-
-```php
-use MathSolver\Math;
-
-Math::from('2x + 3 = 11')->solveFor('x')->string(); // x = 4
 ```
 
 ## Configuration
