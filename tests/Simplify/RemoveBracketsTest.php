@@ -42,3 +42,9 @@ it('removes brackets with negative exponents', function () {
     $result = RemoveBrackets::run($tree);
     expect($result)->toEqual(StringToTreeConverter::run('x^-2'));
 });
+
+it('removes brackets when there is nothing outside', function () {
+    $tree = StringToTreeConverter::run('(x + 3)');
+    $result = RemoveBrackets::run($tree);
+    expect($result)->toEqual(StringToTreeConverter::run('x + 3'));
+});

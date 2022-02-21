@@ -13,6 +13,11 @@ class RemoveBrackets extends Step
      */
     public function handle(Node $node): Node|Collection
     {
+        // there isn't anything outside the brackets
+        if (is_null($node->parent())) {
+            return tap($node->children()->first())->setParent(null);
+        }
+
         // inside brackets is higher than outside
         if (StringToTreeConverter::getPrecedence($node->children()->first()->value()) > StringToTreeConverter::getPrecedence($node->parent()->value())) {
             $node->parent()->removeChild($node);
@@ -34,7 +39,7 @@ class RemoveBrackets extends Step
             return false;
         }
 
-        if ($node->parent()->value() !== '^') {
+        if ($node->parent()?->value() !== '^') {
             return true;
         }
 
