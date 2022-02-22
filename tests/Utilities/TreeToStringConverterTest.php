@@ -249,3 +249,24 @@ it('removes times between fractions and letters', function () {
     $result = TreeToStringConverter::run($times, $mathjax = true);
     expect($result)->toBe('\frac{1}{2}y');
 });
+
+it('removes the one between a minus and a function', function () {
+    $times = new Node('*');
+    $times->appendChild(new Node(-1));
+    $sine = $times->appendChild(new Node('sin'));
+    $sine->appendChild(new Node(45));
+
+    $result = TreeToStringConverter::run($times);
+    expect($result)->toBe('-sin(45)');
+});
+
+it('removes the one between a minus and a function in mathjax', function () {
+    $times = new Node('*');
+    $times->appendChild(new Node(-1));
+    $root = $times->appendChild(new Node('root'));
+    $root->appendChild(new Node(5));
+    $root->appendChild(new Node(2));
+
+    $result = TreeToStringConverter::run($times, $mathjax = true);
+    expect($result)->toBe('-\sqrt{5}');
+});

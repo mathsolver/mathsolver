@@ -27,7 +27,9 @@ class TreeToStringConverter
                 ->replaceMatches('/([a-z0-9])\*\(/', '$1(') // remove * symbol between numbers/letters and (
                 ->replace(')*(', ')(') // remove * symbol between ) and (
                 ->replaceMatches('/(?<=[a-z])\*(?=[a-z])/', '') // remove * symbol with two letters
-                ->replaceMatches('/([0-9])\*([a-z])/', '$1$2'); // remove * symbol with a number and a letter
+                ->replaceMatches('/([0-9])\*([a-z])/', '$1$2') // remove * symbol with a number and a letter
+                ->replaceMatches('/-1(\x5c)/', '-$1') // Replace "-1" by "-" (for example: "-1\sqrt{5}" -> "-\sqrt{5}")
+                ->replaceMatches('/-1([a-z])/', '-$1'); // Replace "-1" by "-" (for example: "-1x" -> "-x")
         }
 
         if (in_array($node->value(), StringToTreeConverter::$functions)) {
