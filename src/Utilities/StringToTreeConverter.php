@@ -126,7 +126,7 @@ class StringToTreeConverter
     }
 
     /**
-     * Remove the brackets inside functions such as sin(90), tan(45) and roo(9, 2).
+     * Remove the brackets inside functions such as sin(90), tan(45) and root(9, 2).
      */
     protected static function cleanFunctionBrackets(Node $node): Node
     {
