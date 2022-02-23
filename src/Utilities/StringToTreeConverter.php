@@ -12,10 +12,11 @@ class StringToTreeConverter
      * @var array<string>
      */
     public static array $functions = [
-        'root',
-        'frac',
-        'sin',
         'cos',
+        'frac',
+        'rand',
+        'root',
+        'sin',
         'tan',
     ];
 

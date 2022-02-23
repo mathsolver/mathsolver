@@ -402,3 +402,19 @@ it('can parse equations', function () {
     $result = StringToTreeConverter::run('x = 3');
     expect($result)->toEqual($equal);
 });
+
+it('can parse this list of functions', function (string $functionName) {
+    $function = new Node($functionName);
+    $function->appendChild(new Node(2));
+    $function->appendChild(new Node(5));
+
+    $result = StringToTreeConverter::run("{$functionName}(2, 5)");
+    expect($result)->toEqual($function);
+})->with([
+    'cos',
+    'frac',
+    'rand',
+    'root',
+    'sin',
+    'tan',
+]);
