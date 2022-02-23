@@ -33,6 +33,23 @@ it('can simplify one-degree-roots', function () {
     expect($result)->toEqual(StringToTreeConverter::run('8'));
 });
 
+it('wont simplify roots of negative numbers with even exponents', function () {
+    $tree = StringToTreeConverter::run('root(-16, 2)');
+    $result = SimplifyRoots::run($tree);
+    expect($result)->toEqual(StringToTreeConverter::run('root(-16, 2)'));
+});
+
+it('can simplify roots of negative numbers with odd exponents', function (string $input, string $output) {
+    $tree = StringToTreeConverter::run($input);
+    $result = SimplifyRoots::run($tree);
+    expect($result)->toEqual(StringToTreeConverter::run($output));
+})->with([
+    ['root(-27, 3)', '-3'],
+    ['root(-9, 3)', 'root(-9, 3)'],
+    ['root(-16, 3)', '-2root(2, 3)'],
+    ['2root(-16, 3)', '2 * -2root(2, 3)'],
+]);
+
 it('can simplify square roots', function ($start, $outside, $inside) {
     $tree = StringToTreeConverter::run("root({$start} , 2)");
     $result = SimplifyRoots::run($tree);

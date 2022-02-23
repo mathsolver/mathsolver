@@ -16,7 +16,10 @@ class SimplifyRoots extends Step
     public function handle(Node $node): Collection|Node
     {
         $degree = $node->children()->last()->value();
-        $factors = PrimeFactorer::run($node->children()->first()->value());
+
+        $factors = $this->isNegative($node)
+            ? PrimeFactorer::run($node->children()->first()->value() * -1)
+            : PrimeFactorer::run($node->children()->first()->value());
 
         [$outsideRoot, $insideRoot] = $this->findResults($degree, $factors);
 
@@ -28,7 +31,12 @@ class SimplifyRoots extends Step
      */
     public function shouldRun(Node $node): bool
     {
-        return $node->value() === 'root' && $node->children()->count() === $node->numericChildren()->count();
+        return $node->value() === 'root'
+            && is_numeric($node->children()->first()->value())
+            && is_numeric($node->children()->last()->value())
+            && floor($node->children()->first()->value()) == $node->children()->first()->value()
+            && floor($node->children()->last()->value()) == $node->children()->last()->value()
+            && ($node->children()->first()->value() >= 0 || $node->children()->last()->value() % 2 === 1);
     }
 
     /**
@@ -64,13 +72,13 @@ class SimplifyRoots extends Step
     {
         // Check if there is no number inside the root sign
         if ($insideRoot === 1) {
-            return new Node($outsideRoot);
+            return new Node($this->isNegative($node) ? $outsideRoot * -1 : $outsideRoot);
         }
 
         // Check if the coefficient is 1
         if ($outsideRoot === 1) {
             $root = new Node('root');
-            $root->appendChild(new Node($insideRoot));
+            $root->appendChild(new Node($this->isNegative($node) ? $insideRoot * -1 : $insideRoot));
             $root->appendChild(new Node($degree));
             return $root;
         }
@@ -81,16 +89,24 @@ class SimplifyRoots extends Step
             $root->appendChild(new Node($insideRoot));
             $root->appendChild(new Node($degree));
 
-            return collect([new Node($outsideRoot), $root]);
+            return collect([new Node($this->isNegative($node) ? $outsideRoot * -1 : $outsideRoot), $root]);
         }
 
         // Wrap in a multiplication
         $times = new Node('*');
-        $times->appendChild(new Node($outsideRoot));
+        $times->appendChild(new Node($this->isNegative($node) ? $outsideRoot * -1 : $outsideRoot));
         $root = $times->appendChild(new Node('root'));
         $root->appendChild(new Node($insideRoot));
         $root->appendChild(new Node($degree));
 
         return $times;
+    }
+
+    /**
+     * Determine whether the number inside a root is negative or not.
+     */
+    protected function isNegative(Node $node): bool
+    {
+        return $node->children()->first()->value() < 0;
     }
 }
