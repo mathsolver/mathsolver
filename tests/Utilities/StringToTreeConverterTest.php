@@ -413,6 +413,7 @@ it('can parse this list of functions', function (string $functionName) {
 })->with([
     'cos',
     'frac',
+    'log',
     'rand',
     'root',
     'sin',

@@ -14,6 +14,7 @@ class StringToTreeConverter
     public static array $functions = [
         'cos',
         'frac',
+        'log',
         'rand',
         'root',
         'sin',

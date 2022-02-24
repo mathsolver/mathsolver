@@ -17,6 +17,7 @@ class Simplifier
         AddFractions::class,
         AddLikeTerms::class,
         AddRealNumbers::class,
+        CalculateLogarithms::class,
         CalculatePowersOfRealNumbers::class,
         ConvertBrokenExponentsIntoRoots::class,
         ExpandBrackets::class,
