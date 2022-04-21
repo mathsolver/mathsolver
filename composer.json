@@ -29,5 +29,10 @@
     "scripts": {
         "test": "./vendor/bin/pest --parallel",
         "coverage": "./vendor/bin/pest --parallel --coverage --min=100"
+    },
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
     }
 }
