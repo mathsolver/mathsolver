@@ -3,6 +3,7 @@
 namespace MathSolver\Simplify;
 
 use MathSolver\Utilities\Node;
+use MathSolver\Utilities\Step;
 
 class CalculatePowersOfRealNumbers extends Step
 {
@@ -11,13 +12,13 @@ class CalculatePowersOfRealNumbers extends Step
      */
     public function handle(Node $node): Node
     {
-        $base = $node->children()->first()->value() === '('
-            ? $node->children()->first()->children()->first()->value()
-            : $node->children()->first()->value();
+        $base = $node->child(0)->value() === '('
+            ? $node->child(0)->child(0)->value()
+            : $node->child(0)->value();
 
         $exponent = $node->children()->last()->value();
 
-        if ($base < 0 && $exponent % 2 === 0 && $node->children()->first()->value() !== '(') {
+        if ($base < 0 && $exponent % 2 === 0 && $node->child(0)->value() !== '(') {
             return new Node(-1 * pow($base, $exponent));
         }
 
@@ -35,9 +36,9 @@ class CalculatePowersOfRealNumbers extends Step
         }
 
         // check if the base is a real number
-        if (!is_numeric($node->children()->first()->value())) {
+        if (!is_numeric($node->child(0)->value())) {
             // check if it is a bracket with a nested number
-            if ($node->children()->first()->value() !== '(' || !is_numeric($node->children()->first()->children()->first()->value())) {
+            if ($node->child(0)->value() !== '(' || !is_numeric($node->child(0)->child(0)->value())) {
                 return false;
             }
         }

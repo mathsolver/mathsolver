@@ -3,6 +3,7 @@
 namespace MathSolver\Simplify;
 
 use MathSolver\Utilities\Node;
+use MathSolver\Utilities\Step;
 
 class CalculateLogarithms extends Step
 {
@@ -11,7 +12,7 @@ class CalculateLogarithms extends Step
      */
     public function handle(Node $node): Node
     {
-        $number = $node->children()->first()->value();
+        $number = $node->child(0)->value();
         $base = $node->children()->last()->value();
 
         // use a log base 10 when there is no base given

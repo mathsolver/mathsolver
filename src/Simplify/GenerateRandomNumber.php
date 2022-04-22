@@ -3,6 +3,7 @@
 namespace MathSolver\Simplify;
 
 use MathSolver\Utilities\Node;
+use MathSolver\Utilities\Step;
 
 class GenerateRandomNumber extends Step
 {
@@ -11,7 +12,7 @@ class GenerateRandomNumber extends Step
      */
     public function handle(Node $node): Node
     {
-        $min = (int) $node->children()->first()->value();
+        $min = (int) $node->child(0)->value();
         $max = (int) $node->children()->last()->value();
 
         return new Node(rand($min, $max));
@@ -23,7 +24,7 @@ class GenerateRandomNumber extends Step
     public function shouldRun(Node $node): bool
     {
         return $node->value() === 'rand'
-        && is_numeric($node->children()->first()->value())
+        && is_numeric($node->child(0)->value())
         && is_numeric($node->children()->last()->value());
     }
 }

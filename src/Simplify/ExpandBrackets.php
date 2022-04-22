@@ -3,6 +3,7 @@
 namespace MathSolver\Simplify;
 
 use MathSolver\Utilities\Node;
+use MathSolver\Utilities\Step;
 
 class ExpandBrackets extends Step
 {
@@ -20,7 +21,7 @@ class ExpandBrackets extends Step
         $times = new Node('*');
 
         for ($x = 1; $x <= $node->children()->last()->value(); $x++) {
-            $times->appendChild(tap(unserialize(serialize($node->children()->first())))->setParent($times));
+            $times->appendChild(tap(unserialize(serialize($node->child(0))))->setParent($times));
         }
 
         return $times;
@@ -40,7 +41,7 @@ class ExpandBrackets extends Step
     protected function shouldExecute(Node $node): bool
     {
         return $node->value() === '^'
-            && $node->children()->first()->value() === '('
+            && $node->child(0)->value() === '('
             && is_numeric($node->children()->last()->value())
             && $node->children()->last()->value() > 0
             && floor($node->children()->last()->value()) == $node->children()->last()->value();

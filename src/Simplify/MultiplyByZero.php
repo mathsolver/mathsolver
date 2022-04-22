@@ -3,6 +3,7 @@
 namespace MathSolver\Simplify;
 
 use MathSolver\Utilities\Node;
+use MathSolver\Utilities\Step;
 
 class MultiplyByZero extends Step
 {

@@ -4,6 +4,7 @@ namespace MathSolver\Simplify;
 
 use Illuminate\Support\Collection;
 use MathSolver\Utilities\Node;
+use MathSolver\Utilities\Step;
 
 class MultiplyLikeFactors extends Step
 {
@@ -48,7 +49,7 @@ class MultiplyLikeFactors extends Step
 
         $parentNode->children()->each(function (Node $node) use ($totals) {
             if ($node->value() === '^') {
-                $string = $node->children()->first()->toString();
+                $string = $node->child(0)->toString();
                 $increment = $node->children()->last()->value();
             } else {
                 $string = $node->toString();
@@ -101,7 +102,7 @@ class MultiplyLikeFactors extends Step
     protected function getReturnValue(Node $node): Node
     {
         if ($node->children()->count() === 1) {
-            return tap($node->children()->first())->setParent(null);
+            return tap($node->child(0))->setParent(null);
         }
 
         return $node;

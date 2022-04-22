@@ -3,6 +3,7 @@
 namespace MathSolver\Simplify;
 
 use MathSolver\Utilities\Node;
+use MathSolver\Utilities\Step;
 
 class RemoveRedundantNumbers extends Step
 {
@@ -23,7 +24,7 @@ class RemoveRedundantNumbers extends Step
 
         // Remove the first child if no other children are left
         if ($node->children()->count() === 1) {
-            $node = $node->children()->first();
+            $node = $node->child(0);
             $node->setParent(null);
         }
 
@@ -36,6 +37,6 @@ class RemoveRedundantNumbers extends Step
      */
     public function shouldRun(Node $node): bool
     {
-        return $node->value() === '+' || $node->value() === '*';
+        return $node->value() === '+' || $node->value() === '*' || $node->value() === '^';
     }
 }

@@ -3,6 +3,7 @@
 namespace MathSolver\Simplify;
 
 use MathSolver\Utilities\Node;
+use MathSolver\Utilities\Step;
 
 class MultiplyFractions extends Step
 {
@@ -29,7 +30,7 @@ class MultiplyFractions extends Step
 
         // multiply the numerator and denominator for each fraction
         foreach ($fractions as $fraction) {
-            $numerator = $numerator * $fraction->children()->first()->value();
+            $numerator = $numerator * $fraction->child(0)->value();
             $denominator = $denominator * $fraction->children()->last()->value();
             $node->removeChild($fraction);
         }

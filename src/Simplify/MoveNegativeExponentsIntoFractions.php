@@ -3,6 +3,7 @@
 namespace MathSolver\Simplify;
 
 use MathSolver\Utilities\Node;
+use MathSolver\Utilities\Step;
 
 class MoveNegativeExponentsIntoFractions extends Step
 {
@@ -19,13 +20,13 @@ class MoveNegativeExponentsIntoFractions extends Step
 
         // Check if the power is 1
         if ($node->children()->last()->value() == -1) {
-            $fraction->appendChild($node->children()->first());
+            $fraction->appendChild($node->child(0));
             return $fraction;
         }
 
         // Append the power to the fraction
         $power = $fraction->appendChild(new Node('^'));
-        $power->appendChild($node->children()->first());
+        $power->appendChild($node->child(0));
         $power->appendChild(new Node($node->children()->last()->value() * -1));
 
         return $fraction;
@@ -37,7 +38,7 @@ class MoveNegativeExponentsIntoFractions extends Step
     public function shouldRun(Node $node): bool
     {
         return $node->value() === '^'
-            && is_numeric($node->children()->first()->value())
+            && is_numeric($node->child(0)->value())
             && is_numeric($node->children()->last()->value())
             && $node->children()->last()->value() < 0;
     }

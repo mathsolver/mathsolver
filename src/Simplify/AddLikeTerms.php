@@ -4,6 +4,7 @@ namespace MathSolver\Simplify;
 
 use Illuminate\Support\Collection;
 use MathSolver\Utilities\Node;
+use MathSolver\Utilities\Step;
 
 class AddLikeTerms extends Step
 {
@@ -35,7 +36,7 @@ class AddLikeTerms extends Step
         });
 
         if ($this->node->children()->count() === 1) {
-            return tap($this->node->children()->first())->setParent(null);
+            return tap($this->node->child(0))->setParent(null);
         }
 
         return $this->node;
@@ -135,7 +136,7 @@ class AddLikeTerms extends Step
             ->each(fn ($term) => $node->appendChild($term));
 
         if ($node->children()->count() === 1) {
-            $this->node->appendChild(tap($node->children()->first())->setParent(null));
+            $this->node->appendChild(tap($node->child(0))->setParent(null));
             return;
         }
 

@@ -4,6 +4,7 @@ namespace MathSolver\Simplify;
 
 use Illuminate\Support\Collection;
 use MathSolver\Utilities\Node;
+use MathSolver\Utilities\Step;
 use MathSolver\Utilities\PrimeFactorer;
 
 class SimplifyRoots extends Step
@@ -18,8 +19,8 @@ class SimplifyRoots extends Step
         $degree = $node->children()->last()->value();
 
         $factors = $this->isNegative($node)
-            ? PrimeFactorer::run($node->children()->first()->value() * -1)
-            : PrimeFactorer::run($node->children()->first()->value());
+            ? PrimeFactorer::run($node->child(0)->value() * -1)
+            : PrimeFactorer::run($node->child(0)->value());
 
         [$outsideRoot, $insideRoot] = $this->findResults($degree, $factors);
 
@@ -32,11 +33,11 @@ class SimplifyRoots extends Step
     public function shouldRun(Node $node): bool
     {
         return $node->value() === 'root'
-            && is_numeric($node->children()->first()->value())
+            && is_numeric($node->child(0)->value())
             && is_numeric($node->children()->last()->value())
-            && floor($node->children()->first()->value()) == $node->children()->first()->value()
+            && floor($node->child(0)->value()) == $node->child(0)->value()
             && floor($node->children()->last()->value()) == $node->children()->last()->value()
-            && ($node->children()->first()->value() >= 0 || $node->children()->last()->value() % 2 === 1);
+            && ($node->child(0)->value() >= 0 || $node->children()->last()->value() % 2 === 1);
     }
 
     /**
@@ -107,6 +108,6 @@ class SimplifyRoots extends Step
      */
     protected function isNegative(Node $node): bool
     {
-        return $node->children()->first()->value() < 0;
+        return $node->child(0)->value() < 0;
     }
 }

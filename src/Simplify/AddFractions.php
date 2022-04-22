@@ -4,6 +4,7 @@ namespace MathSolver\Simplify;
 
 use Illuminate\Support\Collection;
 use MathSolver\Utilities\Node;
+use MathSolver\Utilities\Step;
 
 class AddFractions extends Step
 {
@@ -27,7 +28,7 @@ class AddFractions extends Step
 
         // convert all fractions to have the same denominator
         $numbers = $fractions->map(function (Node $fraction) use ($leastCommonMultiple) {
-            return (int) $fraction->children()->first()->value() * ($leastCommonMultiple / $fraction->children()->last()->value());
+            return (int) $fraction->child(0)->value() * ($leastCommonMultiple / $fraction->children()->last()->value());
         });
 
         // convert all whole numbers to fractions with the correct denominator

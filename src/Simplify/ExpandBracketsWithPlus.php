@@ -4,6 +4,7 @@ namespace MathSolver\Simplify;
 
 use Illuminate\Support\Collection;
 use MathSolver\Utilities\Node;
+use MathSolver\Utilities\Step;
 
 class ExpandBracketsWithPlus extends Step
 {
@@ -27,8 +28,8 @@ class ExpandBracketsWithPlus extends Step
         [$children1, $children2] = $this->getChildrenToMultiply();
         $this->multiplyChildren($children1, $children2);
 
-        if ($this->node->children()->count() === 1 && $this->node->children()->first()->value() === '(') {
-            $this->node = $this->node->children()->first()->children()->first();
+        if ($this->node->children()->count() === 1 && $this->node->child(0)->value() === '(') {
+            $this->node = $this->node->child(0)->child(0);
             $this->node->setParent(null);
         }
 
@@ -53,7 +54,7 @@ class ExpandBracketsWithPlus extends Step
         }
 
         return $this->node->children()->filter(function (Node $brackets) {
-            return $brackets->value() === '(' && $brackets->children()->first()->value() === '+';
+            return $brackets->value() === '(' && $brackets->child(0)->value() === '+';
         })->count() > 0;
     }
 
@@ -65,17 +66,17 @@ class ExpandBracketsWithPlus extends Step
     protected function getChildrenToMultiply(): array
     {
         $brackets = $this->node->children()->filter(function (Node $brackets) {
-            return $brackets->value() === '(' && $brackets->children()->first()->value() === '+';
+            return $brackets->value() === '(' && $brackets->child(0)->value() === '+';
         })->first();
 
         $this->node->removeChild($brackets);
-        $bracketChildren = $brackets->children()->first()->children();
+        $bracketChildren = $brackets->child(0)->children();
 
         $otherNode = $this->node->children()->filter(fn ($child) => $child !== $brackets)->first();
         $this->node->removeChild($otherNode);
 
-        $otherChildren = $otherNode->value() === '(' && $otherNode->children()->first()->value() === '+'
-            ? $otherNode->children()->first()->children()
+        $otherChildren = $otherNode->value() === '(' && $otherNode->child(0)->value() === '+'
+            ? $otherNode->child(0)->children()
             : collect([$otherNode]);
 
         return [$bracketChildren, $otherChildren];

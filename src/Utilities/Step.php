@@ -1,14 +1,13 @@
 <?php
 
-namespace MathSolver\Simplify;
+namespace MathSolver\Utilities;
 
 use Illuminate\Support\Collection;
-use MathSolver\Utilities\Node;
 
 abstract class Step
 {
     /**
-     * Handle the actual execution of the simplifying process.
+     * Handle the actual execution of the process.
      *
      * @return Collection<Node>|Node
      */
@@ -20,7 +19,7 @@ abstract class Step
     abstract public function shouldRun(Node $node): bool;
 
     /**
-     * A facade for running simplify steps.
+     * A facade for running steps recursively.
      *
      * @return Collection<Node>|Node
      */

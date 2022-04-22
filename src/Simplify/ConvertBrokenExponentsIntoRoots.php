@@ -4,6 +4,7 @@ namespace MathSolver\Simplify;
 
 use Illuminate\Support\Collection;
 use MathSolver\Utilities\Node;
+use MathSolver\Utilities\Step;
 
 class ConvertBrokenExponentsIntoRoots extends Step
 {
@@ -17,7 +18,7 @@ class ConvertBrokenExponentsIntoRoots extends Step
     public function handle(Node $node): Collection|Node
     {
         // Get the base and the exponent
-        $base = $node->children()->first();
+        $base = $node->child(0);
         $exponent = $node->children()->last()->value();
 
         // Create the root node

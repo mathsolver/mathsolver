@@ -3,6 +3,7 @@
 namespace MathSolver\Simplify;
 
 use MathSolver\Utilities\Node;
+use MathSolver\Utilities\Step;
 
 class SortFactors extends Step
 {
@@ -43,8 +44,8 @@ class SortFactors extends Step
             return ord($node->value()) * -1 + 200;
         }
 
-        if ($node->value() === '^' && ctype_alpha($node->children()->first()->value())) {
-            return ord($node->children()->first()->value()) * -1 + 200;
+        if ($node->value() === '^' && ctype_alpha($node->child(0)->value())) {
+            return ord($node->child(0)->value()) * -1 + 200;
         }
 
         // default value

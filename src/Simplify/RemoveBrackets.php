@@ -4,6 +4,7 @@ namespace MathSolver\Simplify;
 
 use Illuminate\Support\Collection;
 use MathSolver\Utilities\Node;
+use MathSolver\Utilities\Step;
 use MathSolver\Utilities\StringToTreeConverter;
 
 class RemoveBrackets extends Step
@@ -15,17 +16,17 @@ class RemoveBrackets extends Step
     {
         // there isn't anything outside the brackets
         if (is_null($node->parent())) {
-            return tap($node->children()->first())->setParent(null);
+            return tap($node->child(0))->setParent(null);
         }
 
         // inside brackets is higher than outside
-        if (StringToTreeConverter::getPrecedence($node->children()->first()->value()) > StringToTreeConverter::getPrecedence($node->parent()->value())) {
+        if (StringToTreeConverter::getPrecedence($node->child(0)->value()) > StringToTreeConverter::getPrecedence($node->parent()->value())) {
             $node->parent()->removeChild($node);
-            return $node->children()->first();
+            return $node->child(0);
         }
 
         // inside brackets is equal to outside, only with + and *
-        $nestedChildren = $node->children()->first()->children();
+        $nestedChildren = $node->child(0)->children();
         $node->parent()->removeChild($node);
         return $nestedChildren;
     }
@@ -43,7 +44,7 @@ class RemoveBrackets extends Step
             return true;
         }
 
-        if (!is_numeric($node->children()->first()->value())) {
+        if (!is_numeric($node->child(0)->value())) {
             return true;
         }
 
