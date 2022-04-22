@@ -418,4 +418,5 @@ it('can parse this list of functions', function (string $functionName) {
     'root',
     'sin',
     'tan',
+    'deriv'
 ]);

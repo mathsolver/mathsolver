@@ -19,6 +19,7 @@ class StringToTreeConverter
         'root',
         'sin',
         'tan',
+        'deriv'
     ];
 
     /**
@@ -138,12 +139,12 @@ class StringToTreeConverter
         // Check if the node is a function
         if (in_array($node->value(), self::$functions)) {
             // Move all children of the brackets node to the function node
-            $node->children()->first()->children()->each(function ($child) use ($node) {
+            $node->child(0)->children()->each(function ($child) use ($node) {
                 $node->appendChild($child);
             });
 
             // Remove the brackets node
-            $node->removeChild($node->children()->first());
+            $node->removeChild($node->child(0));
 
             // Update the keys of the children array
             $node = $node->setChildren($node->children()->values());
