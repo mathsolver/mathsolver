@@ -38,3 +38,9 @@ it('returns a one if no other children are left', function () {
     $result = RemoveRedundantNumbers::run($tree);
     expect($result)->toEqual(StringToTreeConverter::run(1));
 });
+
+it('removes power of one', function () {
+    $tree = StringToTreeConverter::run('y^1');
+    $result = RemoveRedundantNumbers::run($tree);
+    expect($result)->toEqual(StringToTreeConverter::run('y'));
+});

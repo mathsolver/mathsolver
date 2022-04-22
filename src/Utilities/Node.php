@@ -177,4 +177,16 @@ class Node
     {
         $this->setChildren(new Collection());
     }
+
+    /**
+     * Get the nth child of a node.
+     */
+    public function child(int $index = 0): self
+    {
+        if ($index == -1) {
+            return $this->children()->last();
+        }
+
+        return $this->children()[$index];
+    }
 }

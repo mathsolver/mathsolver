@@ -24,7 +24,7 @@ it('can have a child', function () {
     $child = $node->appendChild(new Node('7'));
 
     expect($node->children())->toHaveCount(1);
-    expect($node->children()->first())->toBe($child);
+    expect($node->child(0))->toBe($child);
 });
 
 it('can have a parent', function () {
@@ -40,9 +40,9 @@ it('can have nested children', function () {
     $child = $node->appendChild(new Node('y'));
 
     expect($root->children())->toHaveCount(1);
-    expect($root->children()->first())->toBe($node);
+    expect($root->child(0))->toBe($node);
     expect($node->children())->toHaveCount(1);
-    expect($node->children()->first())->toBe($child);
+    expect($node->child(0))->toBe($child);
     expect($child->children())->toHaveCount(0);
 });
 
@@ -112,12 +112,12 @@ it('can sets its children', function () {
     $child2 = new Node(8);
 
     expect($root->children())->toHaveCount(1);
-    expect($root->children()->first())->toBe($child1);
+    expect($root->child(0))->toBe($child1);
 
     $root->setChildren(collect([$child2]));
 
     expect($root->children())->toHaveCount(1);
-    expect($root->children()->first())->toBe($child2);
+    expect($root->child(0))->toBe($child2);
     expect($child2->parent())->toBe($root);
 });
 
@@ -184,4 +184,15 @@ it('can remove all its children', function () {
     expect($node->children())->toHaveCount(2);
     $node->removeAllChildren();
     expect($node->children())->toHaveCount(0);
+});
+
+it('can get its nth child', function () {
+    $node = new Node('+');
+    $firstChild = $node->appendChild(new Node(3));
+    $secondChild = $node->appendChild(new Node(5));
+
+    expect($node->child(0))->toBe($firstChild);
+    expect($node->child())->toBe($firstChild);
+    expect($node->child(1))->toBe($secondChild);
+    expect($node->child(-1))->toBe($secondChild);
 });
