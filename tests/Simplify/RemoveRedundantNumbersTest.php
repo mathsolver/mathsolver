@@ -44,3 +44,9 @@ it('removes power of one', function () {
     $result = RemoveRedundantNumbers::run($tree);
     expect($result)->toEqual(StringToTreeConverter::run('y'));
 });
+
+it('does not remove powers with a base of one', function () {
+    $tree = StringToTreeConverter::run('1^5');
+    $result = RemoveRedundantNumbers::run($tree);
+    expect($result)->toEqual(StringToTreeConverter::run('1^5'));
+});

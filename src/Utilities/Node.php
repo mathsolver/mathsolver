@@ -183,7 +183,7 @@ class Node
      */
     public function child(int $index = 0): self
     {
-        if ($index == -1) {
+        if ($index === -1) {
             return $this->children()->last();
         }
 

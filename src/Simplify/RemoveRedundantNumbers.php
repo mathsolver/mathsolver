@@ -14,7 +14,11 @@ class RemoveRedundantNumbers extends Step
     {
         // Remove all zeros or ones
         $node->children()
-            ->filter(fn ($child) => $node->value() === '+' ? $child->value() == 0 : $child->value() == 1)
+            ->filter(fn ($child) => match ($node->value()) {
+                '+' => $child->value() == 0,
+                '*' => $child->value() == 1,
+                '^' => $node->child(1) === $child && $child->value() == 1,
+            })
             ->each(fn ($child) => $node->removeChild($child));
 
         // Return a zero or one if no other children are left
@@ -24,7 +28,7 @@ class RemoveRedundantNumbers extends Step
 
         // Remove the first child if no other children are left
         if ($node->children()->count() === 1) {
-            $node = $node->child(0);
+            $node = $node->children()->first();
             $node->setParent(null);
         }
 
@@ -37,6 +41,8 @@ class RemoveRedundantNumbers extends Step
      */
     public function shouldRun(Node $node): bool
     {
-        return $node->value() === '+' || $node->value() === '*' || $node->value() === '^';
+        return $node->value() === '+' ||
+            $node->value() === '*' ||
+            $node->value() === '^';
     }
 }
