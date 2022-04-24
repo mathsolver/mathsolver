@@ -196,3 +196,29 @@ it('can get its nth child', function () {
     expect($node->child(1))->toBe($secondChild);
     expect($node->child(-1))->toBe($secondChild);
 });
+
+it('knows if its value is numeric', function (string $value, bool $isNumeric) {
+    $node = new Node($value);
+    expect($node->isNumeric())->toBe($isNumeric);
+})->with([
+    [4, true],
+    ['x', false],
+    ['*', false],
+    ['π', true],
+    [0.125, true],
+    ['28', true],
+]);
+
+it('knows if fractions are numeric', function () {
+    // numeric fraction
+    $fraction = new Node('frac');
+    $fraction->appendChild(new Node(2));
+    $fraction->appendChild(new Node(5));
+    expect($fraction->isNumeric())->toBeTrue();
+
+    // non-numeric fraction
+    $fraction = new Node('frac');
+    $fraction->appendChild(new Node(2));
+    $fraction->appendChild(new Node('x'));
+    expect($fraction->isNumeric())->toBeFalse();
+});

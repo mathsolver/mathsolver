@@ -67,13 +67,25 @@ class Node
     }
 
     /**
+     * Determine whether a node's value is numeric.
+     */
+    public function isNumeric(): bool
+    {
+        if ($this->value() === 'frac') {
+            return $this->numericChildren()->count() === 2;
+        }
+
+        return is_numeric($this->value()) || $this->value() === 'π';
+    }
+
+    /**
      * Get all numeric children.
      *
      * @return Collection<Node>
      */
     public function numericChildren(): Collection
     {
-        return $this->children->filter(fn ($node) => is_numeric($node->value()))->values();
+        return $this->children->filter(fn ($node) => $node->isNumeric())->values();
     }
 
     /**
@@ -83,7 +95,7 @@ class Node
      */
     public function nonNumericChildren(): Collection
     {
-        return $this->children->filter(fn ($node) => !is_numeric($node->value()))->values();
+        return $this->children->filter(fn ($node) => !$node->isNumeric())->values();
     }
 
     /**
