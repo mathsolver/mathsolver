@@ -3,6 +3,7 @@
 namespace MathSolver\Simplify;
 
 use Illuminate\Support\Str;
+use MathSolver\Derivatives\ConstantRule;
 use MathSolver\Derivatives\PowerRule;
 use MathSolver\Utilities\Node;
 use MathSolver\Utilities\TreeToStringConverter;
@@ -20,6 +21,7 @@ class Simplifier
         AddRealNumbers::class,
         CalculateLogarithms::class,
         CalculatePowersOfRealNumbers::class,
+        ConstantRule::class,
         ConvertBrokenExponentsIntoRoots::class,
         ExpandBrackets::class,
         ExpandBracketsWithPlus::class,
