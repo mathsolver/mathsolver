@@ -7,6 +7,9 @@ use MathSolver\Utilities\Step;
 
 class PowerRule extends Step
 {
+    /**
+     * Check if it is a power.
+     */
     public function shouldRun(Node $node): bool
     {
         return $node->value() === 'deriv'
@@ -14,6 +17,11 @@ class PowerRule extends Step
             && $node->child(0)->child(0)->value() === 'x';
     }
 
+    /**
+     * Multiply by the exponent and subtract one of the exponent.
+     *
+     * For example: `x^5 -> 5x^4`.
+     */
     public function handle(Node $node): Node
     {
         $exponent = $node->child()->child(1)->value();
