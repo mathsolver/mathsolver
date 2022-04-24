@@ -3,6 +3,7 @@
 namespace MathSolver\Simplify;
 
 use Illuminate\Support\Str;
+use MathSolver\Derivatives\PowerRule;
 use MathSolver\Utilities\Node;
 use MathSolver\Utilities\TreeToStringConverter;
 
@@ -29,6 +30,7 @@ class Simplifier
         MultiplyFractions::class,
         MultiplyLikeFactors::class,
         MultiplyRealNumbers::class,
+        PowerRule::class,
         RemoveBrackets::class,
         RemoveRedundantNumbers::class,
         SimplifyFractions::class,

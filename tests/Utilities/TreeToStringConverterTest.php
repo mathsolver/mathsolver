@@ -270,3 +270,13 @@ it('removes the one between a minus and a function in mathjax', function () {
     $result = TreeToStringConverter::run($times, $mathjax = true);
     expect($result)->toBe('-\sqrt{5}');
 });
+
+it('converts to a differentiate function', function () {
+    $deriv = new Node('deriv');
+    $power = $deriv->appendChild(new Node('^'));
+    $power->appendChild(new Node('x'));
+    $power->appendChild(new Node(5));
+
+    $result = TreeToStringConverter::run($deriv, $mathjax = true);
+    expect($result)->toBe('\frac{d}{dx}(x^{5})');
+});

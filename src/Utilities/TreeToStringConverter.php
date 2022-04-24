@@ -35,7 +35,7 @@ class TreeToStringConverter
         if (in_array($node->value(), StringToTreeConverter::$functions)) {
             if ($mathjax && $node->value() === 'root') {
                 $base = self::run($node->child(0), $mathjax);
-                $degree = self::run($node->children()->last(), $mathjax);
+                $degree = self::run($node->child(-1), $mathjax);
 
                 return $degree == 2
                     ? "\\sqrt{{$base}}"
@@ -44,8 +44,13 @@ class TreeToStringConverter
 
             if ($mathjax && $node->value() === 'frac') {
                 $numerator = self::run($node->child(0), $mathjax);
-                $denominator = self::run($node->children()->last(), $mathjax);
+                $denominator = self::run($node->child(-1), $mathjax);
                 return "\\frac{{$numerator}}{{$denominator}}";
+            }
+
+            if ($mathjax && $node->value() === 'deriv') {
+                $inside = self::run($node->child(0), $mathjax);
+                return '\frac{d}{dx}' . "({$inside})";
             }
 
             $children = $node->children()->map(fn ($child) => self::run($child, $mathjax))->implode(',');
@@ -54,7 +59,7 @@ class TreeToStringConverter
 
         if ($mathjax && $node->value() === '^') {
             $base = self::run($node->child(0), $mathjax);
-            $exponent = self::run($node->children()->last(), $mathjax);
+            $exponent = self::run($node->child(-1), $mathjax);
             return "{$base}^{{$exponent}}";
         }
 

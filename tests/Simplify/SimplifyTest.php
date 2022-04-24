@@ -226,6 +226,16 @@ it('can calculate functions', function (string $input, string $expected) {
     ['log(4, 16)', '0.5'],
 ]);
 
+it('can differentiate', function (string $input, string $expected) {
+    $tree = StringToTreeConverter::run($input);
+    $result = Simplifier::run($tree)['result'];
+    $expected = StringToTreeConverter::run($expected);
+    expect($result)->toEqual($expected);
+})->with([
+    ['deriv(x^2)', '2x'],
+    ['deriv(x^-1)', '-x^-2'],
+]);
+
 it('records steps', function () {
     $tree = StringToTreeConverter::run('6a * 7b + 5ab');
     $result = Simplifier::run($tree);

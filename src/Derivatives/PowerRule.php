@@ -2,11 +2,10 @@
 
 namespace MathSolver\Derivatives;
 
-use MathSolver\Simplify\Simplifier;
 use MathSolver\Utilities\Node;
 use MathSolver\Utilities\Step;
 
-class Differentiator extends Step
+class PowerRule extends Step
 {
     public function shouldRun(Node $node): bool
     {
@@ -23,13 +22,17 @@ class Differentiator extends Step
         $times->appendChild(new Node($exponent));
         $times->appendChild($node->child());
 
-        $newExponent = new Node('+');
-        $newExponent->appendChild(new Node($exponent));
-        $newExponent->appendChild(new Node(-1));
+        if (is_numeric($exponent)) {
+            $newExponent = new Node($exponent - 1);
+        } else {
+            $newExponent = new Node('+');
+            $newExponent->appendChild(new Node($exponent));
+            $newExponent->appendChild(new Node(-1));
+        }
 
         $node->child()->removeChild($node->child()->child(-1));
         $node->child()->appendChild($newExponent);
 
-        return Simplifier::run($times)['result'];
+        return $times;
     }
 }

@@ -1,16 +1,22 @@
 <?php
 
-use MathSolver\Derivatives\Differentiator;
+use MathSolver\Derivatives\PowerRule;
 use MathSolver\Utilities\StringToTreeConverter;
 
-it('can differentiate with the power rule', function (string $input, string $output) {
-    $tree = StringToTreeConverter::run("deriv({$input})");
-    $result = Differentiator::run($tree);
-    $expected = StringToTreeConverter::run($output);
-    expect($result)->toEqual($expected);
-})->with([
-    ['x^2', '2x'],
-    ['x^5', '5x^4'],
-    ['x^18', '18x^17'],
-    ['x^-2', '-2x^-3'],
-]);
+it('can apply the power rule', function () {
+    $tree = StringToTreeConverter::run('deriv(x^2)');
+    $result = PowerRule::run($tree);
+    expect($result)->toEqual(StringToTreeConverter::run('2x^1'));
+});
+
+it('can apply the power rule with higher exponents', function () {
+    $tree = StringToTreeConverter::run('deriv(x^5)');
+    $result = PowerRule::run($tree);
+    expect($result)->toEqual(StringToTreeConverter::run('5x^4'));
+});
+
+it('can apply the power rule with negative exponents', function () {
+    $tree = StringToTreeConverter::run('deriv(x^-2)');
+    $result = PowerRule::run($tree);
+    expect($result)->toEqual(StringToTreeConverter::run('-2x^-3'));
+});
