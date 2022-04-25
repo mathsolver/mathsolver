@@ -81,21 +81,25 @@ class Node
     /**
      * Get all numeric children.
      *
+     * @param bool $trueNumbers if set to true, only consider integers and floats as numbers, else fractions and π too
+     *
      * @return Collection<Node>
      */
-    public function numericChildren(): Collection
+    public function numericChildren(bool $trueNumbers = true): Collection
     {
-        return $this->children->filter(fn ($node) => $node->isNumeric())->values();
+        return $this->children->filter(fn ($node) => $trueNumbers ? is_numeric($node->value()) : $node->isNumeric())->values();
     }
 
     /**
      * Get all non-numeric children.
      *
+     * @param bool $trueNumbers if set to true, only consider integers and floats as numbers, else fractions and π too
+     *
      * @return Collection<Node>
      */
-    public function nonNumericChildren(): Collection
+    public function nonNumericChildren(bool $trueNumbers = true): Collection
     {
-        return $this->children->filter(fn ($node) => !$node->isNumeric())->values();
+        return $this->children->filter(fn ($node) => $trueNumbers ? !is_numeric($node->value()) : !$node->isNumeric())->values();
     }
 
     /**

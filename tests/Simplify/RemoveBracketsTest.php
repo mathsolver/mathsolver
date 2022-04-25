@@ -31,7 +31,7 @@ it('does not remove brackets with real negative numbers', function () {
     expect($result)->toEqual(StringToTreeConverter::run('-5^3'));
 });
 
-it('does remove brackets with letters', function () {
+it('removes brackets with letters', function () {
     $tree = StringToTreeConverter::run('(x)^y');
     $result = RemoveBrackets::run($tree);
     expect($result)->toEqual(StringToTreeConverter::run('x^y'));
@@ -47,4 +47,10 @@ it('removes brackets when there is nothing outside', function () {
     $tree = StringToTreeConverter::run('(x + 3)');
     $result = RemoveBrackets::run($tree);
     expect($result)->toEqual(StringToTreeConverter::run('x + 3'));
+});
+
+it('does not remove brackets in powers', function () {
+    $tree = StringToTreeConverter::run('3^(x + 3)');
+    $result = RemoveBrackets::run($tree);
+    expect($result)->toEqual(StringToTreeConverter::run('3^(x + 3)'));
 });

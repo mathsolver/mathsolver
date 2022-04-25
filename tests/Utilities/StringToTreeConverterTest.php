@@ -403,6 +403,15 @@ it('can parse equations', function () {
     expect($result)->toEqual($equal);
 });
 
+it('sees pi as a number', function () {
+    $plus = new Node('+');
+    $plus->appendChild(new Node('π'));
+    $plus->appendChild(new Node(-1));
+
+    $result = StringToTreeConverter::run('π - 1');
+    expect($result)->toEqual($plus);
+});
+
 it('can parse this list of functions', function (string $functionName) {
     $function = new Node($functionName);
     $function->appendChild(new Node(2));
@@ -418,5 +427,5 @@ it('can parse this list of functions', function (string $functionName) {
     'root',
     'sin',
     'tan',
-    'deriv'
+    'deriv',
 ]);

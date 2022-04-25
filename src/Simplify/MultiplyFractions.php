@@ -21,7 +21,7 @@ class MultiplyFractions extends Step
         }
 
         // don't run when there is only one fraction
-        if ($fractions->count() === 1 && $node->numericChildren()->count() === 1) {
+        if ($fractions->count() === 1 && $node->numericChildren()->count() === 0) {
             return $node;
         }
 

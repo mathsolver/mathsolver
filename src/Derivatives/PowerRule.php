@@ -33,9 +33,10 @@ class PowerRule extends Step
         if (is_numeric($exponent)) {
             $newExponent = new Node($exponent - 1);
         } else {
-            $newExponent = new Node('+');
-            $newExponent->appendChild(new Node($exponent));
-            $newExponent->appendChild(new Node(-1));
+            $newExponent = new Node('(');
+            $plusInExponent = $newExponent->appendChild(new Node('+'));
+            $plusInExponent->appendChild(new Node($exponent));
+            $plusInExponent->appendChild(new Node(-1));
         }
 
         $node->child()->removeChild($node->child()->child(-1));

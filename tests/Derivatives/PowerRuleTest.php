@@ -20,3 +20,9 @@ it('can apply the power rule with negative exponents', function () {
     $result = PowerRule::run($tree);
     expect($result)->toEqual(StringToTreeConverter::run('-2x^-3'));
 });
+
+it('can apply the power rule with other numeric values', function () {
+    $tree = StringToTreeConverter::run('deriv(x^π)');
+    $result = PowerRule::run($tree);
+    expect($result)->toEqual(StringToTreeConverter::run('π * x^(π-1)'));
+});

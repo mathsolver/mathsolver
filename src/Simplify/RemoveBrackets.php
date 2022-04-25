@@ -36,20 +36,22 @@ class RemoveBrackets extends Step
      */
     public function shouldRun(Node $node): bool
     {
+        // check if it are brackets
         if ($node->value() !== '(') {
             return false;
         }
 
+        // when it is not in a power, run it
         if ($node->parent()?->value() !== '^') {
             return true;
         }
 
-        if (!is_numeric($node->child(0)->value())) {
+        if (ctype_alpha($node->child(0)->value()) && ctype_alpha($node->child(-1)->value())) {
             return true;
         }
 
-        return is_numeric($node->parent()->children()->last()->value())
-            && ($node->parent()->children()->last()->value() % 2 === 1
-            || $node->parent()->children()->last()->value() < 0);
+        return is_numeric($node->parent()->child(-1)->value())
+            && ($node->parent()->child(-1)->value() % 2 === 1
+            || $node->parent()->child(-1)->value() < 0);
     }
 }
