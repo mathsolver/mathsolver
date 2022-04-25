@@ -222,3 +222,27 @@ it('knows if fractions are numeric', function () {
     $fraction->appendChild(new Node('x'));
     expect($fraction->isNumeric())->toBeFalse();
 });
+
+it('knows if itself or its children contain a value', function () {
+    // root level
+    $node = new Node('x');
+    expect($node->contains('x'))->toBeTrue();
+
+    $node = new Node(5);
+    expect($node->contains('x'))->toBeFalse();
+
+    // first children
+    $node = new Node('*');
+    $node->appendChild(new Node(3));
+    $node->appendChild(new Node('y'));
+    expect($node->contains('x'))->toBeFalse();
+    expect($node->contains('y'))->toBeTrue();
+
+    // deeper children
+    $node = new Node('*');
+    $power = $node->appendChild(new Node('^'));
+    $power->appendChild(new Node('x'));
+    $power->appendChild(new Node(7));
+    expect($node->contains('x'))->toBeTrue();
+    expect($node->contains('y'))->toBeFalse();
+});

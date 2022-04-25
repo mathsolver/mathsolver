@@ -13,7 +13,7 @@ class ConstantRule extends Step
     public function shouldRun(Node $node): bool
     {
         return $node->value() === 'deriv'
-            && $node->child(0)->isNumeric();
+            && !$node->contains('x');
     }
 
     /**
