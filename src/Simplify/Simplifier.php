@@ -4,6 +4,7 @@ namespace MathSolver\Simplify;
 
 use Illuminate\Support\Str;
 use MathSolver\Derivatives\ConstantRule;
+use MathSolver\Derivatives\MonoVariableRule;
 use MathSolver\Derivatives\PowerRule;
 use MathSolver\Utilities\Node;
 use MathSolver\Utilities\TreeToStringConverter;
@@ -27,6 +28,7 @@ class Simplifier
         ExpandBracketsWithPlus::class,
         ExponentOfZero::class,
         GenerateRandomNumber::class,
+        MonoVariableRule::class,
         MoveNegativeExponentsIntoFractions::class,
         MultiplyByZero::class,
         MultiplyFractions::class,
