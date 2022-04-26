@@ -3,6 +3,7 @@
 namespace MathSolver\Simplify;
 
 use Illuminate\Support\Str;
+use MathSolver\Derivatives\CoefficientRule;
 use MathSolver\Derivatives\ConstantRule;
 use MathSolver\Derivatives\MonoVariableRule;
 use MathSolver\Derivatives\PowerRule;
@@ -22,6 +23,7 @@ class Simplifier
         AddRealNumbers::class,
         CalculateLogarithms::class,
         CalculatePowersOfRealNumbers::class,
+        CoefficientRule::class,
         ConstantRule::class,
         ConvertBrokenExponentsIntoRoots::class,
         ExpandBrackets::class,
