@@ -2,12 +2,10 @@
 
 use MathSolver\Simplify\Simplifier;
 use MathSolver\Utilities\StringToTreeConverter;
-use MathSolver\Utilities\TreeToStringConverter;
 
 it('can differentiate functions', function (string $input, string $expected) {
     $tree = StringToTreeConverter::run("deriv({$input})");
     $result = Simplifier::run($tree)['result'];
-    dd(TreeToStringConverter::run($result));
     $expected = StringToTreeConverter::run($expected);
     expect($result)->toEqual($expected);
 })->with([
