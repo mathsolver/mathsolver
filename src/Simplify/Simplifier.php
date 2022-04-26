@@ -7,6 +7,7 @@ use MathSolver\Derivatives\CoefficientRule;
 use MathSolver\Derivatives\ConstantRule;
 use MathSolver\Derivatives\MonoVariableRule;
 use MathSolver\Derivatives\PowerRule;
+use MathSolver\Derivatives\SumRule;
 use MathSolver\Utilities\Node;
 use MathSolver\Utilities\TreeToStringConverter;
 
@@ -41,6 +42,7 @@ class Simplifier
         RemoveRedundantNumbers::class,
         SimplifyFractions::class,
         SimplifyRoots::class,
+        SumRule::class,
     ];
 
     /**
