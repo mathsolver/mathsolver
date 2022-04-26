@@ -216,4 +216,12 @@ class Node
         // run this function recursively through all children
         return $this->children()->map(fn ($child) => $child->contains($value))->contains(true);
     }
+
+    /**
+     * Reset the indexes of a node's children.
+     */
+    public function resetChildren(): void
+    {
+        $this->setChildren($this->children()->values());
+    }
 }

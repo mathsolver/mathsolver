@@ -123,7 +123,7 @@ class ExpandBracketsWithPlus extends Step
             ->each(function ($plus) {
                 $this->node->removeChild($plus);
                 $plus->children()->each(fn ($child) => $this->node->appendChild($child));
-                $this->node->setChildren($this->node->children()->values());
+                $this->node->resetChildren();
             });
     }
 }

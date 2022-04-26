@@ -147,7 +147,7 @@ class StringToTreeConverter
             $node->removeChild($node->child(0));
 
             // Update the keys of the children array
-            $node = $node->setChildren($node->children()->values());
+            $node->resetChildren();
         }
 
         return $node;

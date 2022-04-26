@@ -24,7 +24,7 @@ class AddRealNumbers extends Step
             $node->appendChild(new Node($total));
         }
 
-        $node->setChildren($node->children()->values());
+        $node->resetChildren();
         return $node;
     }
 
