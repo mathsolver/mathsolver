@@ -67,8 +67,28 @@ class StringToTreeConverter
         $node = new Node($terms->first());
         $terms->shift();
 
+        $bracketsAreClosed = false;
+
         // Loop over all terms
+        /** @var string $term */
         foreach ($terms as $term) {
+            if ($node->value() === '(' && !$bracketsAreClosed) {
+                $node = $node->appendChild(new Node($term));
+                continue;
+            }
+
+            if ($term === ')') {
+                $node = $node->parent();
+
+                while ($node->value() !== '(') {
+                    $node = $node->parent();
+                }
+
+                $bracketsAreClosed = true;
+
+                continue;
+            }
+
             if (self::getPrecedence($term) < self::getPrecedence($node->value())) {
                 $done = false;
 

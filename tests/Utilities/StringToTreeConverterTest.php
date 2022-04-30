@@ -328,7 +328,9 @@ it('can parse functions with brackets outside', function () {
 
     $result = StringToTreeConverter::run('tan(45)(3 + x)');
     expect($result)->toEqual($times);
+});
 
+it('can parse functions after brackets', function () {
     $times = new Node('*');
     $brackets = $times->appendChild(new Node('('));
     $plus = $brackets->appendChild(new Node('+'));
@@ -410,6 +412,27 @@ it('sees pi as a number', function () {
 
     $result = StringToTreeConverter::run('π - 1');
     expect($result)->toEqual($plus);
+});
+
+it('can parse double brackets', function () {
+    $brackets = new Node('(');
+    $fraction = $brackets->appendChild(new Node('frac'));
+    $fraction->appendChild(new Node(2));
+    $fraction->appendChild(new Node(5));
+
+    $result = StringToTreeConverter::run('(frac(2, 5))');
+    expect($result)->toEqual($brackets);
+});
+
+it('can parse brackets inside a function', function () {
+    $function = new Node('deriv');
+    $brackets = $function->appendChild(new Node('('));
+    $times = $brackets->appendChild(new Node('*'));
+    $times->appendChild(new Node(5));
+    $times->appendChild(new Node('x'));
+
+    $result = StringToTreeConverter::run('deriv((5x))');
+    expect($result)->toEqual($function);
 });
 
 it('can parse this list of functions', function (string $functionName) {
