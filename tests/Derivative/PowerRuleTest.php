@@ -1,6 +1,6 @@
 <?php
 
-use MathSolver\Derivatives\PowerRule;
+use MathSolver\Derivative\PowerRule;
 use MathSolver\Utilities\StringToTreeConverter;
 
 it('can apply the power rule', function () {

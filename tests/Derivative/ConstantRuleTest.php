@@ -1,6 +1,6 @@
 <?php
 
-use MathSolver\Derivatives\ConstantRule;
+use MathSolver\Derivative\ConstantRule;
 use MathSolver\Utilities\StringToTreeConverter;
 
 it('can differentiate constant functions', function () {

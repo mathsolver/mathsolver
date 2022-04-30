@@ -1,6 +1,6 @@
 <?php
 
-namespace MathSolver\Derivatives;
+namespace MathSolver\Derivative;
 
 use MathSolver\Utilities\Node;
 use MathSolver\Utilities\Step;

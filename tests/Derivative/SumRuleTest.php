@@ -1,6 +1,6 @@
 <?php
 
-use MathSolver\Derivatives\SumRule;
+use MathSolver\Derivative\SumRule;
 use MathSolver\Utilities\StringToTreeConverter;
 
 it('can apply the sum rule', function () {

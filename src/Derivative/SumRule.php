@@ -1,6 +1,6 @@
 <?php
 
-namespace MathSolver\Derivatives;
+namespace MathSolver\Derivative;
 
 use Illuminate\Support\Collection;
 use MathSolver\Utilities\Node;

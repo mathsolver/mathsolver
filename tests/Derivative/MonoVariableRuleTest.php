@@ -1,6 +1,6 @@
 <?php
 
-use MathSolver\Derivatives\MonoVariableRule;
+use MathSolver\Derivative\MonoVariableRule;
 use MathSolver\Utilities\Node;
 use MathSolver\Utilities\StringToTreeConverter;
 

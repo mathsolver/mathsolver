@@ -1,6 +1,6 @@
 <?php
 
-use MathSolver\Derivatives\CoefficientRule;
+use MathSolver\Derivative\CoefficientRule;
 use MathSolver\Utilities\StringToTreeConverter;
 
 it('can apply the coefficient rule', function () {
