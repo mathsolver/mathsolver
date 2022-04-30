@@ -34,6 +34,11 @@ class SortTerms extends Step
      */
     protected function getValue(Node $node): int
     {
+        // run this function for the child in derivatives
+        if ($node->value() === 'deriv') {
+            return $this->getValue($node->child(0));
+        }
+
         // check if it is a number
         if (is_numeric($node->value())) {
             return 10;
