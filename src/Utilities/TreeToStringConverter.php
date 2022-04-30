@@ -54,7 +54,7 @@ class TreeToStringConverter
             }
 
             $children = $node->children()->map(fn ($child) => self::run($child, $mathjax))->implode(',');
-            return "{$node->value()}({$children})";
+            return ($mathjax ? '\text{' . $node->value() . '}' : $node->value()) . "({$children})";
         }
 
         if ($mathjax && $node->value() === '^') {

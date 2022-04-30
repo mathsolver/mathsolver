@@ -190,7 +190,7 @@ it('can convert functions to mathjax', function () {
     $sine = new Node('sin');
     $sine->appendChild(new Node(45));
     $result = TreeToStringConverter::run($sine, $mathjax = true);
-    expect($result)->toBe('sin(45)');
+    expect($result)->toBe('\text{sin}(45)');
 });
 
 it('can convert roots to mathjax', function () {
