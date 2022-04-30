@@ -3,7 +3,6 @@
 namespace MathSolver;
 
 use Illuminate\Support\Collection;
-use MathSolver\Simplify\Simplifier;
 use MathSolver\Utilities\Node;
 use MathSolver\Utilities\StringToTreeConverter;
 use MathSolver\Utilities\Substitutor;
@@ -109,7 +108,7 @@ class Math
      */
     public function simplify(): self
     {
-        $result = Simplifier::run($this->tree, $this->options['mathjax']);
+        $result = Runner::run($this->tree, $this->options['mathjax']);
 
         $this->tree = $result['result'];
 

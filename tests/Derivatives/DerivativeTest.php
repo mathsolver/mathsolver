@@ -1,11 +1,11 @@
 <?php
 
-use MathSolver\Simplify\Simplifier;
+use MathSolver\Runner;
 use MathSolver\Utilities\StringToTreeConverter;
 
 it('can differentiate functions', function (string $input, string $expected) {
     $tree = StringToTreeConverter::run("deriv({$input})");
-    $result = Simplifier::run($tree)['result'];
+    $result = Runner::run($tree)['result'];
     $expected = StringToTreeConverter::run($expected);
     expect($result)->toEqual($expected);
 })->with([

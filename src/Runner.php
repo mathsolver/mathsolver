@@ -1,17 +1,14 @@
 <?php
 
-namespace MathSolver\Simplify;
+namespace MathSolver;
 
 use Illuminate\Support\Str;
-use MathSolver\Derivatives\CoefficientRule;
-use MathSolver\Derivatives\ConstantRule;
-use MathSolver\Derivatives\MonoVariableRule;
-use MathSolver\Derivatives\PowerRule;
-use MathSolver\Derivatives\SumRule;
+use MathSolver\Simplify\SortFactors;
+use MathSolver\Simplify\SortTerms;
 use MathSolver\Utilities\Node;
 use MathSolver\Utilities\TreeToStringConverter;
 
-class Simplifier
+class Runner
 {
     /**
      * A list of all steps to perform.
@@ -19,34 +16,34 @@ class Simplifier
      * @var array<class-string<Step>>
      */
     protected static array $steps = [
-        AddFractions::class,
-        AddLikeTerms::class,
-        AddRealNumbers::class,
-        CalculateLogarithms::class,
-        CalculatePowersOfRealNumbers::class,
-        CoefficientRule::class,
-        ConstantRule::class,
-        ConvertBrokenExponentsIntoRoots::class,
-        ExpandBrackets::class,
-        ExpandBracketsWithPlus::class,
-        ExponentOfZero::class,
-        GenerateRandomNumber::class,
-        MonoVariableRule::class,
-        MoveNegativeExponentsIntoFractions::class,
-        MultiplyByZero::class,
-        MultiplyFractions::class,
-        MultiplyLikeFactors::class,
-        MultiplyRealNumbers::class,
-        PowerRule::class,
-        RemoveBrackets::class,
-        RemoveRedundantNumbers::class,
-        SimplifyFractions::class,
-        SimplifyRoots::class,
-        SumRule::class,
+        Simplify\AddFractions::class,
+        Simplify\AddLikeTerms::class,
+        Simplify\AddRealNumbers::class,
+        Simplify\CalculateLogarithms::class,
+        Simplify\CalculatePowersOfRealNumbers::class,
+        Derivatives\CoefficientRule::class,
+        Derivatives\ConstantRule::class,
+        Simplify\ConvertBrokenExponentsIntoRoots::class,
+        Simplify\ExpandBrackets::class,
+        Simplify\ExpandBracketsWithPlus::class,
+        Simplify\ExponentOfZero::class,
+        Simplify\GenerateRandomNumber::class,
+        Derivatives\MonoVariableRule::class,
+        Simplify\MoveNegativeExponentsIntoFractions::class,
+        Simplify\MultiplyByZero::class,
+        Simplify\MultiplyFractions::class,
+        Simplify\MultiplyLikeFactors::class,
+        Simplify\MultiplyRealNumbers::class,
+        Derivatives\PowerRule::class,
+        Simplify\RemoveBrackets::class,
+        Simplify\RemoveRedundantNumbers::class,
+        Simplify\SimplifyFractions::class,
+        Simplify\SimplifyRoots::class,
+        Derivatives\SumRule::class,
     ];
 
     /**
-     * Simplify the expression as much as possible.
+     * Run all steps to simplify, differentiate and solve.
      */
     public static function run(Node $tree, bool $mathjax = false): array
     {
