@@ -280,3 +280,14 @@ it('converts to a differentiate function', function () {
     $result = TreeToStringConverter::run($deriv, $mathjax = true);
     expect($result)->toBe('\frac{d}{dx}(x^{5})');
 });
+
+it('converts to a differentiate function with respect to a variable', function () {
+    $deriv = new Node('deriv');
+    $power = $deriv->appendChild(new Node('^'));
+    $power->appendChild(new Node('y'));
+    $power->appendChild(new Node(2));
+    $deriv->appendChild(new Node('y'));
+
+    $result = TreeToStringConverter::run($deriv, $mathjax = true);
+    expect($result)->toBe('\frac{d}{dy}(y^{2})');
+});

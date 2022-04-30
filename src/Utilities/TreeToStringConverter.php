@@ -50,7 +50,8 @@ class TreeToStringConverter
 
             if ($mathjax && $node->value() === 'deriv') {
                 $inside = self::run($node->child(0), $mathjax);
-                return '\frac{d}{dx}' . "({$inside})";
+                $respect = $node->child(1)?->value() ?? 'x';
+                return '\frac{d}{d' . $respect . '}' . "({$inside})";
             }
 
             $children = $node->children()->map(fn ($child) => self::run($child, $mathjax))->implode(',');
