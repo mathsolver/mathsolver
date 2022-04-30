@@ -197,10 +197,14 @@ class Node
     /**
      * Get the nth child of a node.
      */
-    public function child(int $index = 0): self
+    public function child(int $index = 0): self|null
     {
         if ($index === -1) {
             return $this->children()->last();
+        }
+
+        if (!array_key_exists($index, $this->children()->toArray())) {
+            return null;
         }
 
         return $this->children()[$index];

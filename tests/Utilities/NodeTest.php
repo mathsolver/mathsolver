@@ -197,6 +197,13 @@ it('can get its nth child', function () {
     expect($node->child(-1))->toBe($secondChild);
 });
 
+it('returns null if the nth child does not exist', function () {
+    $node = new Node('+');
+    $node->appendChild(new Node(3));
+    $node->appendChild(new Node(5));
+    expect($node->child(2))->toBeNull();
+});
+
 it('knows if its value is numeric', function (string $value, bool $isNumeric) {
     $node = new Node($value);
     expect($node->isNumeric())->toBe($isNumeric);
