@@ -142,7 +142,6 @@ class StringToTreeConverter
             '/' => 8,
             '^' => 10,
             '(' => $nested ? 4 : 16,
-            ')' => $nested ? 4 : 14,
             ',' => 2,
             default => in_array($value, self::$functions) ? 12 : 18,
         };
