@@ -8,6 +8,8 @@ use MathSolver\Utilities\Step;
 
 class SumRule extends Step
 {
+    use DifferentiateWithRespect;
+
     /**
      * Only run in additions.
      */
@@ -27,7 +29,16 @@ class SumRule extends Step
 
         $deriv->child(0) // get the plus node
             ->children() // loop over all children
-            ->map(fn (Node $child) => tap(new Node('deriv'))->appendChild($child)) // create a new deriv function
+            ->map(function (Node $child) use ($deriv) { // create a new deriv function
+                $newDeriv = new Node('deriv');
+                $newDeriv->appendChild($child);
+
+                if ($this->respect($deriv) !== 'x') {
+                    $newDeriv->appendChild(new Node($this->respect($deriv)));
+                }
+
+                return $newDeriv;
+            })
             ->each(fn (Node $deriv) => $plus->appendChild($deriv)); // append the deriv function to the plus node
 
         // determine whether to return the children or the plus node itsself

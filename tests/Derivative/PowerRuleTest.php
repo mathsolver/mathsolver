@@ -26,3 +26,9 @@ it('can apply the power rule with other numeric values', function () {
     $result = PowerRule::run($tree);
     expect($result)->toEqual(StringToTreeConverter::run('π * x^(π-1)'));
 });
+
+it('can apply the rule with respect to a variable', function () {
+    $tree = StringToTreeConverter::run('deriv(z^3, z)');
+    $result = PowerRule::run($tree);
+    expect($result)->toEqual(StringToTreeConverter::run('3z^2'));
+});

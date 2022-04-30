@@ -19,3 +19,9 @@ it('does not differentiate non-mono variables', function () {
     $result = MonoVariableRule::run($tree);
     expect($result)->toEqual(StringToTreeConverter::run('deriv(7)'));
 });
+
+it('can apply the rule with respect to a variable', function () {
+    $tree = StringToTreeConverter::run('deriv(y, y)');
+    $result = MonoVariableRule::run($tree);
+    expect($result)->toEqual(new Node(1));
+});

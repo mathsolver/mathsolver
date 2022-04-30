@@ -7,13 +7,15 @@ use MathSolver\Utilities\Step;
 
 class MonoVariableRule extends Step
 {
+    use DifferentiateWithRespect;
+
     /**
      * Run this function when the inside of the `deriv()` function is `x`.
      */
     public function shouldRun(Node $node): bool
     {
         return $node->value() === 'deriv'
-            && $node->child(0)->value() === 'x';
+            && $node->child(0)->value() === $this->respect($node);
     }
 
     /**

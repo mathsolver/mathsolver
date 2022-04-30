@@ -7,6 +7,8 @@ use MathSolver\Utilities\Step;
 
 class PowerRule extends Step
 {
+    use DifferentiateWithRespect;
+
     /**
      * Check if it is a power.
      */
@@ -14,7 +16,7 @@ class PowerRule extends Step
     {
         return $node->value() === 'deriv'
             && $node->child(0)->value() === '^'
-            && $node->child(0)->child(0)->value() === 'x';
+            && $node->child(0)->child(0)->value() === $this->respect($node);
     }
 
     /**

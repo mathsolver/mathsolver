@@ -38,3 +38,9 @@ it('only works in products', function () {
     $result = CoefficientRule::run($tree);
     expect($result)->toEqual(StringToTreeConverter::run('deriv(x^3)'));
 });
+
+it('can apply the rule with respect to a variable', function () {
+    $tree = StringToTreeConverter::run('deriv(7y^2, y)');
+    $result = CoefficientRule::run($tree);
+    expect($result)->toEqual(StringToTreeConverter::run('7 * deriv(y^2, y)'));
+});

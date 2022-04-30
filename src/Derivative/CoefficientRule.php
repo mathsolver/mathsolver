@@ -8,6 +8,8 @@ use MathSolver\Utilities\Step;
 
 class CoefficientRule extends Step
 {
+    use DifferentiateWithRespect;
+
     /**
      * Only run in multiplications.
      */
@@ -34,14 +36,14 @@ class CoefficientRule extends Step
         // find all constant factors and append them to the $times node
         $deriv->child(0)
             ->children()
-            ->filter(fn ($child) => !$child->contains('x'))
+            ->filter(fn ($child) => !$child->contains($this->respect($deriv)))
             ->each(fn ($child) => $times->appendChild($child, $top = true))
             ->each(fn ($child) => $deriv->child(0)->removeChild($child));
 
         // remove the times inside the derivative if it has only one child left
         if ($deriv->child(0)->children()->count() === 1) {
-            $deriv->appendChild($deriv->child(0)->children()->first());
-            $deriv->removeChild($deriv->child(0));
+            $deriv->appendChild($deriv->child(0)->children()->first(), $top = true);
+            $deriv->removeChild($deriv->child(1));
             $deriv->resetChildren();
         }
 
