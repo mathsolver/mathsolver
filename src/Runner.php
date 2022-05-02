@@ -22,6 +22,7 @@ class Runner
         Simplify\CalculateLogarithms::class,
         Simplify\CalculatePowersOfRealNumbers::class,
         Derivative\CoefficientRule::class,
+        Simplify\ConvertDecimalsIntoFractions::class,
         Derivative\ConstantRule::class,
         Simplify\ConvertBrokenExponentsIntoRoots::class,
         Simplify\ExpandBrackets::class,

@@ -190,16 +190,10 @@ it('can calculate with fractions', function (string $input, string $expected) {
     ['frac(3, 5) + frac(1, 5)', 'frac(4, 5)'],
     ['2frac(2, 5) + frac(3, 5)', 'frac(7, 5)'],
     ['1 - frac(2, 5)', 'frac(3, 5)'],
-]);
-
-it('can make conversions between fractions and negative exponents', function (string $input, string $expected) {
-    $tree = StringToTreeConverter::run($input);
-    $result = Runner::run($tree)['result'];
-    $expected = StringToTreeConverter::run($expected);
-    expect($result)->toEqual($expected);
-})->with([
     ['4^-2', 'frac(1, 16)'],
     ['3^-1', 'frac(1, 3)'],
+    ['0.5', 'frac(1, 2)'],
+    ['0.375', 'frac(3, 8)'],
 ]);
 
 it('removes redundant numbers', function (string $input, string $expected) {
@@ -223,7 +217,7 @@ it('can calculate functions', function (string $input, string $expected) {
 })->with([
     ['log(81, 3)', '4'],
     ['log(100)', '2'],
-    ['log(4, 16)', '0.5'],
+    ['log(4, 16)', 'frac(1, 2)'],
 ]);
 
 it('can differentiate', function (string $input, string $expected) {
