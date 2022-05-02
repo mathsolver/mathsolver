@@ -60,7 +60,7 @@ class TreeToStringConverter
 
         if ($mathjax && $node->value() === '^') {
             $base = self::run($node->child(0), $mathjax);
-            $exponent = self::run($node->child(-1), $mathjax);
+            $exponent = $mathjax ? trim(self::run($node->child(-1), $mathjax), '()') : self::run($node->child(-1), $mathjax);
             return "{$base}^{{$exponent}}";
         }
 

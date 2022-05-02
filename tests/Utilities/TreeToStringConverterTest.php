@@ -291,3 +291,18 @@ it('converts to a differentiate function with respect to a variable', function (
     $result = TreeToStringConverter::run($deriv, $mathjax = true);
     expect($result)->toBe('\frac{d}{dy}(y^{2})');
 });
+
+it('removes brackets around exponents', function () {
+    $power = new Node('^');
+    $power->appendChild(new Node('x'));
+    $brackets = $power->appendChild(new Node('('));
+    $times = $brackets->appendChild(new Node('*'));
+    $times->appendChild(new Node(7));
+    $times->appendChild(new Node('x'));
+
+    $result = TreeToStringConverter::run($power, $mathjax = false);
+    expect($result)->toBe('x^(7x)');
+
+    $result = TreeToStringConverter::run($power, $mathjax = true);
+    expect($result)->toBe('x^{7x}');
+});
