@@ -3,8 +3,8 @@
 use MathSolver\Runner;
 use MathSolver\Utilities\StringToTreeConverter;
 
-it('can differentiate functions', function (string $input, string $expected, string $respectTo = 'x') {
-    $tree = $respectTo == 'x' ? StringToTreeConverter::run("deriv({$input})") : StringToTreeConverter::run("deriv({$input}, {$respectTo})");
+it('can differentiate functions', function (string $input, string $expected, string $respect = 'x') {
+    $tree = $respect == 'x' ? StringToTreeConverter::run("deriv({$input})") : StringToTreeConverter::run("deriv({$input}, {$respect})");
     $result = Runner::run($tree)['result'];
     $expected = StringToTreeConverter::run($expected);
     expect($result)->toEqual($expected);
