@@ -444,11 +444,11 @@ it('can parse this list of functions', function (string $functionName) {
     expect($result)->toEqual($function);
 })->with([
     'cos',
+    'deriv',
     'frac',
     'log',
     'rand',
     'root',
     'sin',
     'tan',
-    'deriv',
 ]);
