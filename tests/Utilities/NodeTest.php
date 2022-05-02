@@ -254,16 +254,12 @@ it('knows if itself or its children contain a value', function () {
     expect($node->contains('y'))->toBeFalse();
 });
 
-it('can reset the indexes of its children', function () {
+it('resets the indexes of its children', function () {
     $root = new Node('*');
     $constant = $root->appendChild(new Node(2));
     $variable = $root->appendChild(new Node('x'));
 
     $root->removeChild($constant);
-    expect(array_key_exists(0, $root->children()->toArray()))->toBeFalse();
-    expect($root->child(1))->toBe($variable);
-
-    $root->resetChildren();
     expect(array_key_exists(0, $root->children()->toArray()))->toBeTrue();
     expect($root->child(0))->toBe($variable);
 });

@@ -164,9 +164,6 @@ class StringToTreeConverter
 
             // Remove the brackets node
             $node->removeChild($node->child(0));
-
-            // Update the keys of the children array
-            $node->resetChildren();
         }
 
         return $node;

@@ -139,9 +139,13 @@ class Node
     /**
      * Remove a child from the $children collection.
      */
-    public function removeChild(self $node): void
+    public function removeChild(self $node, bool $resetIndexes = true): void
     {
         $this->children = $this->children->filter(fn ($nodeToCheck) => $nodeToCheck !== $node);
+
+        if ($resetIndexes) {
+            $this->setChildren($this->children()->values());
+        }
     }
 
     /**
@@ -219,13 +223,5 @@ class Node
 
         // run this function recursively through all children
         return $this->children()->map(fn ($child) => $child->contains($value))->contains(true);
-    }
-
-    /**
-     * Reset the indexes of a node's children.
-     */
-    public function resetChildren(): void
-    {
-        $this->setChildren($this->children()->values());
     }
 }

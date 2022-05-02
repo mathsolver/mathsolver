@@ -66,8 +66,6 @@ class ExpandBrackets extends Step
             $node->removeChild($nestedTimes);
         });
 
-        $node->resetChildren();
-
         return $node;
     }
 }
