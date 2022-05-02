@@ -39,6 +39,12 @@ it('only works in products', function () {
     expect($result)->toEqual(StringToTreeConverter::run('deriv(x^3)'));
 });
 
+it('doesnt always create a times symbol', function () {
+    $tree = StringToTreeConverter::run('deriv(x * x^2)');
+    $result = CoefficientRule::run($tree);
+    expect($result)->toEqual(StringToTreeConverter::run('deriv(x * x^2)'));
+});
+
 it('can apply the rule with respect to a variable', function () {
     $tree = StringToTreeConverter::run('deriv(7y^2, y)');
     $result = CoefficientRule::run($tree);

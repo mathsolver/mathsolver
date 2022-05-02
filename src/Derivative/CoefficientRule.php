@@ -48,6 +48,11 @@ class CoefficientRule extends Step
 
         $deriv->child(0)->setChildren($deriv->child(0)->children()->values());
 
+        // return the deriv function if no constants were found
+        if ($times->children()->count() === 1) {
+            return tap($times->child(0))->setParent(null);
+        }
+
         // determine whether to return the children or the times node itsself
         return $timesAlreadyExists ? $times->children() : $times;
     }
