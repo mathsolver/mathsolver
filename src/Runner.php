@@ -16,31 +16,31 @@ class Runner
      * @var array<class-string<Step>>
      */
     protected static array $steps = [
+        Derivative\CoefficientRule::class,
+        Derivative\ConstantRule::class,
+        Derivative\MonoVariableRule::class,
+        Derivative\PowerRule::class,
+        Derivative\SumRule::class,
         Simplify\AddFractions::class,
         Simplify\AddLikeTerms::class,
         Simplify\AddRealNumbers::class,
         Simplify\CalculateLogarithms::class,
         Simplify\CalculatePowersOfRealNumbers::class,
-        Derivative\CoefficientRule::class,
-        Simplify\ConvertDecimalsIntoFractions::class,
-        Derivative\ConstantRule::class,
         Simplify\ConvertBrokenExponentsIntoRoots::class,
+        Simplify\ConvertDecimalsIntoFractions::class,
         Simplify\ExpandBrackets::class,
         Simplify\ExpandBracketsWithPlus::class,
         Simplify\ExponentOfZero::class,
         Simplify\GenerateRandomNumber::class,
-        Derivative\MonoVariableRule::class,
         Simplify\MoveNegativeExponentsIntoFractions::class,
         Simplify\MultiplyByZero::class,
         Simplify\MultiplyFractions::class,
         Simplify\MultiplyLikeFactors::class,
         Simplify\MultiplyRealNumbers::class,
-        Derivative\PowerRule::class,
         Simplify\RemoveBrackets::class,
         Simplify\RemoveRedundantNumbers::class,
         Simplify\SimplifyFractions::class,
         Simplify\SimplifyRoots::class,
-        Derivative\SumRule::class,
     ];
 
     /**
