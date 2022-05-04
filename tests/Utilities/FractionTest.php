@@ -89,3 +89,23 @@ it('can subtract fractions with different denominators', function () {
     $fraction = (new Fraction(4, 7))->subtract(1, 8);
     expect($fraction->numerator())->toBe(25)->and($fraction->denominator())->toBe(56);
 });
+
+it('can get the whole part', function (int $numerator, int $denominator, int $wholePart) {
+    $fraction = new Fraction($numerator, $denominator);
+    expect($fraction->wholePart())->toBe($wholePart);
+})->with([
+    [28, 17, 1],
+    [99, 4, 24],
+    [100, 25, 4],
+    [4, 9, 0],
+]);
+
+it('can get the fraction part', function (int $numerator, int $denominator, int $fractionPart) {
+    $fraction = new Fraction($numerator, $denominator);
+    expect($fraction->fractionPart())->toEqual(new Fraction($fractionPart, $denominator));
+})->with([
+    [28, 17, 11],
+    [99, 4, 3],
+    [100, 25, 0],
+    [4, 9, 4],
+]);

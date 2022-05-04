@@ -128,4 +128,26 @@ class Fraction
     {
         return $this->add($numerator * -1, $denominator);
     }
+
+    /**
+     * Get the whole part of a fraction.
+     *
+     * For example, 10/3 = 3 + 1/3, so the whole part here
+     * is 3. In 7/4, the whole part is 1.
+     */
+    public function wholePart(): int
+    {
+        return floor($this->numerator() / $this->denominator());
+    }
+
+    /**
+     * Get the not-whole part of a fraction.
+     *
+     * For example, 10/3 = 3 + 1/3, so the fraction part
+     * here is 1/3. In 7/4, the fraction part is 3/4.
+     */
+    public function fractionPart(): self
+    {
+        return new self($this->numerator % $this->denominator, $this->denominator);
+    }
 }
