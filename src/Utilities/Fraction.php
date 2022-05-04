@@ -71,10 +71,10 @@ class Fraction
             $greatestCommonDivisor *= -1;
         }
 
-        $this->numerator /= $greatestCommonDivisor;
-        $this->denominator /= $greatestCommonDivisor;
+        $numerator = $this->numerator / $greatestCommonDivisor;
+        $denominator = $this->denominator / $greatestCommonDivisor;
 
-        return $this;
+        return new self($numerator, $denominator);
     }
 
     /**
@@ -82,9 +82,7 @@ class Fraction
      */
     public function multiply(int $numerator, int $denominator = 1): self
     {
-        $this->numerator *= $numerator;
-        $this->denominator *= $denominator;
-        return $this;
+        return new self($this->numerator * $numerator, $this->denominator * $denominator);
     }
 
     /**
@@ -114,10 +112,10 @@ class Fraction
             return $this;
         }
 
-        $this->numerator = ($this->numerator * $denominator) + ($numerator * $this->denominator);
-        $this->denominator = $this->denominator * $denominator;
+        $numerator = ($this->numerator * $denominator) + ($numerator * $this->denominator);
+        $denominator = $this->denominator * $denominator;
 
-        return $this;
+        return new self($numerator, $denominator);
     }
 
     /**
