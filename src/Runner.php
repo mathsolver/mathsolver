@@ -34,7 +34,7 @@ class Runner
         Simplify\MoveNegativeExponentsIntoFractions::class,
         Simplify\MultiplyByZero::class,
         Simplify\MultiplyFractions::class,
-        Simplify\MultiplyLikeFactors::class,
+        Simplify\MultiplyLikeFactorsAndConvertBrokenExponentsIntoRoots::class,
         Simplify\MultiplyRealNumbers::class,
         Simplify\RemoveBrackets::class,
         Simplify\RemoveRedundantNumbers::class,

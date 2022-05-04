@@ -7,7 +7,7 @@ use MathSolver\Utilities\Fraction;
 use MathSolver\Utilities\Node;
 use MathSolver\Utilities\Step;
 
-class MultiplyLikeFactors extends Step
+class MultiplyLikeFactorsAndConvertBrokenExponentsIntoRoots extends Step
 {
     /**
      * Multiply like factors and convert broken exponents into roots.
