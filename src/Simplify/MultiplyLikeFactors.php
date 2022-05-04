@@ -9,8 +9,20 @@ use MathSolver\Utilities\Step;
 
 class MultiplyLikeFactors extends Step
 {
+    /**
+     * Multiply like factors and convert broken exponents into roots.
+     *
+     * 1. Calculate the total exponent per factor
+     * 2. Append each factor with their exponent to the root node
+     */
     public function handle(Node $node): Node
     {
+        // wrap in times if not already so
+        if ($node->value() !== '*') {
+            $node = tap(new Node('*'))->appendChild($node);
+        }
+
+        // calculate the total exponents of each factor
         $totals = $this->calculateTotals($node);
 
         // append all factors
@@ -26,18 +38,25 @@ class MultiplyLikeFactors extends Step
         return $node;
     }
 
+    /**
+     * Run this in multiplications, or in powers (but only if it is not already in a multiplication).
+     */
     public function shouldRun(Node $node): bool
     {
-        return $node->value() === '*';
+        return $node->value() === '*'
+            || ($node->value() === '^' && $node->parent()?->value() !== '*');
     }
 
-    protected function calculateTotals(Node $node): Collection
+    /**
+     * Loop through each factor and add up the exponents.
+     */
+    protected function calculateTotals(Node $times): Collection
     {
         $totals = new Collection();
 
-        $node->children()
+        $times->children()
             ->filter(fn (Node $child) => !$child->isNumeric())
-            ->each(fn (Node $child) => $node->removeChild($child))
+            ->each(fn (Node $child) => $times->removeChild($child))
             ->map(fn (Node $child) => $this->getValueAndExponent($child))
             ->each(function (array $valueAndExponent) use ($totals) {
                 if (!$totals->has($valueAndExponent['value'])) {
@@ -52,7 +71,10 @@ class MultiplyLikeFactors extends Step
         return $totals;
     }
 
-    protected function getValueAndExponent(Node $node)
+    /**
+     * Find the value of the exponent for roots, fractions, and natural-number exponents.
+     */
+    protected function getValueAndExponent(Node $node): array
     {
         // it's a root
         if ($node->value() === 'root') {
@@ -90,24 +112,52 @@ class MultiplyLikeFactors extends Step
         ];
     }
 
-    protected function pushFactor(string $factor, Fraction $fraction)
+    /**
+     * Create the new node and then return it.
+     *
+     * 1. Check if the new exponent is 1
+     * 2. Create a power for the whole part of the fraction
+     * 3. Create a root for the fraction part
+     * 4. Return the proper result
+     */
+    protected function pushFactor(string $factor, Fraction $fraction): Node
     {
+        // check if the exponent is 1
         if ($fraction->simplify()->numerator() === 1 && $fraction->simplify()->denominator() === 1) {
             return Node::fromString($factor);
         }
 
+        // create a power for the whole part
         $power = new Node('^');
+        $power->appendChild(Node::fromString($factor));
+        $power->appendChild(new Node($fraction->simplify()->wholePart()));
 
-        // add brackets if the exponent is even
-        if (is_numeric($factor) && $factor < 0 && is_int($fraction->simplify()->node()->value()) && $fraction->simplify()->node()->value() % 2 === 0) {
-            $brackets = new Node('(');
-            $brackets->appendChild(Node::fromString($factor));
-            $power->appendChild($brackets);
-        } else {
-            $power->appendChild(Node::fromString($factor));
+        // create a root for the fraction part
+        $root = new Node('root');
+        $root->appendChild(Node::fromString($factor));
+        $root->appendChild(new Node($fraction->simplify()->fractionPart()->denominator()));
+
+        // append the root in the denominator of the fraction
+        if ($fraction->simplify()->fractionPart()->numerator() !== 1) {
+            $rootPower = new Node('^');
+            $rootPower->appendChild($root);
+            $rootPower->appendChild(new Node($fraction->simplify()->fractionPart()->numerator()));
+            $root = $rootPower; // rename var
         }
 
-        $power->appendChild($fraction->simplify()->node());
-        return $power;
+        // check if the whole part or the fraction part is 0
+        // if so, return the other part
+        if ($fraction->simplify()->wholePart() === 0) {
+            return $root;
+        }
+        if ($fraction->simplify()->fractionPart()->numerator() === 0) {
+            return $power;
+        }
+
+        // return the whole part times the fraction part
+        $times = new Node('*');
+        $fraction->simplify()->wholePart() === 1 ? $times->appendChild(Node::fromString($factor)) : $times->appendChild($power);
+        $times->appendChild($root);
+        return $times;
     }
 }

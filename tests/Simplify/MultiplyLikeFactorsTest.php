@@ -110,9 +110,9 @@ it('keeps the order when there are no double factors', function () {
     $result = MultiplyLikeFactors::run($tree);
     expect($result)->toEqual(StringToTreeConverter::run('169 * 15'));
 
-    $tree = StringToTreeConverter::run('3root(2, 2)');
+    $tree = StringToTreeConverter::run('3sin(2, 2)');
     $result = MultiplyLikeFactors::run($tree);
-    expect($result)->toEqual(StringToTreeConverter::run('3root(2, 2)'));
+    expect($result)->toEqual(StringToTreeConverter::run('3sin(2, 2)'));
 });
 
 it('can add fractions', function () {
@@ -125,4 +125,28 @@ it('can add roots', function () {
     $tree = StringToTreeConverter::run('root(x, 2) * root(x, 2)');
     $result = MultiplyLikeFactors::run($tree);
     expect($result)->toEqual(StringToTreeConverter::run('x'));
+});
+
+it('converts broken exponents into roots', function () {
+    $tree = StringToTreeConverter::run('x^frac(1, 2)');
+    $result = MultiplyLikeFactors::run($tree);
+    expect($result)->toEqual(StringToTreeConverter::run('root(x, 2)'));
+});
+
+it('converts broken exponents with roots and inside powers', function () {
+    $tree = StringToTreeConverter::run('x^frac(2, 3)');
+    $result = MultiplyLikeFactors::run($tree);
+    expect($result)->toEqual(StringToTreeConverter::run('root(x, 3)^2'));
+});
+
+it('converts broken exponents into a whole and broken part', function () {
+    $tree = StringToTreeConverter::run('x^frac(5, 2)');
+    $result = MultiplyLikeFactors::run($tree);
+    expect($result)->toEqual(StringToTreeConverter::run('x^2 * root(x, 2)'));
+});
+
+it('does not append an exponent of one', function () {
+    $tree = StringToTreeConverter::run('x^frac(3, 2)');
+    $result = MultiplyLikeFactors::run($tree);
+    expect($result)->toEqual(StringToTreeConverter::run('x * root(x, 2)'));
 });
