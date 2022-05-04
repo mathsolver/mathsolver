@@ -9,7 +9,7 @@ it('combines like terms', function () {
     expect($result)->toEqual(StringToTreeConverter::run('12x'));
 });
 
-it('combines like terms without a number', function () {
+it('combines without a number', function () {
     $tree = StringToTreeConverter::run('y + y');
     $result = AddLikeTerms::run($tree);
     expect($result)->toEqual(StringToTreeConverter::run('2y'));
