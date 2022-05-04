@@ -9,6 +9,12 @@ it('can instantiate a fraction', function () {
     expect($fraction->denominator())->toBe(3);
 });
 
+test('the denominator is by default 1', function () {
+    $fraction = new Fraction(5);
+    expect($fraction->numerator())->toBe(5);
+    expect($fraction->denominator())->toBe(1);
+});
+
 it('can convert to a node', function () {
     $node = new Node('frac');
     $node->appendChild(new Node(2));

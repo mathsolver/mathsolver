@@ -19,7 +19,7 @@ class Fraction
      *
      * @return self
      */
-    public function __construct(int $numerator, int $denominator)
+    public function __construct(int $numerator, int $denominator = 1)
     {
         $this->numerator = $numerator;
         $this->denominator = $denominator;
