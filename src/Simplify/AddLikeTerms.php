@@ -3,6 +3,7 @@
 namespace MathSolver\Simplify;
 
 use Illuminate\Support\Collection;
+use MathSolver\Utilities\Fraction;
 use MathSolver\Utilities\Node;
 use MathSolver\Utilities\Step;
 
@@ -51,7 +52,7 @@ class AddLikeTerms extends Step
             return false;
         }
 
-        $childrenWithChildrenWithMultipleNumberProducts = $node->children()->filter(fn ($child) => $child->numericChildren()->count() < 2);
+        $childrenWithChildrenWithMultipleNumberProducts = $node->children()->filter(fn ($child) => $child->numericChildren(false)->count() < 2);
         return $childrenWithChildrenWithMultipleNumberProducts->count() === $node->children()->count();
     }
 
@@ -64,8 +65,14 @@ class AddLikeTerms extends Step
             ->map(fn ($child) => $this->wrapInMultiplication($child))
             ->filter(fn ($child) => $child->value() === '*')
             ->each(function (Node $times) {
-                $coefficient = $times->numericChildren()->first()?->value() ?? 1;
-                $terms = $times->nonNumericChildren()->map(fn (Node $child) => $child->toString()); /** @var Collection<string> $terms */
+                if ($times->numericChildren(false)->first()?->value() === 'frac') {
+                    $fraction = $times->numericChildren(false)->first();
+                    $coefficient = new Fraction($fraction->child(0)->value(), $fraction->child(1)->value());
+                } else {
+                    $coefficient = new Fraction($times->numericChildren(false)->first()?->value() ?? 1);
+                }
+
+                $terms = $times->nonNumericChildren(false)->map(fn (Node $child) => $child->toString()); /** @var Collection<string> $terms */
                 $this->pushToTotals($coefficient, $terms);
             })
             ->each(fn ($times) => $this->node->removeChild($times));
@@ -94,7 +101,7 @@ class AddLikeTerms extends Step
      *
      * @param Collection<string> $terms
      */
-    protected function pushToTotals(float $coefficient, Collection $terms): void
+    protected function pushToTotals(Fraction $coefficient, Collection $terms): void
     {
         $total = $this->totals->first(fn ($total) => $total['terms'] == $terms);
 
@@ -110,7 +117,7 @@ class AddLikeTerms extends Step
         $index = $this->totals->search($total);
 
         $this->totals->put($index, [
-            'coefficient' => $total['coefficient'] + $coefficient,
+            'coefficient' => $total['coefficient']->add($coefficient->numerator(), $coefficient->denominator()),
             'terms' => $terms,
         ]);
     }
@@ -120,16 +127,17 @@ class AddLikeTerms extends Step
      *
      * @param Collection<string> $terms
      */
-    protected function appendChildToNode(float $coefficient, Collection $terms): void
+    protected function appendChildToNode(Fraction $coefficient, Collection $terms): void
     {
-        if ($coefficient == 0) {
+        if ($coefficient->numerator() === 0) {
             return;
         }
 
         $node = new Node('*');
 
-        if ($coefficient != 1) {
-            $node->appendChild(new Node($coefficient));
+        // only append the coefficient if it is not 1
+        if ($coefficient->simplify()->numerator() !== 1 || $coefficient->simplify()->denominator() !== 1) {
+            $node->appendChild($coefficient->node());
         }
 
         $terms->map(fn ($term) => Node::fromString($term))
