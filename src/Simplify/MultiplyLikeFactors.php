@@ -86,6 +86,16 @@ class MultiplyLikeFactors extends Step
             ];
         }
 
+        // power with root inside
+        if ($node->value() === '^' && $node->child(0)->value() === 'root') {
+            $fraction = new Fraction($node->child(1)->value(), $node->child(0)->child(1)->value());
+
+            return [
+                'value' => $node->child(0)->child(0)->toString(),
+                'exponent' => $fraction,
+            ];
+        }
+
         // exponent is 1 (no power)
         if ($node->value() !== '^') {
             return [

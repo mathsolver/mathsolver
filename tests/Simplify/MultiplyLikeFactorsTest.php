@@ -150,3 +150,9 @@ it('does not append an exponent of one', function () {
     $result = MultiplyLikeFactors::run($tree);
     expect($result)->toEqual(StringToTreeConverter::run('x * root(x, 2)'));
 });
+
+it('can add factors with a root inside a power', function () {
+    $tree = StringToTreeConverter::run('root(x, 2) * root(x, 2)^3');
+    $result = MultiplyLikeFactors::run($tree);
+    expect($result)->toEqual(StringToTreeConverter::run('x^2'));
+});
