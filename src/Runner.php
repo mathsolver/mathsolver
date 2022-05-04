@@ -26,7 +26,6 @@ class Runner
         Simplify\AddRealNumbers::class,
         Simplify\CalculateLogarithms::class,
         Simplify\CalculatePowersOfRealNumbers::class,
-        Simplify\ConvertBrokenExponentsIntoRoots::class,
         Simplify\ConvertDecimalsIntoFractions::class,
         Simplify\ExpandBrackets::class,
         Simplify\ExpandBracketsWithPlus::class,
