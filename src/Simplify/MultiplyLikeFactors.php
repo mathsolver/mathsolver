@@ -3,108 +3,100 @@
 namespace MathSolver\Simplify;
 
 use Illuminate\Support\Collection;
+use MathSolver\Utilities\Fraction;
 use MathSolver\Utilities\Node;
 use MathSolver\Utilities\Step;
 
 class MultiplyLikeFactors extends Step
 {
-    public bool $foundDouble = false;
-
-    /**
-     * Replace all double letters with a power.
-     *
-     * For example "x * x * x" -> "x^3".
-     */
     public function handle(Node $node): Node
     {
         $totals = $this->calculateTotals($node);
 
-        if (!$this->foundDouble) {
-            return $node;
-        }
-
-        $node->removeAllChildren();
-
-        $node = $this->appendCalculatedTotals($node, $totals);
-
-        return $this->getReturnValue($node);
-    }
-
-    /**
-     * Determine whether the function should run.
-     */
-    public function shouldRun(Node $node): bool
-    {
-        return $node->value() === '*';
-    }
-
-    /**
-     * Calculate the totals of each term and return that collection.
-     *
-     * @return Collection<string,integer>
-     */
-    protected function calculateTotals(Node $parentNode): Collection
-    {
-        $totals = new Collection();
-
-        $parentNode->children()->each(function (Node $node) use ($totals) {
-            if ($node->value() === '^') {
-                $string = $node->child(0)->toString();
-                $increment = $node->children()->last()->value();
-            } else {
-                $string = $node->toString();
-                $increment = 1;
-            }
-
-            if ($totals->has($string)) {
-                $this->foundDouble = true;
-                $totals->put($string, $totals->get($string) + $increment);
-            } else {
-                $totals->put($string, $increment);
-            }
+        // append all factors
+        $totals->each(function (Fraction $fraction, string $factor) use ($node) {
+            $node->appendChild($this->pushFactor($factor, $fraction));
         });
 
-        return $totals->sortKeys(SORT_NATURAL);
-    }
-
-    /**
-     * Loop over the calculated totals and append them to the parent node.
-     *
-     * @param Collection<string,integer> $totals
-     */
-    protected function appendCalculatedTotals(Node $parentNode, Collection $totals): Node
-    {
-        $totals->each(function (int $count, string $node) use ($parentNode) {
-            if ($count === 1) {
-                $parentNode->appendChild(Node::fromString($node));
-                return;
-            }
-
-            $power = new Node('^');
-
-            if (is_numeric($node) && $node < 0 && $count % 2 === 0) {
-                // add brackets when the base is a negative number
-                tap($power->appendChild(new Node('(')))->appendChild(Node::fromString($node));
-            } else {
-                $power->appendChild(Node::fromString($node));
-            }
-
-            $power->appendChild(new Node($count));
-            $parentNode->appendChild($power);
-        });
-
-        return $parentNode;
-    }
-
-    /**
-     * When the multiplication has only one child left (the power), return just that one child.
-     */
-    protected function getReturnValue(Node $node): Node
-    {
+        // return the first child if it only has one child
         if ($node->children()->count() === 1) {
             return tap($node->child(0))->setParent(null);
         }
 
         return $node;
+    }
+
+    public function shouldRun(Node $node): bool
+    {
+        return $node->value() === '*';
+    }
+
+    protected function calculateTotals(Node $node): Collection
+    {
+        $totals = new Collection();
+
+        $node->children()
+            ->filter(fn (Node $child) => !$child->isNumeric())
+            ->each(fn (Node $child) => $node->removeChild($child))
+            ->map(fn (Node $child) => $this->getValueAndExponent($child))
+            ->each(function (array $valueAndExponent) use ($totals) {
+                if (!$totals->has($valueAndExponent['value'])) {
+                    $totals->put($valueAndExponent['value'], $valueAndExponent['exponent']);
+                    return;
+                }
+
+                $totals->put($valueAndExponent['value'], $totals[$valueAndExponent['value']]
+                    ->add($valueAndExponent['exponent']->numerator(), $valueAndExponent['exponent']->denominator()));
+            });
+
+        return $totals;
+    }
+
+    protected function getValueAndExponent(Node $node)
+    {
+        // check if the node isn't a power
+        if ($node->value() !== '^') {
+            return [
+                'value' => $node->toString(),
+                'exponent' => new Fraction(1),
+            ];
+        }
+
+        // check if the exponent isn't a fraction
+        if ($node->child(1)->value() !== 'frac') {
+            return [
+                'value' => $node->child(0)->toString(),
+                'exponent' => new Fraction($node->child(1)->value()),
+            ];
+        }
+
+        $numerator = $node->child(1)->child(0)->value();
+        $denominator = $node->child(1)->child(1)->value();
+
+        return [
+            'value' => $node->child(0)->toString(),
+            'exponent' => new Fraction($numerator, $denominator),
+        ];
+    }
+
+    protected function pushFactor(string $factor, Fraction $fraction)
+    {
+        if ($fraction->simplify()->numerator() === 1 && $fraction->simplify()->denominator() === 1) {
+            return Node::fromString($factor);
+        }
+
+        $power = new Node('^');
+
+        // add brackets if the exponent is even
+        if (is_numeric($factor) && $factor < 0 && is_int($fraction->simplify()->node()->value()) && $fraction->simplify()->node()->value() % 2 === 0) {
+            $brackets = new Node('(');
+            $brackets->appendChild(Node::fromString($factor));
+            $power->appendChild($brackets);
+        } else {
+            $power->appendChild(Node::fromString($factor));
+        }
+
+        $power->appendChild($fraction->simplify()->node());
+        return $power;
     }
 }
