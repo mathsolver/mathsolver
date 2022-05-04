@@ -54,7 +54,17 @@ class MultiplyLikeFactors extends Step
 
     protected function getValueAndExponent(Node $node)
     {
-        // check if the node isn't a power
+        // it's a root
+        if ($node->value() === 'root') {
+            $degree = $node->child(1)->value();
+
+            return [
+                'value' => $node->child(0)->toString(),
+                'exponent' => new Fraction(1, $degree),
+            ];
+        }
+
+        // exponent is 1 (no power)
         if ($node->value() !== '^') {
             return [
                 'value' => $node->toString(),
@@ -62,7 +72,7 @@ class MultiplyLikeFactors extends Step
             ];
         }
 
-        // check if the exponent isn't a fraction
+        // exponent is natural number
         if ($node->child(1)->value() !== 'frac') {
             return [
                 'value' => $node->child(0)->toString(),
@@ -70,6 +80,7 @@ class MultiplyLikeFactors extends Step
             ];
         }
 
+        // exponent is fraction
         $numerator = $node->child(1)->child(0)->value();
         $denominator = $node->child(1)->child(1)->value();
 

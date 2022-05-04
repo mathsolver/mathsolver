@@ -120,3 +120,9 @@ it('can add fractions', function () {
     $result = MultiplyLikeFactors::run($tree);
     expect($result)->toEqual(StringToTreeConverter::run('x^2'));
 });
+
+it('can add roots', function () {
+    $tree = StringToTreeConverter::run('root(x, 2) * root(x, 2)');
+    $result = MultiplyLikeFactors::run($tree);
+    expect($result)->toEqual(StringToTreeConverter::run('x'));
+});
