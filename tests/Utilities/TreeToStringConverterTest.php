@@ -306,3 +306,15 @@ it('removes brackets around exponents', function () {
     $result = TreeToStringConverter::run($power, $mathjax = true);
     expect($result)->toBe('x^{7x}');
 });
+
+it('converts logarithms with mathjax', function () {
+    $log = new Node('log');
+    $log->appendChild(new Node(8));
+    $log->appendChild(new Node(2));
+
+    $result = TreeToStringConverter::run($log, $mathjax = false);
+    expect($result)->toBe('log(8,2)');
+
+    $result = TreeToStringConverter::run($log, $mathjax = true);
+    expect($result)->toBe('\log_{2}(8)');
+});

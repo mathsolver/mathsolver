@@ -54,6 +54,12 @@ class TreeToStringConverter
                 return '\frac{d}{d' . $respect . '}' . "({$inside})";
             }
 
+            if ($mathjax && $node->value() === 'log') {
+                $base = self::run($node->child(1), $mathjax);
+                $parameter = self::run($node->child(0), $mathjax);
+                return '\log_{' . $base . '}(' . $parameter . ')';
+            }
+
             $children = $node->children()->map(fn ($child) => self::run($child, $mathjax))->implode(',');
             return ($mathjax ? '\text{' . $node->value() . '}' : $node->value()) . "({$children})";
         }
