@@ -265,14 +265,14 @@ it('records steps', function () {
 it('can record steps with mathjax', function () {
     $tree = StringToTreeConverter::run('root(8,2)');
 
-    // without mathjax
+    // Without mathjax
     $result = Runner::run($tree, $mathjax = false);
     expect($result)->toEqual([
         'result' => StringToTreeConverter::run('2root(2,2)'),
         'steps' => [['type' => 'simplify', 'name' => 'Simplify roots', 'result' => '2root(2,2)']],
     ]);
 
-    // with mathjax
+    // With mathjax
     $result = Runner::run($tree, $mathjax = true);
     expect($result)->toEqual([
         'result' => StringToTreeConverter::run('2root(2,2)'),

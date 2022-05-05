@@ -23,12 +23,12 @@ class SumRule extends Step
      */
     public function handle(Node $deriv): Node
     {
-        // create a new plus node
+        // Create a new plus node
         $plus = new Node('+');
 
-        $deriv->child(0) // get the plus node
-            ->children() // loop over all children
-            ->map(function (Node $child) use ($deriv) { // create a new deriv function
+        $deriv->child(0) // Get the plus node
+            ->children() // Loop over all children
+            ->map(function (Node $child) use ($deriv) { // Create a new deriv function
                 $newDeriv = new Node('deriv');
                 $newDeriv->appendChild($child);
 
@@ -38,9 +38,9 @@ class SumRule extends Step
 
                 return $newDeriv;
             })
-            ->each(fn (Node $deriv) => $plus->appendChild($deriv)); // append the deriv function to the plus node
+            ->each(fn (Node $deriv) => $plus->appendChild($deriv)); // Append the deriv function to the plus node
 
-        // determine whether to return the children or the plus node itsself
+        // Determine whether to return the children or the plus node itsself
         return $plus;
     }
 }

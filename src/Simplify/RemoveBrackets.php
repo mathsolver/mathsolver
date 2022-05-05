@@ -13,18 +13,18 @@ class RemoveBrackets extends Step
      */
     public function handle(Node $node): Node
     {
-        // there isn't anything outside the brackets
+        // There isn't anything outside the brackets
         if (is_null($node->parent())) {
             return tap($node->child(0))->setParent(null);
         }
 
-        // inside brackets is higher than outside
+        // Inside brackets is higher than outside
         if (StringToTreeConverter::getPrecedence($node->child(0)->value()) > StringToTreeConverter::getPrecedence($node->parent()->value())) {
             $node->parent()->removeChild($node);
             return $node->child(0);
         }
 
-        // inside brackets is equal to outside, only with + and *
+        // Inside brackets is equal to outside, only with + and *
         return $node->child(0);
     }
 
@@ -33,12 +33,12 @@ class RemoveBrackets extends Step
      */
     public function shouldRun(Node $node): bool
     {
-        // check if it are brackets
+        // Check if it are brackets
         if ($node->value() !== '(') {
             return false;
         }
 
-        // when it is not in a power, run it
+        // When it is not in a power, run it
         if ($node->parent()?->value() !== '^') {
             return true;
         }

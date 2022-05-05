@@ -12,15 +12,15 @@ class MultiplyFractions extends Step
      */
     public function handle(Node $node): Node
     {
-        // find all fractions
+        // Find all fractions
         $fractions = $node->children()->filter(fn ($child) => $this->isFraction($child));
 
-        // don't run when the amount of fractions is zero
+        // Don't run when the amount of fractions is zero
         if ($fractions->count() === 0) {
             return $node;
         }
 
-        // don't run when there is only one fraction
+        // Don't run when there is only one fraction
         if ($fractions->count() === 1 && $node->numericChildren()->count() === 0) {
             return $node;
         }
@@ -28,20 +28,20 @@ class MultiplyFractions extends Step
         $numerator = 1;
         $denominator = 1;
 
-        // multiply the numerator and denominator for each fraction
+        // Multiply the numerator and denominator for each fraction
         foreach ($fractions as $fraction) {
             $numerator = $numerator * $fraction->child(0)->value();
             $denominator = $denominator * $fraction->children()->last()->value();
             $node->removeChild($fraction);
         }
 
-        // multiply the numerator for each whole number, as the denominator is always 1
+        // Multiply the numerator for each whole number, as the denominator is always 1
         foreach ($node->numericChildren() as $number) {
             $numerator = $numerator * $number->value();
             $node->removeChild($number);
         }
 
-        // create a fraction node
+        // Create a fraction node
         $fraction = new Node('frac');
         $fraction->appendChild(new Node($numerator));
         $fraction->appendChild(new Node($denominator));

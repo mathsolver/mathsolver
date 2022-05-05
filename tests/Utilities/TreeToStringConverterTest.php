@@ -204,7 +204,7 @@ it('can convert roots to mathjax', function () {
     $result = TreeToStringConverter::run($times, $mathjax = true);
     expect($result)->toBe('2\sqrt[2+3]{16}');
 
-    // square root
+    // Square root
     $root = new Node('root');
     $root->appendChild(new Node(36));
     $root->appendChild(new Node(2));

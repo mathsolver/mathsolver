@@ -15,14 +15,14 @@ class CalculateLogarithms extends Step
         $number = $node->child(0)->value();
         $base = $node->children()->last()->value();
 
-        // use a log base 10 when there is no base given
+        // Use a log base 10 when there is no base given
         if ($node->children()->count() === 1) {
             $base = 10;
         }
 
         $result = log($number, $base);
 
-        // check if it is an exact value
+        // Check if it is an exact value
         if (round($result, 4) === $result) {
             return new Node($result);
         }

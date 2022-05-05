@@ -30,25 +30,25 @@ class CalculatePowersOfRealNumbers extends Step
      */
     public function shouldRun(Node $node): bool
     {
-        // check if it is a power
+        // Check if it is a power
         if ($node->value() !== '^') {
             return false;
         }
 
-        // check if the base is a real number
+        // Check if the base is a real number
         if (!is_numeric($node->child(0)->value())) {
-            // check if it is a bracket with a nested number
+            // Check if it is a bracket with a nested number
             if ($node->child(0)->value() !== '(' || !is_numeric($node->child(0)->child(0)->value())) {
                 return false;
             }
         }
 
-        // check if the exponent is a real and positive number
+        // Check if the exponent is a real and positive number
         if (!is_numeric($node->children()->last()->value()) || $node->children()->last()->value() < 0) {
             return false;
         }
 
-        // check if both numbers are whole numbers
+        // Check if both numbers are whole numbers
         return floor($node->children()->last()->value()) === (float) $node->children()->last()->value();
     }
 }

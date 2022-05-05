@@ -216,12 +216,12 @@ class Node
 
     public function contains(string $value): bool
     {
-        // check if its own value is the searched one
+        // Check if its own value is the searched one
         if ($this->value() === $value) {
             return true;
         }
 
-        // run this function recursively through all children
+        // Run this function recursively through all children
         return $this->children()->map(fn ($child) => $child->contains($value))->contains(true);
     }
 }

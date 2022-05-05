@@ -44,12 +44,12 @@ class StringToTreeConverter
             ->replace(',', ' , ')
             ->explode(' ') // Explode on spaces
             ->flatMap(function ($term) { // Expand terms like 7xy to 7*x*y and xtan(45) to x*tan(45)
-                // check if it contains letters
+                // Check if it contains letters
                 if (!Str::match('/[-]?[0-9.]*[a-z]+/', $term)) {
                     return [$term];
                 }
 
-                // check for functions
+                // Check for functions
                 foreach (self::$functions as $function) {
                     if (str_contains($term, $function)) {
                         return $function === $term

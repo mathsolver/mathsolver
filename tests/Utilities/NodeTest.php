@@ -217,13 +217,13 @@ it('knows if its value is numeric', function (string $value, bool $isNumeric) {
 ]);
 
 it('knows if fractions are numeric', function () {
-    // numeric fraction
+    // Numeric fraction
     $fraction = new Node('frac');
     $fraction->appendChild(new Node(2));
     $fraction->appendChild(new Node(5));
     expect($fraction->isNumeric())->toBeTrue();
 
-    // non-numeric fraction
+    // Non-numeric fraction
     $fraction = new Node('frac');
     $fraction->appendChild(new Node(2));
     $fraction->appendChild(new Node('x'));
@@ -231,21 +231,21 @@ it('knows if fractions are numeric', function () {
 });
 
 it('knows if itself or its children contain a value', function () {
-    // root level
+    // Root level
     $node = new Node('x');
     expect($node->contains('x'))->toBeTrue();
 
     $node = new Node(5);
     expect($node->contains('x'))->toBeFalse();
 
-    // first children
+    // First children
     $node = new Node('*');
     $node->appendChild(new Node(3));
     $node->appendChild(new Node('y'));
     expect($node->contains('x'))->toBeFalse();
     expect($node->contains('y'))->toBeTrue();
 
-    // deeper children
+    // Deeper children
     $node = new Node('*');
     $power = $node->appendChild(new Node('^'));
     $power->appendChild(new Node('x'));

@@ -34,12 +34,12 @@ class SortFactors extends Step
      */
     protected function getValue(Node $node): int
     {
-        // check if it is a number
+        // Check if it is a number
         if (is_numeric($node->value())) {
             return 1000;
         }
 
-        // check if it is a letter
+        // Check if it is a letter
         if (preg_match('/[a-z]/', $node->value())) {
             return ord($node->value()) * -1 + 200;
         }
@@ -48,7 +48,7 @@ class SortFactors extends Step
             return ord($node->child(0)->value()) * -1 + 200;
         }
 
-        // default value
+        // Default value
         return 0;
     }
 }

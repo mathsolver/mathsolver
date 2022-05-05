@@ -25,24 +25,24 @@ class CoefficientRule extends Step
      */
     public function handle(Node $deriv): Node
     {
-        // create a new times node
+        // Create a new times node
         $times = new Node('*');
         $times->appendChild($deriv);
 
-        // find all constant factors and append them to the $times node
+        // Find all constant factors and append them to the $times node
         $deriv->child(0)
             ->children()
             ->filter(fn ($child) => !$child->contains($this->respect($deriv)))
             ->each(fn ($child) => $times->appendChild($child, $top = true))
             ->each(fn ($child) => $deriv->child(0)->removeChild($child, $resetIndexes = false));
 
-        // remove the times inside the derivative if it has only one child left
+        // Remove the times inside the derivative if it has only one child left
         if ($deriv->child(0)->children()->count() === 1) {
             $deriv->appendChild($deriv->child(0)->children()->first(), $top = true);
             $deriv->removeChild($deriv->child(1));
         }
 
-        // reset the children in the times inside the deriv
+        // Reset the children in the times inside the deriv
         $deriv->child(0)->setChildren($deriv->child(0)->children()->values());
         return $times;
     }

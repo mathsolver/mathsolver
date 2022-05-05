@@ -11,12 +11,12 @@ it('replaces powers with an exponent of zero by one', function () {
 });
 
 it('does not replace powers without an exponent of zero', function () {
-    // positive exponent
+    // Positive exponent
     $tree = StringToTreeConverter::run('8^2');
     $result = ExponentOfZero::run($tree);
     expect($result)->toEqual($tree);
 
-    // negative exponent
+    // Negative exponent
     $tree = StringToTreeConverter::run('8^-5');
     $result = ExponentOfZero::run($tree);
     expect($result)->toEqual($tree);

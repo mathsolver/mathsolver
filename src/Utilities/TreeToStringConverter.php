@@ -22,12 +22,12 @@ class TreeToStringConverter
 
         if ($node->value() === '*') {
             return Str::of($node->children()->map(fn ($child) => self::run($child, $mathjax))->implode('*'))
-                ->replaceMatches('/([0-9])\*(\x5c)sqrt/', '$1$2sqrt') // remove * symbol for roots
-                ->replaceMatches('/(\x5cfrac{.+}{.+})\*([a-z])/', '$1$2') // remove * symbol between fractions and letters
-                ->replaceMatches('/([a-z0-9])\*\(/', '$1(') // remove * symbol between numbers/letters and (
-                ->replace(')*(', ')(') // remove * symbol between ) and (
-                ->replaceMatches('/(?<=[a-z])\*(?=[a-z])/', '') // remove * symbol with two letters
-                ->replaceMatches('/([0-9])\*([a-z])/', '$1$2') // remove * symbol with a number and a letter
+                ->replaceMatches('/([0-9])\*(\x5c)sqrt/', '$1$2sqrt') // Remove * symbol for roots
+                ->replaceMatches('/(\x5cfrac{.+}{.+})\*([a-z])/', '$1$2') // Remove * symbol between fractions and letters
+                ->replaceMatches('/([a-z0-9])\*\(/', '$1(') // Remove * symbol between numbers/letters and (
+                ->replace(')*(', ')(') // Remove * symbol between ) and (
+                ->replaceMatches('/(?<=[a-z])\*(?=[a-z])/', '') // Remove * symbol with two letters
+                ->replaceMatches('/([0-9])\*([a-z])/', '$1$2') // Remove * symbol with a number and a letter
                 ->replaceMatches('/-1(\x5c)/', '-$1') // Replace "-1" by "-" (for example: "-1\sqrt{5}" -> "-\sqrt{5}")
                 ->replaceMatches('/-1([a-z])/', '-$1'); // Replace "-1" by "-" (for example: "-1x" -> "-x")
         }

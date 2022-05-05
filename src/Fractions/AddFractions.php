@@ -13,35 +13,35 @@ class AddFractions extends Step
      */
     public function handle(Node $node): Node
     {
-        // find all fractions and remove then from the parent node
+        // Find all fractions and remove then from the parent node
         $fractions = $node->children()
             ->filter(fn ($child) => $this->isFraction($child))
             ->each(fn ($child) => $node->removeChild($child));
 
-        // don't run when the amount of fractions is less than 2
+        // Don't run when the amount of fractions is less than 2
         if ($fractions->count() === 0) {
             return $node;
         }
 
-        // find the least common multiple of all fractions
+        // Find the least common multiple of all fractions
         $leastCommonMultiple = $this->findLeastCommonMultiple($fractions);
 
-        // convert all fractions to have the same denominator
+        // Convert all fractions to have the same denominator
         $numbers = $fractions->map(function (Node $fraction) use ($leastCommonMultiple) {
             return (int) $fraction->child(0)->value() * ($leastCommonMultiple / $fraction->children()->last()->value());
         });
 
-        // convert all whole numbers to fractions with the correct denominator
+        // Convert all whole numbers to fractions with the correct denominator
         $node->numericChildren()
             ->each(fn ($child) => $node->removeChild($child))
             ->each(fn ($child) => $numbers->push($child->value() * $leastCommonMultiple));
 
-        // create a fraction node
+        // Create a fraction node
         $fraction = new Node('frac');
         $fraction->appendChild(new Node($numbers->sum()));
         $fraction->appendChild(new Node($leastCommonMultiple));
 
-        // append the fraction
+        // Append the fraction
         $node->appendChild($fraction);
         return $node;
     }

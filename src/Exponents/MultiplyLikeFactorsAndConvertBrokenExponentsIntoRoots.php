@@ -17,15 +17,15 @@ class MultiplyLikeFactorsAndConvertBrokenExponentsIntoRoots extends Step
      */
     public function handle(Node $node): Node
     {
-        // wrap in times if not already so
+        // Wrap in times if not already so
         if ($node->value() !== '*') {
             $node = tap(new Node('*'))->appendChild($node);
         }
 
-        // calculate the total exponents of each factor
+        // Calculate the total exponents of each factor
         $totals = $this->calculateTotals($node);
 
-        // append all factors
+        // Append all factors
         $totals->each(function (Fraction $fraction, string $factor) use ($node) {
             $node->appendChild($this->pushFactor($factor, $fraction));
         });
@@ -49,9 +49,9 @@ class MultiplyLikeFactorsAndConvertBrokenExponentsIntoRoots extends Step
     {
         $totals = new Collection();
 
-        $times->children() // get all children
-            ->filter(fn (Node $child) => !$child->isNumeric()) // filter out numbers
-            ->filter(function (Node $child) { // filter out powers with non-number exponents
+        $times->children() // Get all children
+            ->filter(fn (Node $child) => !$child->isNumeric()) // Filter out numbers
+            ->filter(function (Node $child) { // Filter out powers with non-number exponents
                 if ($child->value() !== '^') {
                     return true;
                 }
@@ -60,8 +60,8 @@ class MultiplyLikeFactorsAndConvertBrokenExponentsIntoRoots extends Step
                 }
                 return $child->child(1)->isNumeric();
             })
-            ->each(fn (Node $child) => $times->removeChild($child)) // remove the child from their parent
-            ->map(fn (Node $child) => $this->getValueAndExponent($child)) // get the value of the exponent
+            ->each(fn (Node $child) => $times->removeChild($child)) // Remove the child from their parent
+            ->map(fn (Node $child) => $this->getValueAndExponent($child)) // Get the value of the exponent
             ->each(function (array $valueAndExponent) use ($totals) {
                 if (!$totals->has($valueAndExponent['value'])) {
                     $totals->put($valueAndExponent['value'], $valueAndExponent['exponent']);
@@ -80,7 +80,7 @@ class MultiplyLikeFactorsAndConvertBrokenExponentsIntoRoots extends Step
      */
     protected function getValueAndExponent(Node $node): array
     {
-        // it's a root
+        // It's a root
         if ($node->value() === 'root') {
             $degree = $node->child(1)->value();
 
@@ -90,7 +90,7 @@ class MultiplyLikeFactorsAndConvertBrokenExponentsIntoRoots extends Step
             ];
         }
 
-        // power with root inside
+        // Power with root inside
         if ($node->value() === '^' && $node->child(0)->value() === 'root') {
             $fraction = new Fraction($node->child(1)->value(), $node->child(0)->child(1)->value());
 
@@ -100,7 +100,7 @@ class MultiplyLikeFactorsAndConvertBrokenExponentsIntoRoots extends Step
             ];
         }
 
-        // exponent is 1 (no power)
+        // Exponent is 1 (no power)
         if ($node->value() !== '^') {
             return [
                 'value' => $node->toString(),
@@ -108,7 +108,7 @@ class MultiplyLikeFactorsAndConvertBrokenExponentsIntoRoots extends Step
             ];
         }
 
-        // exponent is natural number
+        // Exponent is natural number
         if ($node->child(1)->value() !== 'frac') {
             return [
                 'value' => $node->child(0)->toString(),
@@ -116,7 +116,7 @@ class MultiplyLikeFactorsAndConvertBrokenExponentsIntoRoots extends Step
             ];
         }
 
-        // exponent is fraction
+        // Exponent is fraction
         $numerator = $node->child(1)->child(0)->value();
         $denominator = $node->child(1)->child(1)->value();
 
@@ -136,31 +136,31 @@ class MultiplyLikeFactorsAndConvertBrokenExponentsIntoRoots extends Step
      */
     protected function pushFactor(string $factor, Fraction $fraction): Node
     {
-        // check if the exponent is 1
+        // Check if the exponent is 1
         if ($fraction->simplify()->numerator() === 1 && $fraction->simplify()->denominator() === 1) {
             return Node::fromString($factor);
         }
 
-        // create a power for the whole part
+        // Create a power for the whole part
         $power = new Node('^');
         $power->appendChild(Node::fromString($factor));
         $power->appendChild(new Node($fraction->simplify()->wholePart()));
 
-        // create a root for the fraction part
+        // Create a root for the fraction part
         $root = new Node('root');
         $root->appendChild(Node::fromString($factor));
         $root->appendChild(new Node($fraction->simplify()->fractionPart()->denominator()));
 
-        // append the root in the denominator of the fraction
+        // Append the root in the denominator of the fraction
         if ($fraction->simplify()->fractionPart()->numerator() !== 1) {
             $rootPower = new Node('^');
             $rootPower->appendChild($root);
             $rootPower->appendChild(new Node($fraction->simplify()->fractionPart()->numerator()));
-            $root = $rootPower; // rename var
+            $root = $rootPower; // Rename var
         }
 
-        // check if the whole part or the fraction part is 0
-        // if so, return the other part
+        // Check if the whole part or the fraction part is 0
+        // If so, return the other part
         if ($fraction->simplify()->wholePart() === 0) {
             return $root;
         }
@@ -168,7 +168,7 @@ class MultiplyLikeFactorsAndConvertBrokenExponentsIntoRoots extends Step
             return $power;
         }
 
-        // return the whole part times the fraction part
+        // Return the whole part times the fraction part
         $times = new Node('*');
         $fraction->simplify()->wholePart() === 1 ? $times->appendChild(Node::fromString($factor)) : $times->appendChild($power);
         $times->appendChild($root);
