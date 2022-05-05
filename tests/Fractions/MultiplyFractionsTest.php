@@ -7,7 +7,9 @@ it('can multiply fractions', function () {
     $tree = StringToTreeConverter::run('frac(1, 5) * frac(2, 5)');
     $result = MultiplyFractions::run($tree);
     expect($result)->toEqual(StringToTreeConverter::run('frac(2, 25)'));
+});
 
+it('can multiply with different denominators', function () {
     $tree = StringToTreeConverter::run('frac(5, 2) * frac(7, 3)');
     $result = MultiplyFractions::run($tree);
     expect($result)->toEqual(StringToTreeConverter::run('frac(35, 6)'));
