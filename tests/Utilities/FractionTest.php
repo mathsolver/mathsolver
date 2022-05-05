@@ -47,7 +47,7 @@ test('sometimes it cant be simplified', function () {
 
 it('can multiply fractions', function () {
     $fraction = (new Fraction(2, 3))->multiply(3, 4);
-    expect($fraction)->toEqual(new Fraction(6, 12));
+    expect($fraction)->toEqual(new Fraction(1, 2));
 });
 
 it('can multiply by a whole number', function () {
@@ -57,7 +57,7 @@ it('can multiply by a whole number', function () {
 
 it('can divide fractions', function () {
     $fraction = (new Fraction(2, 3))->divide(4, 3);
-    expect($fraction)->toEqual(new Fraction(6, 12));
+    expect($fraction)->toEqual(new Fraction(1, 2));
 });
 
 it('can divide by a whole number', function () {

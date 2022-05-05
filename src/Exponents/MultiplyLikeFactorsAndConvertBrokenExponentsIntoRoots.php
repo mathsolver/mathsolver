@@ -137,40 +137,40 @@ class MultiplyLikeFactorsAndConvertBrokenExponentsIntoRoots extends Step
     protected function pushFactor(string $factor, Fraction $fraction): Node
     {
         // Check if the exponent is 1
-        if ($fraction->simplify()->numerator() === 1 && $fraction->simplify()->denominator() === 1) {
+        if ($fraction->numerator() === 1 && $fraction->denominator() === 1) {
             return Node::fromString($factor);
         }
 
         // Create a power for the whole part
         $power = new Node('^');
         $power->appendChild(Node::fromString($factor));
-        $power->appendChild(new Node($fraction->simplify()->wholePart()));
+        $power->appendChild(new Node($fraction->wholePart()));
 
         // Create a root for the fraction part
         $root = new Node('root');
         $root->appendChild(Node::fromString($factor));
-        $root->appendChild(new Node($fraction->simplify()->fractionPart()->denominator()));
+        $root->appendChild(new Node($fraction->fractionPart()->denominator()));
 
         // Append the root in the denominator of the fraction
-        if ($fraction->simplify()->fractionPart()->numerator() !== 1) {
+        if ($fraction->fractionPart()->numerator() !== 1) {
             $rootPower = new Node('^');
             $rootPower->appendChild($root);
-            $rootPower->appendChild(new Node($fraction->simplify()->fractionPart()->numerator()));
+            $rootPower->appendChild(new Node($fraction->fractionPart()->numerator()));
             $root = $rootPower; // Rename var
         }
 
         // Check if the whole part or the fraction part is 0
         // If so, return the other part
-        if ($fraction->simplify()->wholePart() === 0) {
+        if ($fraction->wholePart() === 0) {
             return $root;
         }
-        if ($fraction->simplify()->fractionPart()->numerator() === 0) {
+        if ($fraction->fractionPart()->numerator() === 0) {
             return $power;
         }
 
         // Return the whole part times the fraction part
         $times = new Node('*');
-        $fraction->simplify()->wholePart() === 1 ? $times->appendChild(Node::fromString($factor)) : $times->appendChild($power);
+        $fraction->wholePart() === 1 ? $times->appendChild(Node::fromString($factor)) : $times->appendChild($power);
         $times->appendChild($root);
         return $times;
     }

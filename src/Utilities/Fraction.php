@@ -30,7 +30,7 @@ class Fraction
      */
     public function numerator(): int
     {
-        return $this->numerator;
+        return $this->simplify()->numerator;
     }
 
     /**
@@ -38,7 +38,7 @@ class Fraction
      */
     public function denominator(): int
     {
-        return $this->denominator;
+        return $this->simplify()->denominator;
     }
 
     /**
@@ -82,7 +82,7 @@ class Fraction
      */
     public function multiply(int $numerator, int $denominator = 1): self
     {
-        return new self($this->numerator * $numerator, $this->denominator * $denominator);
+        return (new self($this->numerator * $numerator, $this->denominator * $denominator))->simplify();
     }
 
     /**
@@ -115,7 +115,7 @@ class Fraction
         $numerator = ($this->numerator * $denominator) + ($numerator * $this->denominator);
         $denominator = $this->denominator * $denominator;
 
-        return new self($numerator, $denominator);
+        return (new self($numerator, $denominator))->simplify();
     }
 
     /**

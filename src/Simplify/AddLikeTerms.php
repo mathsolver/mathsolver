@@ -132,7 +132,7 @@ class AddLikeTerms extends Step
         $node = new Node('*');
 
         // Only append the coefficient if it is not 1
-        if ($coefficient->simplify()->numerator() !== 1 || $coefficient->simplify()->denominator() !== 1) {
+        if ($coefficient->numerator() !== 1 || $coefficient->denominator() !== 1) {
             $node->appendChild($coefficient->simplify()->node());
         }
 

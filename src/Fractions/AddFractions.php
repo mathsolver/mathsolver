@@ -47,7 +47,7 @@ class AddFractions extends Step
         }
 
         // Append the new fraction
-        $node->appendChild($fraction->simplify()->node());
+        $node->appendChild($fraction->node());
         return $node;
     }
 
