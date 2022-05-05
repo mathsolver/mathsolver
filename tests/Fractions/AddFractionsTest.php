@@ -32,3 +32,9 @@ it('can add up more than two fractions', function () {
     $result = AddFractions::run($tree);
     expect($result)->toEqual(StringToTreeConverter::run('frac(4, 3)'));
 });
+
+it('does not reorder', function () {
+    $tree = StringToTreeConverter::run('frac(1, 3) + x');
+    $result = AddFractions::run($tree);
+    expect($result)->toEqual(StringToTreeConverter::run('frac(1, 3) + x'));
+});

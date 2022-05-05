@@ -18,28 +18,20 @@ class AddFractions extends Step
 
         // Find all fractions and convert them to an array
         // of [numerator, denominator]
-        $fractions = $node->children()
-            ->filter(fn (Node $child) => $child->isNumeric())
+        $fractions = $node->children()->filter(fn (Node $child) => $child->isNumeric());
+
+        // Don't do anything if there are no fractions
+        if ($fractions->count() < 2) {
+            return $node;
+        }
+
+        $fractions = $fractions
             ->each(fn (Node $fraction) => $node->removeChild($fraction))
             ->map(
                 fn (Node $fraction) => $fraction->value() === 'frac'
                 ? [$fraction->child(0)->value(), $fraction->child(1)->value()]
                 : [$fraction->value(), 1]
             );
-
-        // Don't do anything if there are no fractions
-        if ($fractions->count() === 0) {
-            return $node;
-        }
-
-        // If there is only one fraction, append the old
-        // fraction so that the simplification process
-        // won't be done in this step (but in the
-        // `SimplifyFractions` step instead)
-        if ($fractions->count() === 1) {
-            $fraction = new Fraction($fractions->first()[0], $fractions->first()[1]);
-            return tap($node)->appendChild($fraction->node());
-        }
 
         // Add each fraction up
         foreach ($fractions as $fractionArray) {
