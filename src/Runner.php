@@ -3,8 +3,8 @@
 namespace MathSolver;
 
 use Illuminate\Support\Str;
-use MathSolver\Simplify\SortFactors;
-use MathSolver\Simplify\SortTerms;
+use MathSolver\Sorting\SortFactors;
+use MathSolver\Sorting\SortTerms;
 use MathSolver\Utilities\Node;
 use MathSolver\Utilities\TreeToStringConverter;
 
@@ -16,30 +16,30 @@ class Runner
      * @var array<class-string<Step>>
      */
     protected static array $steps = [
+        Arithmetic\AddRealNumbers::class,
+        Arithmetic\MultiplyByZero::class,
+        Arithmetic\MultiplyRealNumbers::class,
         Derivative\CoefficientRule::class,
         Derivative\ConstantRule::class,
         Derivative\MonoVariableRule::class,
         Derivative\PowerRule::class,
         Derivative\SumRule::class,
-        Simplify\AddFractions::class,
+        Exponents\CalculateLogarithms::class,
+        Exponents\CalculatePowersOfRealNumbers::class,
+        Exponents\ExponentOfZero::class,
+        Exponents\MoveNegativeExponentsIntoFractions::class,
+        Exponents\MultiplyLikeFactorsAndConvertBrokenExponentsIntoRoots::class,
+        Exponents\SimplifyRoots::class,
+        Fractions\AddFractions::class,
+        Fractions\ConvertDecimalsIntoFractions::class,
+        Fractions\MultiplyFractions::class,
+        Fractions\SimplifyFractions::class,
+        Functions\GenerateRandomNumber::class,
         Simplify\AddLikeTerms::class,
-        Simplify\AddRealNumbers::class,
-        Simplify\CalculateLogarithms::class,
-        Simplify\CalculatePowersOfRealNumbers::class,
-        Simplify\ConvertDecimalsIntoFractions::class,
         Simplify\ExpandBrackets::class,
         Simplify\ExpandBracketsWithPlus::class,
-        Simplify\ExponentOfZero::class,
-        Simplify\GenerateRandomNumber::class,
-        Simplify\MoveNegativeExponentsIntoFractions::class,
-        Simplify\MultiplyByZero::class,
-        Simplify\MultiplyFractions::class,
-        Simplify\MultiplyLikeFactorsAndConvertBrokenExponentsIntoRoots::class,
-        Simplify\MultiplyRealNumbers::class,
         Simplify\RemoveBrackets::class,
         Simplify\RemoveRedundantNumbers::class,
-        Simplify\SimplifyFractions::class,
-        Simplify\SimplifyRoots::class,
     ];
 
     /**

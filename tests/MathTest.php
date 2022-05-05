@@ -51,8 +51,8 @@ it('can record steps with simplifications', function () {
     expect($result)->toBe([
         'result' => '34x^2',
         'steps' => [
-            ['type' => 'simplify', 'name' => 'Multiply like factors and convert broken exponents into roots', 'result' => '4x^2+5*6x^2'],
-            ['type' => 'simplify', 'name' => 'Multiply real numbers', 'result' => '4x^2+30x^2'],
+            ['type' => 'simplify', 'name' => 'Multiply real numbers', 'result' => '4x^2+30xx'],
+            ['type' => 'simplify', 'name' => 'Multiply like factors and convert broken exponents into roots', 'result' => '4x^2+30x^2'],
             ['type' => 'simplify', 'name' => 'Add like terms', 'result' => '34x^2'],
         ],
     ]);
