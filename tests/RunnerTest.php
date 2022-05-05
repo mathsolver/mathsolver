@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file contains a lot of math expressions, to
+ * This file contains a lot of math expressions to
  * test that all the steps can work together.
  */
 
