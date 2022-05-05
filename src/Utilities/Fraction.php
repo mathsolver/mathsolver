@@ -74,6 +74,11 @@ class Fraction
         $numerator = $this->numerator / $greatestCommonDivisor;
         $denominator = $this->denominator / $greatestCommonDivisor;
 
+        if ($numerator > 0 && $denominator < 0) {
+            $numerator *= -1;
+            $denominator *= -1;
+        }
+
         return new self($numerator, $denominator);
     }
 

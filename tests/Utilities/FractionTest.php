@@ -40,6 +40,11 @@ it('removes minus in the numerator and the denominator', function () {
     expect($fraction)->toEqual(new Fraction(1, 3));
 });
 
+it('minus from the denominator to the numerator', function () {
+    $fraction = (new Fraction(1, -3))->simplify();
+    expect($fraction)->toEqual(new Fraction(-1, 3));
+});
+
 test('sometimes it cant be simplified', function () {
     $fraction = (new Fraction(3, 4))->simplify();
     expect($fraction)->toEqual(new Fraction(3, 4));
