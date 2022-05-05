@@ -12,7 +12,7 @@ class ExponentOfZero extends Step
      *
      * For example: 6^0 -> 1, x^0 -> 1.
      */
-    public function handle(Node $parentNode): Node
+    public function handle(Node $node): Node
     {
         return new Node(1);
     }
