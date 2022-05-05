@@ -22,6 +22,7 @@ class MultiplyByZero extends Step
      */
     public function shouldRun(Node $node): bool
     {
-        return $node->value() === '*' && $node->children()->map(fn ($child) => $child->value())->contains(0);
+        return $node->value() === '*'
+            && $node->children()->map(fn ($child) => $child->value())->contains(0);
     }
 }
