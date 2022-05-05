@@ -2,7 +2,6 @@
 
 namespace MathSolver\Derivative;
 
-use Illuminate\Support\Collection;
 use MathSolver\Utilities\Node;
 use MathSolver\Utilities\Step;
 
@@ -24,11 +23,8 @@ class CoefficientRule extends Step
      *
      * For example: `deriv(2x) -> 2*deriv(x)`.
      */
-    public function handle(Node $deriv): Node|Collection
+    public function handle(Node $deriv): Node
     {
-        // determine if the deriv's parent is a times node
-        $timesAlreadyExists = $deriv->parent()?->value() === '*';
-
         // create a new times node
         $times = new Node('*');
         $times->appendChild($deriv);
@@ -46,14 +42,8 @@ class CoefficientRule extends Step
             $deriv->removeChild($deriv->child(1));
         }
 
+        // reset the children in the times inside the deriv
         $deriv->child(0)->setChildren($deriv->child(0)->children()->values());
-
-        // return the deriv function if no constants were found
-        if ($times->children()->count() === 1) {
-            return tap($times->child(0))->setParent(null);
-        }
-
-        // determine whether to return the children or the times node itsself
-        return $timesAlreadyExists ? $times->children() : $times;
+        return $times;
     }
 }

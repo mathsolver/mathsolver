@@ -2,7 +2,6 @@
 
 namespace MathSolver\Simplify;
 
-use Illuminate\Support\Collection;
 use MathSolver\Utilities\Node;
 use MathSolver\Utilities\Step;
 use MathSolver\Utilities\StringToTreeConverter;
@@ -12,7 +11,7 @@ class RemoveBrackets extends Step
     /**
      * Remove brackets when the outside presedence is lower than the inside.
      */
-    public function handle(Node $node): Node|Collection
+    public function handle(Node $node): Node
     {
         // there isn't anything outside the brackets
         if (is_null($node->parent())) {
@@ -26,9 +25,7 @@ class RemoveBrackets extends Step
         }
 
         // inside brackets is equal to outside, only with + and *
-        $nestedChildren = $node->child(0)->children();
-        $node->parent()->removeChild($node);
-        return $nestedChildren;
+        return $node->child(0);
     }
 
     /**

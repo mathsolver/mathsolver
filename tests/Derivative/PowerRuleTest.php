@@ -32,3 +32,9 @@ it('can apply the rule with respect to a variable', function () {
     $result = PowerRule::run($tree);
     expect($result)->toEqual(StringToTreeConverter::run('3z^2'));
 });
+
+it('can apply the rule in a product', function () {
+    $tree = StringToTreeConverter::run('2 * deriv(x^2)');
+    $result = PowerRule::run($tree);
+    expect($result)->toEqual(StringToTreeConverter::run('2 * 2 * x^1'));
+});

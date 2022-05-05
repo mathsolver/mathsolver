@@ -36,10 +36,6 @@ class AddLikeTerms extends Step
             $this->appendChildToNode($total['coefficient'], $total['terms']);
         });
 
-        if ($this->node->children()->count() === 1) {
-            return tap($this->node->child(0))->setParent(null);
-        }
-
         return $this->node;
     }
 

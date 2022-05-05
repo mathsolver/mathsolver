@@ -30,11 +30,6 @@ class MultiplyLikeFactorsAndConvertBrokenExponentsIntoRoots extends Step
             $node->appendChild($this->pushFactor($factor, $fraction));
         });
 
-        // return the first child if it only has one child
-        if ($node->children()->count() === 1) {
-            return tap($node->child(0))->setParent(null);
-        }
-
         return $node;
     }
 

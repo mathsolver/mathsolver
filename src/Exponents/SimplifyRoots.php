@@ -14,7 +14,7 @@ class SimplifyRoots extends Step
      *
      * @return Collection<Node>|Node
      */
-    public function handle(Node $node): Collection|Node
+    public function handle(Node $node): Node
     {
         $degree = $node->children()->last()->value();
 
@@ -82,15 +82,6 @@ class SimplifyRoots extends Step
             $root->appendChild(new Node($this->isNegative($node) ? $insideRoot * -1 : $insideRoot));
             $root->appendChild(new Node($degree));
             return $root;
-        }
-
-        // Check if the node's parent is already a multiplication
-        if ($node->parent()?->value() === '*') {
-            $root = new Node('root');
-            $root->appendChild(new Node($insideRoot));
-            $root->appendChild(new Node($degree));
-
-            return collect([new Node($this->isNegative($node) ? $outsideRoot * -1 : $outsideRoot), $root]);
         }
 
         // Wrap in a multiplication

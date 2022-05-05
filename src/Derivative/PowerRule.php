@@ -24,14 +24,17 @@ class PowerRule extends Step
      *
      * For example: `x^5 -> 5x^4`.
      */
-    public function handle(Node $node): Node
+    public function handle(Node $deriv): Node
     {
-        $exponent = $node->child()->child(1)->value();
+        // Find the old exponent
+        $exponent = $deriv->child()->child(1)->value();
 
+        // Multiply the old exponent by the power
         $times = new Node('*');
         $times->appendChild(new Node($exponent));
-        $times->appendChild($node->child());
+        $times->appendChild($deriv->child(0));
 
+        // Create the new exponent
         if (is_numeric($exponent)) {
             $newExponent = new Node($exponent - 1);
         } else {
@@ -41,8 +44,9 @@ class PowerRule extends Step
             $plusInExponent->appendChild(new Node(-1));
         }
 
-        $node->child()->removeChild($node->child()->child(-1));
-        $node->child()->appendChild($newExponent);
+        // Append the new exponent to the power
+        $deriv->child()->removeChild($deriv->child()->child(-1));
+        $deriv->child()->appendChild($newExponent);
 
         return $times;
     }

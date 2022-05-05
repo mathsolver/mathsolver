@@ -41,11 +41,6 @@ class AddFractions extends Step
         $fraction->appendChild(new Node($numbers->sum()));
         $fraction->appendChild(new Node($leastCommonMultiple));
 
-        // check if there are other terms besides fractions and whole numbers
-        if ($node->children()->count() === 0) {
-            return $fraction;
-        }
-
         // append the fraction
         $node->appendChild($fraction);
         return $node;

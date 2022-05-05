@@ -24,7 +24,7 @@ class GenerateRandomNumber extends Step
     public function shouldRun(Node $node): bool
     {
         return $node->value() === 'rand'
-        && is_numeric($node->child(0)->value())
-        && is_numeric($node->children()->last()->value());
+            && is_numeric($node->child(0)->value())
+            && is_numeric($node->children()->last()->value());
     }
 }

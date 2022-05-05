@@ -18,7 +18,7 @@ class MultiplyRealNumbers extends Step
             ->each(fn ($child) => $node->removeChild($child))
             ->reduce(fn ($total, $number) => $number->value() * $total, 1);
 
-        if ($node->nonNumericChildren()->count() === 0) {
+        if ($node->children()->count() === 0) {
             return new Node($total);
         }
 

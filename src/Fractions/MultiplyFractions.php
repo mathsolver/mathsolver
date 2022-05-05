@@ -46,11 +46,6 @@ class MultiplyFractions extends Step
         $fraction->appendChild(new Node($numerator));
         $fraction->appendChild(new Node($denominator));
 
-        // check if there other factors besides fractions and whole numbers
-        if ($node->children()->count() === 0) {
-            return $fraction;
-        }
-
         $node->appendChild($fraction);
         return $node;
     }

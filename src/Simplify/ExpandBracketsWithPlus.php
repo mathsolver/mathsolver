@@ -16,14 +16,9 @@ class ExpandBracketsWithPlus extends Step
     /**
      * Remove brackets with a plus. For example 3(p + 4) -> 3p + 3*4 and (x+3)(y-5) -> xy + 5x + 3y + 3*-5.
      */
-    public function handle(Node $node): Node
+    public function handle(Node $node): Node|Collection
     {
         $this->node = $node;
-
-        if (!$this->shouldExecute()) {
-            $this->removeNestedOperations();
-            return $this->node;
-        }
 
         [$children1, $children2] = $this->getChildrenToMultiply();
         $this->multiplyChildren($children1, $children2);
@@ -37,23 +32,15 @@ class ExpandBracketsWithPlus extends Step
     }
 
     /**
-     * This is always true, because this class does its own check.
+     * Determine whether this function should run.
      */
     public function shouldRun(Node $node): bool
     {
-        return true;
-    }
-
-    /**
-     * Determine whether this function should run.
-     */
-    protected function shouldExecute(): bool
-    {
-        if ($this->node->value() !== '*') {
+        if ($node->value() !== '*') {
             return false;
         }
 
-        return $this->node->children()->filter(function (Node $brackets) {
+        return $node->children()->filter(function (Node $brackets) {
             return $brackets->value() === '(' && $brackets->child(0)->value() === '+';
         })->count() > 0;
     }

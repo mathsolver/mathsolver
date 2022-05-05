@@ -22,6 +22,6 @@ class ExponentOfZero extends Step
      */
     public function shouldRun(Node $node): bool
     {
-        return $node->value() === '^' && $node->children()->last()->value() == 0;
+        return $node->value() === '^' && $node->child(1)->value() == 0;
     }
 }

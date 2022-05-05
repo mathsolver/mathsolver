@@ -14,14 +14,11 @@ class ExpandBrackets extends Step
      */
     public function handle(Node $node): Node
     {
-        if (!$this->shouldExecute($node)) {
-            return $this->removeDoubleTimes($node);
-        }
-
         $times = new Node('*');
 
         for ($x = 1; $x <= $node->children()->last()->value(); $x++) {
-            $times->appendChild(tap(unserialize(serialize($node->child(0))))->setParent($times));
+            $child = tap(unserialize(serialize($node->child(0))))->setParent($times);
+            $times->appendChild($child);
         }
 
         return $times;
@@ -32,40 +29,10 @@ class ExpandBrackets extends Step
      */
     public function shouldRun(Node $node): bool
     {
-        return true;
-    }
-
-    /**
-     * Determine whether the function should run.
-     */
-    protected function shouldExecute(Node $node): bool
-    {
         return $node->value() === '^'
             && $node->child(0)->value() === '('
             && is_numeric($node->children()->last()->value())
             && $node->children()->last()->value() > 0
             && floor($node->children()->last()->value()) == $node->children()->last()->value();
-    }
-
-    /**
-     * Remove a nested times in the math tree.
-     */
-    protected function removeDoubleTimes(Node $node): Node
-    {
-        if ($node->value() !== '*') {
-            return $node;
-        }
-
-        $nestedTimeses = $node->children()->filter(fn ($child) => $child->value() === '*');
-
-        $nestedTimeses->each(function ($nestedTimes) use ($node) {
-            $nestedTimes->children()->each(function ($nestedTimesChild) use ($node) {
-                $node->appendChild(tap(unserialize(serialize($nestedTimesChild)))->setParent($node));
-            });
-
-            $node->removeChild($nestedTimes);
-        });
-
-        return $node;
     }
 }
