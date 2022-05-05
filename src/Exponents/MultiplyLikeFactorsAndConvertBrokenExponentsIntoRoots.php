@@ -54,10 +54,19 @@ class MultiplyLikeFactorsAndConvertBrokenExponentsIntoRoots extends Step
     {
         $totals = new Collection();
 
-        $times->children()
-            ->filter(fn (Node $child) => !$child->isNumeric())
-            ->each(fn (Node $child) => $times->removeChild($child))
-            ->map(fn (Node $child) => $this->getValueAndExponent($child))
+        $times->children() // get all children
+            ->filter(fn (Node $child) => !$child->isNumeric()) // filter out numbers
+            ->filter(function (Node $child) { // filter out powers with non-number exponents
+                if ($child->value() !== '^') {
+                    return true;
+                }
+                if (is_numeric($child->child(1)->value()) && floor($child->child(1)->value()) != $child->child(1)->value()) {
+                    return false;
+                }
+                return $child->child(1)->isNumeric();
+            })
+            ->each(fn (Node $child) => $times->removeChild($child)) // remove the child from their parent
+            ->map(fn (Node $child) => $this->getValueAndExponent($child)) // get the value of the exponent
             ->each(function (array $valueAndExponent) use ($totals) {
                 if (!$totals->has($valueAndExponent['value'])) {
                     $totals->put($valueAndExponent['value'], $valueAndExponent['exponent']);

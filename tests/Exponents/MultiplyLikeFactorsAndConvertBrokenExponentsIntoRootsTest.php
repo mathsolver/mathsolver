@@ -156,3 +156,15 @@ it('can add factors with a root inside a power', function () {
     $result = MultiplyLikeFactorsAndConvertBrokenExponentsIntoRoots::run($tree);
     expect($result)->toEqual(StringToTreeConverter::run('x^2'));
 });
+
+it('does not run with decimal exponents', function () {
+    $tree = StringToTreeConverter::run('x^0.5');
+    $result = MultiplyLikeFactorsAndConvertBrokenExponentsIntoRoots::run($tree);
+    expect($result)->toEqual(StringToTreeConverter::run('x^0.5'));
+});
+
+it('does not run with letters in exponents', function () {
+    $tree = StringToTreeConverter::run('x^y');
+    $result = MultiplyLikeFactorsAndConvertBrokenExponentsIntoRoots::run($tree);
+    expect($result)->toEqual(StringToTreeConverter::run('x^y'));
+});
