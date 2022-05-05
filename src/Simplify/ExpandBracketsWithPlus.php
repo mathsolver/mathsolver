@@ -94,22 +94,4 @@ class ExpandBracketsWithPlus extends Step
             });
         });
     }
-
-    /**
-     * If a operation contains other same-operation-nodes, remove them.
-     */
-    protected function removeNestedOperations(): void
-    {
-        if (!in_array($this->node->value(), ['+', '*'])) {
-            return;
-        }
-
-        $this->node
-            ->children()
-            ->filter(fn ($child) => $child->value() === $this->node->value())
-            ->each(function ($plus) {
-                $this->node->removeChild($plus);
-                $plus->children()->each(fn ($child) => $this->node->appendChild($child));
-            });
-    }
 }
