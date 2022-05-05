@@ -2,7 +2,7 @@
 
 namespace MathSolver\Fractions;
 
-use Illuminate\Support\Collection;
+use MathSolver\Utilities\Fraction;
 use MathSolver\Utilities\Node;
 use MathSolver\Utilities\Step;
 
@@ -13,36 +13,41 @@ class AddFractions extends Step
      */
     public function handle(Node $node): Node
     {
-        // Find all fractions and remove then from the parent node
-        $fractions = $node->children()
-            ->filter(fn ($child) => $this->isFraction($child))
-            ->each(fn ($child) => $node->removeChild($child));
+        // Instantiate a new fraction
+        $fraction = new Fraction(0, 1);
 
-        // Don't run when the amount of fractions is less than 2
+        // Find all fractions and convert them to an array
+        // of [numerator, denominator]
+        $fractions = $node->children()
+            ->filter(fn (Node $child) => $child->isNumeric())
+            ->each(fn (Node $fraction) => $node->removeChild($fraction))
+            ->map(
+                fn (Node $fraction) => $fraction->value() === 'frac'
+                ? [$fraction->child(0)->value(), $fraction->child(1)->value()]
+                : [$fraction->value(), 1]
+            );
+
+        // Don't do anything if there are no fractions
         if ($fractions->count() === 0) {
             return $node;
         }
 
-        // Find the least common multiple of all fractions
-        $leastCommonMultiple = $this->findLeastCommonMultiple($fractions);
+        // If there is only one fraction, append the old
+        // fraction so that the simplification process
+        // won't be done in this step (but in the
+        // `SimplifyFractions` step instead)
+        if ($fractions->count() === 1) {
+            $fraction = new Fraction($fractions->first()[0], $fractions->first()[1]);
+            return tap($node)->appendChild($fraction->node());
+        }
 
-        // Convert all fractions to have the same denominator
-        $numbers = $fractions->map(function (Node $fraction) use ($leastCommonMultiple) {
-            return (int) $fraction->child(0)->value() * ($leastCommonMultiple / $fraction->children()->last()->value());
-        });
+        // Add each fraction up
+        foreach ($fractions as $fractionArray) {
+            $fraction = $fraction->add($fractionArray[0], $fractionArray[1]);
+        }
 
-        // Convert all whole numbers to fractions with the correct denominator
-        $node->numericChildren()
-            ->each(fn ($child) => $node->removeChild($child))
-            ->each(fn ($child) => $numbers->push($child->value() * $leastCommonMultiple));
-
-        // Create a fraction node
-        $fraction = new Node('frac');
-        $fraction->appendChild(new Node($numbers->sum()));
-        $fraction->appendChild(new Node($leastCommonMultiple));
-
-        // Append the fraction
-        $node->appendChild($fraction);
+        // Append the new fraction
+        $node->appendChild($fraction->simplify()->node());
         return $node;
     }
 
@@ -52,31 +57,5 @@ class AddFractions extends Step
     public function shouldRun(Node $node): bool
     {
         return $node->value() === '+';
-    }
-
-    /**
-     * Check if a node is a fraction with real numbers.
-     */
-    protected function isFraction(Node $node): bool
-    {
-        return $node->value() === 'frac'
-            && $node->numericChildren()->count() === $node->children()->count();
-    }
-
-    /**
-     * Find the least common multiple of all denominators of all fractions.
-     */
-    protected function findLeastCommonMultiple(Collection $fractions): int
-    {
-        $leastCommonMultiple = 1;
-
-        foreach ($fractions as $fraction) {
-            $leastCommonMultiple = (int) gmp_lcm(
-                $leastCommonMultiple,
-                $fraction->children()->last()->value()
-            );
-        }
-
-        return $leastCommonMultiple;
     }
 }

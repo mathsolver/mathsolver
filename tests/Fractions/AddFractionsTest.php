@@ -26,3 +26,9 @@ it('adds fractions and numbers', function () {
     $result = AddFractions::run($tree);
     expect($result)->toEqual(StringToTreeConverter::run('frac(13, 3)'));
 });
+
+it('can add up more than two fractions', function () {
+    $tree = StringToTreeConverter::run('frac(1, 3) + frac(3, 4) + frac(2, 8)');
+    $result = AddFractions::run($tree);
+    expect($result)->toEqual(StringToTreeConverter::run('frac(4, 3)'));
+});
