@@ -12,18 +12,22 @@ class AddRealNumbers extends Step
      */
     public function handle(Node $node): Node
     {
+        // find all numbers and add them up
         $total = (int) $node->numericChildren()
             ->each(fn ($child) => $node->removeChild($child))
             ->reduce(fn ($total, $number) => $number->value() + $total, 0);
 
-        if ($node->nonNumericChildren()->count() === 0) {
+        // check if all children were numbers
+        if ($node->children()->count() === 0) {
             return new Node($total);
         }
 
+        // add the total (if it is not 0)
         if ($total !== 0) {
             $node->appendChild(new Node($total));
         }
 
+        // return the plus node
         return $node;
     }
 
