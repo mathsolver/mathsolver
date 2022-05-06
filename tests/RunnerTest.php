@@ -199,6 +199,8 @@ it('can calculate with fractions', function (string $input, string $expected) {
     ['3^-1', 'frac(1, 3)'],
     ['0.5', 'frac(1, 2)'],
     ['0.375', 'frac(3, 8)'],
+    ['frac(frac(2, 3), 5)', 'frac(2, 15)'],
+    ['frac(frac(x, y), z)', 'frac(x, yz)'],
 ]);
 
 it('removes redundant numbers', function (string $input, string $expected) {

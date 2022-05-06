@@ -33,6 +33,7 @@ class Runner
         Fractions\AddFractions::class,
         Fractions\ConvertDecimalsIntoFractions::class,
         Fractions\MultiplyFractions::class,
+        Fractions\RemoveNestedFractionsInNumerator::class,
         Fractions\SimplifyFractions::class,
         Functions\GenerateRandomNumber::class,
         Simplify\AddLikeTerms::class,
