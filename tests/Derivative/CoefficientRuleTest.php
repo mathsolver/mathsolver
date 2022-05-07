@@ -50,3 +50,9 @@ it('can apply the rule with respect to a variable', function () {
     $result = CoefficientRule::run($tree);
     expect($result)->toEqual(StringToTreeConverter::run('7 * deriv(y^2, y)'));
 });
+
+it('adds brackets if it is in a power', function () {
+    $tree = StringToTreeConverter::run('2^deriv(3x)');
+    $result = CoefficientRule::run($tree);
+    expect($result)->toEqual(StringToTreeConverter::run('2^(3deriv(x))'));
+});

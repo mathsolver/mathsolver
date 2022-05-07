@@ -67,6 +67,17 @@ abstract class Step
             return tap($result->child(0))->setParent(null);
         }
 
+        // If the result's operation has a lower precedence than the
+        // parent's one, add brackets. For example, if the result
+        // is a sum and the parent is a multiplication.
+        if (
+            ($result->value() === '+' && $parent?->value() === '*') ||
+            ($result->value() === '+' && $parent?->value() === '^') ||
+            ($result->value() === '*' and $parent?->value() === '^')
+        ) {
+            return tap(new Node('('))->appendChild($result);
+        }
+
         // Return the final result
         return $result;
     }

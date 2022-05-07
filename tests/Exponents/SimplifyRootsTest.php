@@ -39,6 +39,12 @@ it('wont simplify roots of negative numbers with even exponents', function () {
     expect($result)->toEqual(StringToTreeConverter::run('root(-16, 2)'));
 });
 
+it('adds brackets if it is in a power', function () {
+    $tree = StringToTreeConverter::run('2^root(8, 2)');
+    $result = SimplifyRoots::run($tree);
+    expect($result)->toEqual(StringToTreeConverter::run('2^(2*root(2,2))'));
+});
+
 it('can simplify roots of negative numbers with odd exponents', function (string $input, string $output) {
     $tree = StringToTreeConverter::run($input);
     $result = SimplifyRoots::run($tree);
