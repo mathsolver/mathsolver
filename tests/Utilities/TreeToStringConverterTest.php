@@ -307,6 +307,29 @@ it('removes brackets around exponents', function () {
     expect($result)->toBe('x^{7x}');
 });
 
+it('does not remove double brackets around exponents', function () {
+    $power = new Node('^');
+    $power->appendChild(new Node(2));
+    $brackets = $power->appendChild(new Node('('));
+    $times = $brackets->appendChild(new Node('*'));
+
+    $leftBrackets = $times->appendChild(new Node('('));
+    $leftPlus = $leftBrackets->appendChild(new Node('+'));
+    $leftPlus->appendChild(new Node('x'));
+    $leftPlus->appendChild(new Node(3));
+
+    $rightBrackets = $times->appendChild(new Node('('));
+    $rightPlus = $rightBrackets->appendChild(new Node('+'));
+    $rightPlus->appendChild(new Node('x'));
+    $rightPlus->appendChild(new Node(-5));
+
+    $result = TreeToStringConverter::run($power, $mathjax = false);
+    expect($result)->toBe('2^((x+3)(x-5))');
+
+    $result = TreeToStringConverter::run($power, $mathjax = true);
+    expect($result)->toBe('2^{(x+3)(x-5)}');
+});
+
 it('converts logarithms with mathjax', function () {
     $log = new Node('log');
     $log->appendChild(new Node(8));
