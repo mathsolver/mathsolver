@@ -47,8 +47,13 @@ class RemoveBrackets extends Step
             return true;
         }
 
-        return is_numeric($node->parent()->child(-1)->value())
-            && ($node->parent()->child(-1)->value() % 2 === 1
-            || $node->parent()->child(-1)->value() < 0);
+        // Check if the brackets are in the exponent
+        if ($node->parent()->child(1) === $node) {
+            return true;
+        }
+
+        return is_numeric($node->parent()->child(1)->value())
+            && ($node->parent()->child(1)->value() % 2 === 1
+            || $node->parent()->child(1)->value() < 0);
     }
 }

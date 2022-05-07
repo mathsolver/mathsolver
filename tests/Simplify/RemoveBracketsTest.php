@@ -38,7 +38,7 @@ it('removes brackets with letters', function () {
 });
 
 it('removes brackets with negative exponents', function () {
-    $tree = StringToTreeConverter::run('x^-2');
+    $tree = StringToTreeConverter::run('(x)^-2');
     $result = RemoveBrackets::run($tree);
     expect($result)->toEqual(StringToTreeConverter::run('x^-2'));
 });
@@ -53,4 +53,10 @@ it('does not remove brackets in powers', function () {
     $tree = StringToTreeConverter::run('3^(x + 3)');
     $result = RemoveBrackets::run($tree);
     expect($result)->toEqual(StringToTreeConverter::run('3^(x + 3)'));
+});
+
+it('removes brackets around exponents', function () {
+    $tree = StringToTreeConverter::run('3^(4)');
+    $result = RemoveBrackets::run($tree);
+    expect($result)->toEqual(StringToTreeConverter::run('3^4'));
 });
