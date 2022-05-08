@@ -38,3 +38,13 @@ it('can apply the rule in a product', function () {
     $result = PowerRule::run($tree);
     expect($result)->toEqual(StringToTreeConverter::run('2 * 2 * x^1'));
 });
+
+it('does not differentiate with the respect-letter in the exponent', function () {
+    $tree = StringToTreeConverter::run('deriv(x^x)');
+    $result = PowerRule::run($tree);
+    expect($result)->toEqual(StringToTreeConverter::run('deriv(x^x)'));
+
+    $tree = StringToTreeConverter::run('deriv(x^(2x))');
+    $result = PowerRule::run($tree);
+    expect($result)->toEqual(StringToTreeConverter::run('deriv(x^(2x))'));
+});

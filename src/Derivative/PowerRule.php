@@ -16,7 +16,8 @@ class PowerRule extends Step
     {
         return $node->value() === 'deriv'
             && $node->child(0)->value() === '^'
-            && $node->child(0)->child(0)->value() === $this->respect($node);
+            && $node->child(0)->child(0)->value() === $this->respect($node)
+            && !$node->child(0)->child(1)->contains($this->respect($node));
     }
 
     /**
