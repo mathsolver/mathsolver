@@ -26,3 +26,9 @@ it('sorts letters with powers before other letters', function () {
     $result = SortFactors::run($tree);
     expect($result)->toEqual(StringToTreeConverter::run('a^3b'));
 });
+
+it('sorts fractions before other factors', function () {
+    $tree = StringToTreeConverter::run('a^3 * frac(1, 3)');
+    $result = SortFactors::run($tree);
+    expect($result)->toEqual(StringToTreeConverter::run('frac(1, 3) * a^3'));
+});

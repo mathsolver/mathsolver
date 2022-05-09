@@ -35,7 +35,7 @@ class SortFactors extends Step
     protected function getValue(Node $node): int
     {
         // Check if it is a number
-        if (is_numeric($node->value())) {
+        if ($node->isNumeric()) {
             return 1000;
         }
 
@@ -44,7 +44,7 @@ class SortFactors extends Step
             return ord($node->value()) * -1 + 200;
         }
 
-        if ($node->value() === '^' && ctype_alpha($node->child(0)->value())) {
+        if ($node->value() === '^' && ctype_alpha((string) $node->child(0)->value())) {
             return ord($node->child(0)->value()) * -1 + 200;
         }
 
