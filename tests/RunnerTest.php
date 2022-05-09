@@ -230,6 +230,33 @@ it('can calculate functions', function (string $input, string $expected) {
     ['log(4, 16)', 'frac(1, 2)'],
 ]);
 
+it('can write as a power', function (string $input, string $expected) {
+    $tree = StringToTreeConverter::run($input);
+    $result = Runner::run($tree)['result'];
+    $expected = StringToTreeConverter::run($expected);
+    expect($result)->toEqual($expected);
+})->with([
+    ['frac(1, a)', 'a^-1'],
+    ['frac(1, a^2)', 'a^-2'],
+    ['a^4 * frac(1, a^6)', 'a^-2'],
+    ['frac(a^2, frac(1, a^4))', 'a^6'],
+    ['frac(a^8, a^0)', 'a^8'],
+    ['(a^3)^-2', 'a^-6'],
+    ['frac(frac(1, a^5), a)', 'a^-6'],
+    ['frac(a, a^12)', 'a^-11'],
+    ['frac(1, a^8) * (a^3)^2', 'a^-2'],
+    ['frac(frac(1, a^4), a^-3)', 'a^-1'],
+    ['frac(6b^3, a^5)', '6a^-5 * b^3'],
+    ['frac(1, 3a^3)', 'frac(1, 3) * a^-3'],
+    ['frac(a^4, 5b^2)', 'frac(1, 5) * a^4 * b^-2'],
+    ['frac(3, 5a^4)', 'frac(3, 5) * a^-4'],
+    ['frac(8, a^3)', '8a^-3'],
+    ['frac(b^4, 6a^2)', 'frac(1, 6) * a^-2 * b^4'],
+    ['frac(-4, 9a^2)', 'frac(-4, 9) * a^-2'],
+    ['(3a)^-2 * frac(1, b^3)', 'frac(1, 9) * a^-2 * b^-3'],
+    ['frac(64a^2, 9b^2)', 'frac(64, 9) * a^2 * b^-2'],
+]);
+
 it('can differentiate', function (string $input, string $expected, string $respect = 'x') {
     $tree = $respect == 'x' ? StringToTreeConverter::run("deriv({$input})") : StringToTreeConverter::run("deriv({$input}, {$respect})");
     $result = Runner::run($tree)['result'];
