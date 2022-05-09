@@ -31,8 +31,9 @@ class ExpandBrackets extends Step
     {
         return $node->value() === '^'
             && $node->child(0)->value() === '('
-            && is_numeric($node->children()->last()->value())
-            && $node->children()->last()->value() > 0
-            && floor($node->children()->last()->value()) == $node->children()->last()->value();
+            && $node->child(0)->child(0)->value() === '+'
+            && is_numeric($node->child(1)->value())
+            && $node->child(1)->value() > 0
+            && floor($node->child(1)->value()) == $node->child(1)->value();
     }
 }

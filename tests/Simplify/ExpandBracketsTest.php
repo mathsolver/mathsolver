@@ -21,24 +21,26 @@ it('expands with brackets with more terms', function () {
     expect($result)->toEqual(StringToTreeConverter::run('(x + 3 - 9)(x + 3 - 9)(x + 3 - 9)(x + 3 - 9)'));
 });
 
-it('expands with brackets with one term', function () {
-    $tree = StringToTreeConverter::run('(y)^6');
-    $result = ExpandBrackets::run($tree);
-    expect($result)->toEqual(StringToTreeConverter::run('(y)(y)(y)(y)(y)(y)'));
-});
-
 it('expands with a leading minus', function () {
     $tree = StringToTreeConverter::run('-1 * (x + 8)^2');
     $result = ExpandBrackets::run($tree);
     expect($result)->toEqual(StringToTreeConverter::run('-(x + 8)(x + 8)'));
 });
 
-it('does not expand with negative or broken exponents', function () {
-    $tree = StringToTreeConverter::run('(2x)^-2');
+it('does not expand with brackets with one term', function () {
+    $tree = StringToTreeConverter::run('(y)^6');
     $result = ExpandBrackets::run($tree);
-    expect($result)->toEqual(StringToTreeConverter::run('(2x)^-2'));
+    expect($result)->toEqual(StringToTreeConverter::run('(y)^6'));
+});
 
-    $tree = StringToTreeConverter::run('(5)^0.5');
+it('does not expand with times', function () {
+    $tree = StringToTreeConverter::run('(2x)^3');
     $result = ExpandBrackets::run($tree);
-    expect($result)->toEqual(StringToTreeConverter::run('(5)^0.5'));
+    expect($result)->toEqual(StringToTreeConverter::run('(2x)^3'));
+});
+
+it('does not expand with negative or broken exponents', function () {
+    $tree = StringToTreeConverter::run('(2x + 3)^-2');
+    $result = ExpandBrackets::run($tree);
+    expect($result)->toEqual(StringToTreeConverter::run('(2x + 3)^-2'));
 });
