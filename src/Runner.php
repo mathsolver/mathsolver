@@ -28,6 +28,7 @@ class Runner
         Exponents\CalculatePowersOfRealNumbers::class,
         Exponents\ExponentOfZero::class,
         Exponents\MoveNegativeExponentsIntoFractions::class,
+        Exponents\MultiplyExponents::class,
         Exponents\MultiplyLikeFactorsAndConvertBrokenExponentsIntoRoots::class,
         Exponents\SimplifyRoots::class,
         Fractions\AddFractions::class,
