@@ -25,7 +25,7 @@ class ExpandBrackets extends Step
     }
 
     /**
-     * This is always true, because this class does its own check.
+     * Determine whether this function should run.
      */
     public function shouldRun(Node $node): bool
     {
