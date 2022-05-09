@@ -200,10 +200,10 @@ it('can calculate with fractions', function (string $input, string $expected) {
     ['0.5', 'frac(1, 2)'],
     ['0.375', 'frac(3, 8)'],
     ['frac(frac(2, 3), 5)', 'frac(2, 15)'],
-    ['frac(frac(x, y), z)', 'frac(x, yz)'],
+    ['frac(frac(x, y), z)', 'xy^-1z^-1'],
     ['frac(7, frac(2, 8))', '28'],
     ['frac(5, frac(2, 3))', 'frac(15, 2)'],
-    ['frac(x, frac(y, z))', 'frac(xz, y)'],
+    ['frac(x, frac(y, z))', 'xy^-1z'],
 ]);
 
 it('removes redundant numbers', function (string $input, string $expected) {
