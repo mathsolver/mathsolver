@@ -24,7 +24,7 @@ class TreeToStringConverter
             return Str::of($node->children()->map(fn ($child) => self::run($child, $mathjax))->implode('*'))
                 ->replaceMatches('/([0-9a-z}])\*(\x5c)sqrt/', '$1$2sqrt') // Remove * symbol for roots
                 ->replaceMatches('/(\x5cfrac{.+}{.+})\*([a-z])/', '$1$2') // Remove * symbol between fractions and letters
-                ->replaceMatches('/([a-z0-9])\*\(/', '$1(') // Remove * symbol between numbers/letters and (
+                ->replaceMatches('/([a-z0-9}])\*\(/', '$1(') // Remove * symbol between numbers/letters and (
                 ->replace(')*(', ')(') // Remove * symbol between ) and (
                 ->replaceMatches('/(?<=[a-z])\*(?=[a-z])/', '') // Remove * symbol with two letters
                 ->replaceMatches('/([0-9])\*([a-z])/', '$1$2') // Remove * symbol with a number and a letter
