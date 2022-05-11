@@ -352,3 +352,14 @@ it('removes the times symbol between letters and roots', function () {
     $result = TreeToStringConverter::run($times, $mathjax = true);
     expect($result)->toBe('x\sqrt{y}');
 });
+
+it('adds brackets around roots inside powers', function () {
+    $power = new Node('^');
+    $root = $power->appendChild(new Node('root'));
+    $root->appendChild(new Node('x'));
+    $root->appendChild(new Node(2));
+    $power->appendChild(new Node(-1));
+
+    $result = TreeToStringConverter::run($power, $mathjax = true);
+    expect($result)->toBe('(\sqrt{x})^{-1}');
+});

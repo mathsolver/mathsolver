@@ -76,6 +76,10 @@ class TreeToStringConverter
                 $exponent = substr($exponent, 0, -1);
             }
 
+            if ($node->child(0)->value() === 'root') {
+                return "({$base})^{{$exponent}}";
+            }
+
             return "{$base}^{{$exponent}}";
         }
 
