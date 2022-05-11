@@ -169,13 +169,13 @@ it('can simplify roots', function (string $input, string $expected) {
     $expected = StringToTreeConverter::run($expected);
     expect($result)->toEqual($expected);
 })->with([
-    ['root(18, 2)', '3root(2, 2)'],
-    ['root(20, 2)', '2root(5, 2)'],
-    ['2 * root(8, 2)', '4root(2,2)'],
-    ['3root(9, 2)', '9'],
-    ['root(512, 3)', '8'],
+    ['sqrt(18)', '3sqrt(2)'],
+    ['sqrt(20)', '2sqrt(5)'],
+    ['2 * sqrt(8)', '4sqrt(2)'],
+    ['3sqrt(9)', '9'],
+    ['cbrt(512)', '8'],
     ['2 * root(2 * 8, 2)', '8'],
-    ['x^0.5', 'root(x, 2)'],
+    ['x^0.5', 'sqrt(x)'],
 ]);
 
 it('can calculate with fractions', function (string $input, string $expected) {
@@ -301,19 +301,19 @@ it('records steps', function () {
 });
 
 it('can record steps with mathjax', function () {
-    $tree = StringToTreeConverter::run('root(8,2)');
+    $tree = StringToTreeConverter::run('sqrt(8)');
 
     // Without mathjax
     $result = Runner::run($tree, $mathjax = false);
     expect($result)->toEqual([
-        'result' => StringToTreeConverter::run('2root(2,2)'),
+        'result' => StringToTreeConverter::run('2sqrt(2)'),
         'steps' => [['type' => 'simplify', 'name' => 'Simplify roots', 'result' => '2root(2,2)']],
     ]);
 
     // With mathjax
     $result = Runner::run($tree, $mathjax = true);
     expect($result)->toEqual([
-        'result' => StringToTreeConverter::run('2root(2,2)'),
+        'result' => StringToTreeConverter::run('2sqrt(2)'),
         'steps' => [['type' => 'simplify', 'name' => 'Simplify roots', 'result' => '2\sqrt{2}']],
     ]);
 });

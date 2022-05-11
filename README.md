@@ -93,7 +93,7 @@ These are all available options in short:
 ```php
 use MathSolver\Math;
 
-Math::from('root(18, 2)')->config(['mathjax' => true])->simplify()->string(); // 3\sqrt{2}
+Math::from('sqrt(18)')->config(['mathjax' => true])->simplify()->string(); // 3\sqrt{2}
 ```
 
 ### Steps
@@ -103,13 +103,13 @@ Settings this value to true will Math Solver make record every step.
 ```php
 use MathSolver\Math;
 
-Math::from('root(18, 2) + root(32, 2)')->config(['steps' => true])->simplify()->string();
+Math::from('sqrt(18) + sqrt(32)')->config(['steps' => true])->simplify()->string();
 
 // [
-//     'result' => '7root(2,2)',
+//     'result' => '7sqrt(2)',
 //     'steps' => [
-//         ['type' => 'simplify', 'name' => 'Simplify roots', 'result' => '3root(2,2)+4root(2,2)'],
-//         ['type' => 'simplify', 'name' => 'Add like terms', 'result' => '7root(2,2)']
+//         ['type' => 'simplify', 'name' => 'Simplify roots', 'result' => '3sqrt(2)+4sqrt(2)'],
+//         ['type' => 'simplify', 'name' => 'Add like terms', 'result' => '7sqrt(2)']
 //     ]
 // ]
 ```
@@ -119,5 +119,5 @@ Math::from('root(18, 2) + root(32, 2)')->config(['steps' => true])->simplify()->
 Here are some functions that require another input syntax than you may be used to:
 
 -   **Powers**: five to the power of three is `5^3`
--   **Roots**: the cube root of 15 is `root(15, 3)`
+-   **Roots**: the cube root of 15 is `cbrt(15)`
 -   **Fractions**: two-thirds is `frac(2, 3)`

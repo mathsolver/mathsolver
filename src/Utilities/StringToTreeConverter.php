@@ -12,6 +12,7 @@ class StringToTreeConverter
      * @var array<string>
      */
     public static array $functions = [
+        'cbrt',
         'cos',
         'deriv',
         'frac',
@@ -19,6 +20,7 @@ class StringToTreeConverter
         'rand',
         'root',
         'sin',
+        'sqrt',
         'tan',
     ];
 
@@ -127,7 +129,9 @@ class StringToTreeConverter
         }
 
         // Return the root node
-        return self::cleanFunctionBrackets($node->root());
+        $node = $node->root();
+        $node = self::cleanFunctionBrackets($node);
+        return self::convertRootSymbols($node);
     }
 
     /**
@@ -148,7 +152,7 @@ class StringToTreeConverter
     }
 
     /**
-     * Remove the brackets inside functions such as sin(90), tan(45) and root(9, 2).
+     * Remove the brackets inside functions such as sin(90), tan(45) and sqrt(9).
      */
     protected static function cleanFunctionBrackets(Node $node): Node
     {
@@ -167,5 +171,25 @@ class StringToTreeConverter
         }
 
         return $node;
+    }
+
+    /**
+     * Convert sqrt(x) and cbrt(x) to root(x, 2) and root(x, 3).
+     */
+    protected static function convertRootSymbols(Node $node): Node
+    {
+        // Run this function recursively
+        $node->setChildren($node->children()->map(fn ($child) => self::convertRootSymbols($child))->flatten());
+
+        // Check if the value is "sqrt" or "cbrt"
+        if ($node->value() !== 'sqrt' && $node->value() !== 'cbrt') {
+            return $node;
+        }
+
+        // Create a new root node with the degree applied
+        $root = new Node('root');
+        $root->appendChild($node->child(0));
+        $root->appendChild(new Node($node->value() === 'sqrt' ? 2 : 3));
+        return $root;
     }
 }

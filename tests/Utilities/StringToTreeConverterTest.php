@@ -435,6 +435,24 @@ it('can parse brackets inside a function', function () {
     expect($result)->toEqual($function);
 });
 
+it('converts sqrt to root', function () {
+    $root = new Node('root');
+    $root->appendChild(new Node('x'));
+    $root->appendChild(new Node(2));
+
+    $result = StringToTreeConverter::run('sqrt(x)');
+    expect($result)->toEqual($root);
+});
+
+it('converts cbrt to root', function () {
+    $root = new Node('root');
+    $root->appendChild(new Node('x'));
+    $root->appendChild(new Node(3));
+
+    $result = StringToTreeConverter::run('cbrt(x)');
+    expect($result)->toEqual($root);
+});
+
 it('can parse this list of functions', function (string $functionName) {
     $function = new Node($functionName);
     $function->appendChild(new Node(2));

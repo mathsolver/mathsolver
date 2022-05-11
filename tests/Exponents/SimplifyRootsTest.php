@@ -4,27 +4,27 @@ use MathSolver\Exponents\SimplifyRoots;
 use MathSolver\Utilities\StringToTreeConverter;
 
 it('can simplify a root', function () {
-    $tree = StringToTreeConverter::run('root(20, 2)');
+    $tree = StringToTreeConverter::run('sqrt(20)');
     $result = SimplifyRoots::run($tree);
-    expect($result)->toEqual(StringToTreeConverter::run('2 * root(5, 2)'));
+    expect($result)->toEqual(StringToTreeConverter::run('2 * sqrt(5)'));
 });
 
 it('wont return a multiplication if the coefficient is one', function () {
-    $tree = StringToTreeConverter::run('root(6, 2)');
+    $tree = StringToTreeConverter::run('sqrt(6)');
     $result = SimplifyRoots::run($tree);
-    expect($result)->toEqual(StringToTreeConverter::run('root(6, 2)'));
+    expect($result)->toEqual(StringToTreeConverter::run('sqrt(6)'));
 });
 
 it('wont return a root sign if the number inside the root is one', function () {
-    $tree = StringToTreeConverter::run('root(9, 2)');
+    $tree = StringToTreeConverter::run('sqrt(9)');
     $result = SimplifyRoots::run($tree);
     expect($result)->toEqual(StringToTreeConverter::run('3'));
 });
 
 it('wont return a multiplication is the parent is a multiplication', function () {
-    $tree = StringToTreeConverter::run('2 * root(8, 2)');
+    $tree = StringToTreeConverter::run('2 * sqrt(8)');
     $result = SimplifyRoots::run($tree);
-    expect($result)->toEqual(StringToTreeConverter::run('2 * 2 * root(2, 2)'));
+    expect($result)->toEqual(StringToTreeConverter::run('2 * 2 * sqrt(2)'));
 });
 
 it('can simplify one-degree-roots', function () {
@@ -40,9 +40,9 @@ it('wont simplify roots of negative numbers with even exponents', function () {
 });
 
 it('adds brackets if it is in a power', function () {
-    $tree = StringToTreeConverter::run('2^root(8, 2)');
+    $tree = StringToTreeConverter::run('2^sqrt(8)');
     $result = SimplifyRoots::run($tree);
-    expect($result)->toEqual(StringToTreeConverter::run('2^(2*root(2,2))'));
+    expect($result)->toEqual(StringToTreeConverter::run('2^(2*sqrt(2))'));
 });
 
 it('can simplify roots of negative numbers with odd exponents', function (string $input, string $output) {
@@ -52,8 +52,8 @@ it('can simplify roots of negative numbers with odd exponents', function (string
 })->with([
     ['root(-27, 3)', '-3'],
     ['root(-9, 3)', 'root(-9, 3)'],
-    ['root(-16, 3)', '-2root(2, 3)'],
-    ['2root(-16, 3)', '2 * -2root(2, 3)'],
+    ['root(-16, 3)', '-2cbrt(2)'],
+    ['2root(-16, 3)', '2 * -2cbrt(2)'],
 ]);
 
 it('can simplify square roots', function ($start, $outside, $inside) {
