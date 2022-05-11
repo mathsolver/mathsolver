@@ -23,6 +23,7 @@ class Runner
         Derivative\ConstantRule::class,
         Derivative\MonoVariableRule::class,
         Derivative\PowerRule::class,
+        Derivative\RootRule::class,
         Derivative\SumRule::class,
         Exponents\AppendPowersToBrackets::class,
         Exponents\CalculateLogarithms::class,
