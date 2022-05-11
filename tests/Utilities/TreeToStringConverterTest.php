@@ -341,3 +341,14 @@ it('converts logarithms with mathjax', function () {
     $result = TreeToStringConverter::run($log, $mathjax = true);
     expect($result)->toBe('\log_{2}(8)');
 });
+
+it('removes the times symbol between letters and roots', function () {
+    $times = new Node('*');
+    $times->appendChild(new Node('x'));
+    $root = $times->appendChild(new Node('root'));
+    $root->appendChild(new Node('y'));
+    $root->appendChild(new Node(2));
+
+    $result = TreeToStringConverter::run($times, $mathjax = true);
+    expect($result)->toBe('x\sqrt{y}');
+});
