@@ -176,7 +176,6 @@ it('can simplify roots', function (string $input, string $expected) {
     ['root(512, 3)', '8'],
     ['2 * root(2 * 8, 2)', '8'],
     ['x^0.5', 'root(x, 2)'],
-    ['8^1.5', '16root(2, 2)'],
 ]);
 
 it('can calculate with fractions', function (string $input, string $expected) {

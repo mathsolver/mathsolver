@@ -136,42 +136,31 @@ class MultiplyLikeFactorsAndConvertBrokenExponentsIntoRoots extends Step
      */
     protected function pushFactor(string $factor, Fraction $fraction): Node
     {
-        // Check if the exponent is 1
+        // Check if the exponent is 1, so no power or root is needed
         if ($fraction->numerator() === 1 && $fraction->denominator() === 1) {
             return Node::fromString($factor);
         }
 
-        // Create a power for the whole part
-        $power = new Node('^');
-        $power->appendChild(Node::fromString($factor));
-        $power->appendChild(new Node($fraction->wholePart()));
-
-        // Create a root for the fraction part
-        $root = new Node('root');
-        $root->appendChild(Node::fromString($factor));
-        $root->appendChild(new Node($fraction->fractionPart()->denominator()));
-
-        // Append the root in the denominator of the fraction
-        if ($fraction->fractionPart()->numerator() !== 1) {
-            $rootPower = new Node('^');
-            $rootPower->appendChild($root);
-            $rootPower->appendChild(new Node($fraction->fractionPart()->numerator()));
-            $root = $rootPower; // Rename var
-        }
-
-        // Check if the whole part or the fraction part is 0
-        // If so, return the other part
-        if ($fraction->wholePart() === 0) {
-            return $root;
-        }
-        if ($fraction->fractionPart()->numerator() === 0) {
+        // Check if the denominator is 1, so only a power is needed
+        if ($fraction->denominator() === 1) {
+            $power = new Node('^');
+            $power->appendChild(Node::fromString($factor));
+            $power->appendChild(new Node($fraction->wholePart()));
             return $power;
         }
 
-        // Return the whole part times the fraction part
-        $times = new Node('*');
-        $fraction->wholePart() === 1 ? $times->appendChild(Node::fromString($factor)) : $times->appendChild($power);
-        $times->appendChild($root);
-        return $times;
+        // Create a power and append the root to it
+        $power = new Node('^');
+        $root = $power->appendChild(new Node('root'));
+        $root->appendChild(Node::fromString($factor));
+        $root->appendChild(new Node($fraction->denominator()));
+        $power->appendChild(new Node($fraction->numerator()));
+
+        // If the numerator is 1, only the root is needed
+        if ($fraction->numerator() === 1) {
+            return $root;
+        }
+
+        return $power;
     }
 }

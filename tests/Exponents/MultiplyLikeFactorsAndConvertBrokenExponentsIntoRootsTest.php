@@ -139,16 +139,16 @@ it('converts broken exponents with roots and inside powers', function () {
     expect($result)->toEqual(StringToTreeConverter::run('root(x, 3)^2'));
 });
 
-it('converts broken exponents into a whole and broken part', function () {
+it('converts broken exponents into roots with powers', function () {
     $tree = StringToTreeConverter::run('x^frac(5, 2)');
     $result = MultiplyLikeFactorsAndConvertBrokenExponentsIntoRoots::run($tree);
-    expect($result)->toEqual(StringToTreeConverter::run('x^2 * root(x, 2)'));
+    expect($result)->toEqual(StringToTreeConverter::run('root(x, 2)^5'));
 });
 
-it('does not append an exponent of one', function () {
+it('works if the power is greater than the root-degree', function () {
     $tree = StringToTreeConverter::run('x^frac(3, 2)');
     $result = MultiplyLikeFactorsAndConvertBrokenExponentsIntoRoots::run($tree);
-    expect($result)->toEqual(StringToTreeConverter::run('x * root(x, 2)'));
+    expect($result)->toEqual(StringToTreeConverter::run('root(x, 2)^3'));
 });
 
 it('can add factors with a root inside a power', function () {
@@ -167,4 +167,10 @@ it('does not run with letters in exponents', function () {
     $tree = StringToTreeConverter::run('x^y');
     $result = MultiplyLikeFactorsAndConvertBrokenExponentsIntoRoots::run($tree);
     expect($result)->toEqual(StringToTreeConverter::run('x^y'));
+});
+
+it('works with negative exponents', function () {
+    $tree = StringToTreeConverter::run('root(x, 2)^-1');
+    $result = MultiplyLikeFactorsAndConvertBrokenExponentsIntoRoots::run($tree);
+    expect($result)->toEqual(StringToTreeConverter::run('root(x, 2)^-1'));
 });
