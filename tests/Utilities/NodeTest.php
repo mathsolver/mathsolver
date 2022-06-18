@@ -9,7 +9,7 @@ it('can be instantiated', function () {
     expect($node->children())->toBeEmpty();
 
     $node = new Node('7');
-    expect($node->value())->toBe('7');
+    expect($node->value())->toBe(7.0);
 });
 
 it('can be instantiated from a string', function () {

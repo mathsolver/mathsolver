@@ -9,7 +9,7 @@ class Node
     /**
      * The value of this node.
      */
-    protected mixed $value;
+    protected string|float $value;
 
     /**
      * The direct parent node.
@@ -28,7 +28,12 @@ class Node
      */
     public function __construct(string|int|float $value)
     {
-        $this->value = $value;
+        if (is_numeric($value)) {
+            $this->value = (float) $value;
+        } else {
+            $this->value = (string) $value;
+        }
+
         $this->children = collect([]);
     }
 

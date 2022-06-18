@@ -43,7 +43,7 @@ class RemoveBrackets extends Step
             return true;
         }
 
-        if (ctype_alpha($node->child(0)->value()) && ctype_alpha($node->child(-1)->value())) {
+        if (ctype_alpha((string) $node->child(0)->value()) && ctype_alpha((string) $node->child(-1)->value())) {
             return true;
         }
 
