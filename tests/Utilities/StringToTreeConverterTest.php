@@ -453,6 +453,17 @@ it('converts cbrt to root', function () {
     expect($result)->toEqual($root);
 });
 
+it('can parse double powers', function () {
+    $root = new Node('^');
+    $root->appendChild(new Node('x'));
+    $power = $root->appendChild(new Node('^'));
+    $power->appendChild(new Node('y'));
+    $power->appendChild(new Node('z'));
+
+    $result = StringToTreeConverter::run('x^y^z');
+    expect($result)->toEqual($root);
+});
+
 it('can parse this list of functions', function (string $functionName) {
     $function = new Node($functionName);
     $function->appendChild(new Node(2));

@@ -91,12 +91,12 @@ class StringToTreeConverter
                 continue;
             }
 
-            if (self::getPrecedence($term) < self::getPrecedence($node->value())) {
+            if (self::getPrecedence($node->value()) > self::getPrecedence($term)) {
                 $done = false;
 
                 while (!$done) {
                     if ($node->parent()) {
-                        if (self::getPrecedence($term, true) > self::getPrecedence($node->parent()->value(), true)) {
+                        if (self::getPrecedence($term, true) > self::getPrecedence($node->parent()->value(), true) || ($term === '^' && $node->parent()->value() === '^')) {
                             $parent = new Node($term);
                             $node->parent()->removeChild($node);
                             $node->parent()->appendChild($parent);

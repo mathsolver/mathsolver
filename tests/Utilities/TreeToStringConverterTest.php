@@ -375,3 +375,14 @@ it('removes times symbol between fractions and brackets', function () {
     $result = TreeToStringConverter::run($times, $mathjax = true);
     expect($result)->toBe('\frac{1}{2}(x)');
 });
+
+it('adds brackets around multiple powers', function () {
+    $root = new Node('^');
+    $root->appendChild(new Node('x'));
+    $power = $root->appendChild(new Node('^'));
+    $power->appendChild(new Node('y'));
+    $power->appendChild(new Node('z'));
+
+    $result = TreeToStringConverter::run($root, $mathjax = true);
+    expect($result)->toBe('x^{y^{z}}');
+});
