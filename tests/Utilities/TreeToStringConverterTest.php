@@ -173,7 +173,7 @@ it('can convert functions to a string', function () {
     $sine = new Node('sin');
     $sine->appendChild(new Node(45));
     $result = TreeToStringConverter::run($sine);
-    expect($result)->toBe('sin(45)');
+    expect($result)->toBe('sin[45]');
 
     $times = new Node('*');
     $times->appendChild(new Node(2));
@@ -183,14 +183,14 @@ it('can convert functions to a string', function () {
     $plus->appendChild(new Node(2));
     $plus->appendChild(new Node(3));
     $result = TreeToStringConverter::run($times);
-    expect($result)->toBe('2root(16,2+3)');
+    expect($result)->toBe('2root[16,2+3]');
 });
 
 it('can convert functions to mathjax', function () {
     $sine = new Node('sin');
     $sine->appendChild(new Node(45));
     $result = TreeToStringConverter::run($sine, $mathjax = true);
-    expect($result)->toBe('\text{sin}(45)');
+    expect($result)->toBe('\text{sin}[45]');
 });
 
 it('can convert roots to mathjax', function () {
@@ -257,7 +257,7 @@ it('removes the one between a minus and a function', function () {
     $sine->appendChild(new Node(45));
 
     $result = TreeToStringConverter::run($times);
-    expect($result)->toBe('-sin(45)');
+    expect($result)->toBe('-sin[45]');
 });
 
 it('removes the one between a minus and a function in mathjax', function () {
@@ -278,7 +278,7 @@ it('converts to a differentiate function', function () {
     $power->appendChild(new Node(5));
 
     $result = TreeToStringConverter::run($deriv, $mathjax = true);
-    expect($result)->toBe('\frac{d}{dx}(x^{5})');
+    expect($result)->toBe('\frac{d}{dx}[x^{5}]');
 });
 
 it('converts to a differentiate function with respect to a variable', function () {
@@ -289,7 +289,7 @@ it('converts to a differentiate function with respect to a variable', function (
     $deriv->appendChild(new Node('y'));
 
     $result = TreeToStringConverter::run($deriv, $mathjax = true);
-    expect($result)->toBe('\frac{d}{dy}(y^{2})');
+    expect($result)->toBe('\frac{d}{dy}[y^{2}]');
 });
 
 it('removes brackets around exponents', function () {
@@ -336,10 +336,10 @@ it('converts logarithms with mathjax', function () {
     $log->appendChild(new Node(2));
 
     $result = TreeToStringConverter::run($log, $mathjax = false);
-    expect($result)->toBe('log(8,2)');
+    expect($result)->toBe('log[8,2]');
 
     $result = TreeToStringConverter::run($log, $mathjax = true);
-    expect($result)->toBe('\log_{2}(8)');
+    expect($result)->toBe('\log_{2}[8]');
 });
 
 it('removes the times symbol between letters and roots', function () {

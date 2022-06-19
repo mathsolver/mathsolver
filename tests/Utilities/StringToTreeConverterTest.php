@@ -296,6 +296,24 @@ it('can parse functions into their own nodes', function () {
     expect($result)->toEqual($tangent);
 });
 
+it('can parse this list of functions', function (string $functionName) {
+    $function = new Node($functionName);
+    $function->appendChild(new Node(2));
+    $function->appendChild(new Node(5));
+
+    $result = StringToTreeConverter::run("{$functionName}[2, 5]");
+    expect($result)->toEqual($function);
+})->with([
+    'cos',
+    'deriv',
+    'frac',
+    'log',
+    'rand',
+    'root',
+    'sin',
+    'tan',
+]);
+
 it('can parse functions with other operations', function () {
     $plus = new Node('+');
     $times = $plus->appendChild(new Node('*'));
@@ -464,20 +482,12 @@ it('can parse double powers', function () {
     expect($result)->toEqual($root);
 });
 
-it('can parse this list of functions', function (string $functionName) {
-    $function = new Node($functionName);
-    $function->appendChild(new Node(2));
-    $function->appendChild(new Node(5));
+it('can parse functions with an expression afterwards', function () {
+    $times = new Node('*');
+    $sine = $times->appendChild(new Node('sin'));
+    $sine->appendChild(new Node(45));
+    $times->appendChild(new Node('x'));
 
-    $result = StringToTreeConverter::run("{$functionName}[2, 5]");
-    expect($result)->toEqual($function);
-})->with([
-    'cos',
-    'deriv',
-    'frac',
-    'log',
-    'rand',
-    'root',
-    'sin',
-    'tan',
-]);
+    $result = StringToTreeConverter::run('sin[45]x');
+    expect($result)->toEqual($times);
+});

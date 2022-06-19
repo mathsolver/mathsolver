@@ -12,7 +12,7 @@ class RootRule extends Step
     /**
      * Differentiate roots using the root rule.
      *
-     * Root rule: d/dx(root(x, n)) => frac(1, n) * root(x, n)^(-n + 1).
+     * Root rule: d/dx(root[x, n]) => frac[1, n] * root[x, n]^(-n + 1).
      */
     public function handle(Node $deriv): Node
     {

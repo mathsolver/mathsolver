@@ -82,19 +82,19 @@ it('does not run when there are multiple numbers in a product', function () {
 });
 
 it('works with fractions', function () {
-    $tree = StringToTreeConverter::run('frac(3, 2)x + frac(1, 2)x');
+    $tree = StringToTreeConverter::run('frac[3, 2]x + frac[1, 2]x');
     $result = AddLikeTerms::run($tree);
     expect($result)->toEqual(StringToTreeConverter::run('2x'));
 });
 
 it('works by subtracting fractions', function () {
-    $tree = StringToTreeConverter::run('frac(1, 2)y + frac(-1, 4)y');
+    $tree = StringToTreeConverter::run('frac[1, 2]y + frac[-1, 4]y');
     $result = AddLikeTerms::run($tree);
-    expect($result)->toEqual(StringToTreeConverter::run('frac(1, 4)y'));
+    expect($result)->toEqual(StringToTreeConverter::run('frac[1, 4]y'));
 });
 
 it('does not run if there are multiple numbers', function () {
-    $tree = StringToTreeConverter::run('frac(1, 2)y - frac(1, 4)y');
+    $tree = StringToTreeConverter::run('frac[1, 2]y - frac[1, 4]y');
     $result = AddLikeTerms::run($tree);
-    expect($result)->toEqual(StringToTreeConverter::run('frac(1, 2)y - frac(1, 4)y'));
+    expect($result)->toEqual(StringToTreeConverter::run('frac[1, 2]y - frac[1, 4]y'));
 });

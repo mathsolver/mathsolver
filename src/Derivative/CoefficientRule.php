@@ -21,7 +21,7 @@ class CoefficientRule extends Step
     /**
      * Find all constants and bring them outside the deriv function.
      *
-     * For example: `deriv(2x) -> 2*deriv(x)`.
+     * For example: `deriv[2x] -> 2*deriv[x]`.
      */
     public function handle(Node $deriv): Node
     {

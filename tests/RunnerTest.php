@@ -174,7 +174,7 @@ it('can simplify roots', function (string $input, string $expected) {
     ['2 * sqrt(8)', '4sqrt(2)'],
     ['3sqrt(9)', '9'],
     ['cbrt(512)', '8'],
-    ['2 * root(2 * 8, 2)', '8'],
+    ['2 * root[2 * 8, 2]', '8'],
     ['x^0.5', 'sqrt(x)'],
 ]);
 
@@ -184,25 +184,25 @@ it('can calculate with fractions', function (string $input, string $expected) {
     $expected = StringToTreeConverter::run($expected);
     expect($result)->toEqual($expected);
 })->with([
-    ['frac(12, 8)', 'frac(3, 2)'],
-    ['frac(22, 14)', 'frac(11, 7)'],
-    ['frac(36, 27)', 'frac(4, 3)'],
-    ['frac(42, 72)', 'frac(7, 12)'],
-    ['5frac(4,2)', '10'],
-    ['frac(2, 8) * frac(1, 4)', 'frac(1, 16)'],
-    ['5frac(1, 3)', 'frac(5, 3)'],
-    ['frac(3, 5) + frac(1, 5)', 'frac(4, 5)'],
-    ['2frac(2, 5) + frac(3, 5)', 'frac(7, 5)'],
-    ['1 - frac(2, 5)', 'frac(3, 5)'],
-    ['4^-2', 'frac(1, 16)'],
-    ['3^-1', 'frac(1, 3)'],
-    ['0.5', 'frac(1, 2)'],
-    ['0.375', 'frac(3, 8)'],
-    ['frac(frac(2, 3), 5)', 'frac(2, 15)'],
-    ['frac(frac(x, y), z)', 'xy^-1z^-1'],
-    ['frac(7, frac(2, 8))', '28'],
-    ['frac(5, frac(2, 3))', 'frac(15, 2)'],
-    ['frac(x, frac(y, z))', 'xy^-1z'],
+    ['frac[12, 8]', 'frac[3, 2]'],
+    ['frac[22, 14]', 'frac[11, 7]'],
+    ['frac[36, 27]', 'frac[4, 3]'],
+    ['frac[42, 72]', 'frac[7, 12]'],
+    ['5frac[4,2]', '10'],
+    ['frac[2, 8] * frac[1, 4]', 'frac[1, 16]'],
+    ['5frac[1, 3]', 'frac[5, 3]'],
+    ['frac[3, 5] + frac[1, 5]', 'frac[4, 5]'],
+    ['2frac[2, 5] + frac[3, 5]', 'frac[7, 5]'],
+    ['1 - frac[2, 5]', 'frac[3, 5]'],
+    ['4^-2', 'frac[1, 16]'],
+    ['3^-1', 'frac[1, 3]'],
+    ['0.5', 'frac[1, 2]'],
+    ['0.375', 'frac[3, 8]'],
+    ['frac[frac[2, 3], 5]', 'frac[2, 15]'],
+    ['frac[frac[x, y], z]', 'xy^-1z^-1'],
+    ['frac[7, frac[2, 8]]', '28'],
+    ['frac[5, frac[2, 3]]', 'frac[15, 2]'],
+    ['frac[x, frac[y, z]]', 'xy^-1z'],
 ]);
 
 it('removes redundant numbers', function (string $input, string $expected) {
@@ -224,9 +224,9 @@ it('can calculate functions', function (string $input, string $expected) {
     $expected = StringToTreeConverter::run($expected);
     expect($result)->toEqual($expected);
 })->with([
-    ['log(81, 3)', '4'],
-    ['log(100)', '2'],
-    ['log(4, 16)', 'frac(1, 2)'],
+    ['log[81, 3]', '4'],
+    ['log[100]', '2'],
+    ['log[4, 16]', 'frac[1, 2]'],
 ]);
 
 it('can write as a power', function (string $input, string $expected) {
@@ -235,29 +235,29 @@ it('can write as a power', function (string $input, string $expected) {
     $expected = StringToTreeConverter::run($expected);
     expect($result)->toEqual($expected);
 })->with([
-    ['frac(1, a)', 'a^-1'],
-    ['frac(1, a^2)', 'a^-2'],
-    ['a^4 * frac(1, a^6)', 'a^-2'],
-    ['frac(a^2, frac(1, a^4))', 'a^6'],
-    ['frac(a^8, a^0)', 'a^8'],
+    ['frac[1, a]', 'a^-1'],
+    ['frac[1, a^2]', 'a^-2'],
+    ['a^4 * frac[1, a^6]', 'a^-2'],
+    ['frac[a^2, frac[1, a^4]]', 'a^6'],
+    ['frac[a^8, a^0]', 'a^8'],
     ['(a^3)^-2', 'a^-6'],
-    ['frac(frac(1, a^5), a)', 'a^-6'],
-    ['frac(a, a^12)', 'a^-11'],
-    ['frac(1, a^8) * (a^3)^2', 'a^-2'],
-    ['frac(frac(1, a^4), a^-3)', 'a^-1'],
-    ['frac(6b^3, a^5)', '6a^-5 * b^3'],
-    ['frac(1, 3a^3)', 'frac(1, 3) * a^-3'],
-    ['frac(a^4, 5b^2)', 'frac(1, 5) * a^4 * b^-2'],
-    ['frac(3, 5a^4)', 'frac(3, 5) * a^-4'],
-    ['frac(8, a^3)', '8a^-3'],
-    ['frac(b^4, 6a^2)', 'frac(1, 6) * a^-2 * b^4'],
-    ['frac(-4, 9a^2)', 'frac(-4, 9) * a^-2'],
-    ['(3a)^-2 * frac(1, b^3)', 'frac(1, 9) * a^-2 * b^-3'],
-    ['frac(64a^2, 9b^2)', 'frac(64, 9) * a^2 * b^-2'],
+    ['frac[frac[1, a^5], a]', 'a^-6'],
+    ['frac[a, a^12]', 'a^-11'],
+    ['frac[1, a^8] * (a^3)^2', 'a^-2'],
+    ['frac[frac[1, a^4], a^-3]', 'a^-1'],
+    ['frac[6b^3, a^5]', '6a^-5 * b^3'],
+    ['frac[1, 3a^3]', 'frac[1, 3] * a^-3'],
+    ['frac[a^4, 5b^2]', 'frac[1, 5] * a^4 * b^-2'],
+    ['frac[3, 5a^4]', 'frac[3, 5] * a^-4'],
+    ['frac[8, a^3]', '8a^-3'],
+    ['frac[b^4, 6a^2]', 'frac[1, 6] * a^-2 * b^4'],
+    ['frac[-4, 9a^2]', 'frac[-4, 9] * a^-2'],
+    ['(3a)^-2 * frac[1, b^3]', 'frac[1, 9] * a^-2 * b^-3'],
+    ['frac[64a^2, 9b^2]', 'frac[64, 9] * a^2 * b^-2'],
 ]);
 
 it('can differentiate', function (string $input, string $expected, string $respect = 'x') {
-    $tree = $respect == 'x' ? StringToTreeConverter::run("deriv({$input})") : StringToTreeConverter::run("deriv({$input}, {$respect})");
+    $tree = $respect == 'x' ? StringToTreeConverter::run("deriv[{$input}]") : StringToTreeConverter::run("deriv[{$input}, {$respect}]");
     $result = Runner::run($tree)['result'];
     $expected = StringToTreeConverter::run($expected);
     expect($result)->toEqual($expected);
@@ -266,7 +266,7 @@ it('can differentiate', function (string $input, string $expected, string $respe
     ['x^-1', '-x^-2'],
     ['5x^6 - 3x^5 + 2x - 7', '30x^5 - 15x^4 + 2'],
     ['-2x^8 - 4x^4 + 7.2', '-16x^7 - 16x^3'],
-    ['-frac(1, 3)x^3 - frac(1, 2)x^2 - x - 1', '-x^2 - x - 1'],
+    ['-frac[1, 3]x^3 - frac[1, 2]x^2 - x - 1', '-x^2 - x - 1'],
     ['1 + 3q - 3q^2 - 5q^7', '-35q^6 - 6q + 3', 'q'],
     ['(5x + 7)(4 - 3x)', '-30x - 1'],
     ['(3x + 6)^2 - 8x', '18x + 28'],
@@ -278,13 +278,13 @@ it('can differentiate', function (string $input, string $expected, string $respe
     ['5 - 3(x^4 - x)(x + 1)', '-15x^4 - 12x^3 + 6x + 3'],
     ['(5t^3 - t)(3t^5 + t)', '120t^7 + 20t^3 - 18t^5 - 2t', 't'],
     ['1 - (3q^2 - 2)^2', '-36q^3 + 24q', 'q'],
-    ['frac(1, x^6)', '-6x^-7'],
-    ['5 - frac(3, x^2)', '6x^-3'],
-    ['ax^4 - frac(b, x^4)', '4ax^3 + 4bx^-5'],
-    ['frac(2x - 1, 3x^2)', 'frac(-2, 3)x^-2 + frac(2, 3)x^-3'],
-    ['frac(3x^6 - 3, x^3)', '9x^2 + 9x^-4'],
-    ['5x^2 - frac(5, x^2)', '10x^-3 + 10x'],
-    ['6 - frac(x^2 - 1, x)', '-x^-2 - 1'],
+    ['frac[1, x^6]', '-6x^-7'],
+    ['5 - frac[3, x^2]', '6x^-3'],
+    ['ax^4 - frac[b, x^4]', '4ax^3 + 4bx^-5'],
+    ['frac[2x - 1, 3x^2]', 'frac[-2, 3]x^-2 + frac[2, 3]x^-3'],
+    ['frac[3x^6 - 3, x^3]', '9x^2 + 9x^-4'],
+    ['5x^2 - frac[5, x^2]', '10x^-3 + 10x'],
+    ['6 - frac[x^2 - 1, x]', '-x^-2 - 1'],
 ]);
 
 it('records steps', function () {
@@ -307,7 +307,7 @@ it('can record steps with mathjax', function () {
     $result = Runner::run($tree, $mathjax = false);
     expect($result)->toEqual([
         'result' => StringToTreeConverter::run('2sqrt(2)'),
-        'steps' => [['type' => 'simplify', 'name' => 'Simplify roots', 'result' => '2root(2,2)']],
+        'steps' => [['type' => 'simplify', 'name' => 'Simplify roots', 'result' => '2root[2,2]']],
     ]);
 
     // With mathjax

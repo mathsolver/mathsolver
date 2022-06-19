@@ -40,7 +40,7 @@ it('sorts powers first', function () {
 });
 
 it('sorts with deriv functions', function () {
-    $tree = StringToTreeConverter::run('deriv(2x) + deriv(x^2)');
+    $tree = StringToTreeConverter::run('deriv[2x] + deriv[x^2]');
     $result = SortTerms::run($tree);
-    expect($result)->toEqual(StringToTreeConverter::run('deriv(x^2) + deriv(2x)'));
+    expect($result)->toEqual(StringToTreeConverter::run('deriv[x^2] + deriv[2x]'));
 });

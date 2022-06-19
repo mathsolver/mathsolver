@@ -34,7 +34,7 @@ class StringToTreeConverter
             ->replaceMatches('/([a-z0-9π)])-/', '$1+-') // Replace - with +-
             ->replaceMatches('/-([^0-9])/', '-1$1') // Replace - with -1
             ->replaceMatches('/([0-9a-z.])\(/', '$1*(') // 5x(3y - 4) -> 5x * (3y - 4)
-            ->replaceMatches('/\)([a-z0-9])/', ')*$1')
+            ->replaceMatches('/(\)|\])([a-z0-9])/', '$1*$2')
             ->replaceMatches('/(\)|\])(\(|\[)/', '$1*$2') // Add times between brackets
             ->pipe(function ($string) { // Replace root* with root, and tan* with tan
                 foreach (self::$functions as $function) {
@@ -175,7 +175,7 @@ class StringToTreeConverter
     }
 
     /**
-     * Convert sqrt(x) and cbrt(x) to root(x, 2) and root(x, 3).
+     * Convert sqrt(x) and cbrt(x) to root[x, 2] and root[x, 3].
      */
     protected static function convertRootSymbols(Node $node): Node
     {

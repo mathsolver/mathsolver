@@ -5,23 +5,23 @@ use MathSolver\Utilities\Node;
 use MathSolver\Utilities\StringToTreeConverter;
 
 it('can differentiate mono variables', function () {
-    $tree = StringToTreeConverter::run('deriv(x)');
+    $tree = StringToTreeConverter::run('deriv[x]');
     $result = MonoVariableRule::run($tree);
     expect($result)->toEqual(new Node(1));
 });
 
 it('does not differentiate non-mono variables', function () {
-    $tree = StringToTreeConverter::run('deriv(2x)');
+    $tree = StringToTreeConverter::run('deriv[2x]');
     $result = MonoVariableRule::run($tree);
-    expect($result)->toEqual(StringToTreeConverter::run('deriv(2x)'));
+    expect($result)->toEqual(StringToTreeConverter::run('deriv[2x]'));
 
-    $tree = StringToTreeConverter::run('deriv(7)');
+    $tree = StringToTreeConverter::run('deriv[7]');
     $result = MonoVariableRule::run($tree);
-    expect($result)->toEqual(StringToTreeConverter::run('deriv(7)'));
+    expect($result)->toEqual(StringToTreeConverter::run('deriv[7]'));
 });
 
 it('can apply the rule with respect to a variable', function () {
-    $tree = StringToTreeConverter::run('deriv(y, y)');
+    $tree = StringToTreeConverter::run('deriv[y, y]');
     $result = MonoVariableRule::run($tree);
     expect($result)->toEqual(new Node(1));
 });

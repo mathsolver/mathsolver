@@ -4,31 +4,31 @@ use MathSolver\Derivative\SumRule;
 use MathSolver\Utilities\StringToTreeConverter;
 
 it('can apply the sum rule', function () {
-    $tree = StringToTreeConverter::run('deriv(x^2 + 2x)');
+    $tree = StringToTreeConverter::run('deriv[x^2 + 2x]');
     $result = SumRule::run($tree);
-    expect($result)->toEqual(StringToTreeConverter::run('deriv(x^2) + deriv(2x)'));
+    expect($result)->toEqual(StringToTreeConverter::run('deriv[x^2] + deriv[2x]'));
 });
 
 it('can apply the rule when the deriv function is in a sum', function () {
-    $tree = StringToTreeConverter::run('3 + deriv(3x + 7)');
+    $tree = StringToTreeConverter::run('3 + deriv[3x + 7]');
     $result = SumRule::run($tree);
-    expect($result)->toEqual(StringToTreeConverter::run('3 + deriv(3x) + deriv(7)'));
+    expect($result)->toEqual(StringToTreeConverter::run('3 + deriv[3x] + deriv[7]'));
 });
 
 it('can apply the rule with respect to a variable', function () {
-    $tree = StringToTreeConverter::run('deriv(y^2 + 2y, y)');
+    $tree = StringToTreeConverter::run('deriv[y^2 + 2y, y]');
     $result = SumRule::run($tree);
-    expect($result)->toEqual(StringToTreeConverter::run('deriv(y^2, y) + deriv(2y, y)'));
+    expect($result)->toEqual(StringToTreeConverter::run('deriv[y^2, y] + deriv[2y, y]'));
 });
 
 it('adds brackets if it is in a product', function () {
-    $tree = StringToTreeConverter::run('2deriv(x^2 + 3x)');
+    $tree = StringToTreeConverter::run('2deriv[x^2 + 3x]');
     $result = SumRule::run($tree);
-    expect($result)->toEqual(StringToTreeConverter::run('2(deriv(x^2) + deriv(3x))'));
+    expect($result)->toEqual(StringToTreeConverter::run('2(deriv[x^2] + deriv[3x])'));
 });
 
 it('adds brackets if it is in a power', function() {
-    $tree = StringToTreeConverter::run('2^deriv(x^2 + 3x)');
+    $tree = StringToTreeConverter::run('2^deriv[x^2 + 3x]');
     $result = SumRule::run($tree);
-    expect($result)->toEqual(StringToTreeConverter::run('2^(deriv(x^2) + deriv(3x))'));
+    expect($result)->toEqual(StringToTreeConverter::run('2^(deriv[x^2] + deriv[3x])'));
 });

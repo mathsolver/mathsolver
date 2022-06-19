@@ -110,13 +110,13 @@ it('keeps the order when there are no double factors', function () {
     $result = MultiplyLikeFactorsAndConvertBrokenExponentsIntoRoots::run($tree);
     expect($result)->toEqual(StringToTreeConverter::run('169 * 15'));
 
-    $tree = StringToTreeConverter::run('3sin(2, 2)');
+    $tree = StringToTreeConverter::run('3sin[2, 2]');
     $result = MultiplyLikeFactorsAndConvertBrokenExponentsIntoRoots::run($tree);
-    expect($result)->toEqual(StringToTreeConverter::run('3sin(2, 2)'));
+    expect($result)->toEqual(StringToTreeConverter::run('3sin[2, 2]'));
 });
 
 it('can add fractions', function () {
-    $tree = StringToTreeConverter::run('x^frac(1, 2) * x^frac(3, 2)');
+    $tree = StringToTreeConverter::run('x^frac[1, 2] * x^frac[3, 2]');
     $result = MultiplyLikeFactorsAndConvertBrokenExponentsIntoRoots::run($tree);
     expect($result)->toEqual(StringToTreeConverter::run('x^2'));
 });
@@ -128,25 +128,25 @@ it('can add roots', function () {
 });
 
 it('converts broken exponents into roots', function () {
-    $tree = StringToTreeConverter::run('x^frac(1, 2)');
+    $tree = StringToTreeConverter::run('x^frac[1, 2]');
     $result = MultiplyLikeFactorsAndConvertBrokenExponentsIntoRoots::run($tree);
     expect($result)->toEqual(StringToTreeConverter::run('sqrt(x)'));
 });
 
 it('converts broken exponents with roots and inside powers', function () {
-    $tree = StringToTreeConverter::run('x^frac(2, 3)');
+    $tree = StringToTreeConverter::run('x^frac[2, 3]');
     $result = MultiplyLikeFactorsAndConvertBrokenExponentsIntoRoots::run($tree);
     expect($result)->toEqual(StringToTreeConverter::run('cbrt(x)^2'));
 });
 
 it('converts broken exponents into roots with powers', function () {
-    $tree = StringToTreeConverter::run('x^frac(5, 2)');
+    $tree = StringToTreeConverter::run('x^frac[5, 2]');
     $result = MultiplyLikeFactorsAndConvertBrokenExponentsIntoRoots::run($tree);
     expect($result)->toEqual(StringToTreeConverter::run('sqrt(x)^5'));
 });
 
 it('works if the power is greater than the root-degree', function () {
-    $tree = StringToTreeConverter::run('x^frac(3, 2)');
+    $tree = StringToTreeConverter::run('x^frac[3, 2]');
     $result = MultiplyLikeFactorsAndConvertBrokenExponentsIntoRoots::run($tree);
     expect($result)->toEqual(StringToTreeConverter::run('sqrt(x)^3'));
 });

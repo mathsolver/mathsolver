@@ -5,7 +5,7 @@ use MathSolver\Utilities\StringToTreeConverter;
 use MathSolver\Utilities\TreeToStringConverter;
 
 it('can generate a random number', function () {
-    $tree = StringToTreeConverter::run('rand(1, 10)');
+    $tree = StringToTreeConverter::run('rand[1, 10]');
     $result = GenerateRandomNumber::run($tree);
 
     expect((int) TreeToStringConverter::run($result))
@@ -13,7 +13,7 @@ it('can generate a random number', function () {
         ->toBeGreaterThanOrEqual(1)
         ->toBeLessThanOrEqual(10);
 
-    $tree = StringToTreeConverter::run('rand(100, 1000)');
+    $tree = StringToTreeConverter::run('rand[100, 1000]');
     $result = GenerateRandomNumber::run($tree);
 
     expect((int) TreeToStringConverter::run($result))
@@ -23,7 +23,7 @@ it('can generate a random number', function () {
 });
 
 it('never falls out of the range', function () {
-    $tree = StringToTreeConverter::run('rand(1, 10)');
+    $tree = StringToTreeConverter::run('rand[1, 10]');
 
     for ($i = 1; $i <= 1000; $i++) {
         $result = GenerateRandomNumber::run($tree);
@@ -35,7 +35,7 @@ it('never falls out of the range', function () {
 });
 
 it('is spreaded approximately evenly', function () {
-    $tree = StringToTreeConverter::run('rand(1, 10)');
+    $tree = StringToTreeConverter::run('rand[1, 10]');
 
     $results = [];
     for ($i = 1; $i <= 10000; $i++) {
