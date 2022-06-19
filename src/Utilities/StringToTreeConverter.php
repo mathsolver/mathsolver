@@ -35,17 +35,17 @@ class StringToTreeConverter
             ->replaceMatches('/-([^0-9])/', '-1$1') // Replace - with -1
             ->replaceMatches('/([0-9a-z.])\(/', '$1*(') // 5x(3y - 4) -> 5x * (3y - 4)
             ->replaceMatches('/\)([a-z0-9])/', ')*$1')
-            ->replace(')(', ')*(')
+            ->replaceMatches('/(\)|\])(\(|\[)/', '$1*$2') // Add times between brackets
             ->pipe(function ($string) { // Replace root* with root, and tan* with tan
                 foreach (self::$functions as $function) {
                     $string = $string->replace("{$function}*", $function);
                 }
                 return $string;
             })
-            ->replaceMatches('/[=|+|\/|*|^|(|)]/', ' $0 ') // Add spaces to operators
+            ->replaceMatches('/[=|+|\/|*|^|(|)|\[|\]]/', ' $0 ') // Add spaces to operators
             ->replace(',', ' , ')
             ->explode(' ') // Explode on spaces
-            ->flatMap(function ($term) { // Expand terms like 7xy to 7*x*y and xtan(45) to x*tan(45)
+            ->flatMap(function ($term) { // Expand terms like 7xy to 7*x*y and xtan[45] to x*tan[45]
                 // Check if it contains letters
                 if (!Str::match('/[-]?[0-9.]*[a-z]+/', $term)) {
                     return [$term];
@@ -79,10 +79,27 @@ class StringToTreeConverter
                 continue;
             }
 
+            if ($node->value() === '[' && !$bracketsAreClosed) {
+                $node = $node->appendChild(new Node($term));
+                continue;
+            }
+
             if ($term === ')') {
                 $node = $node->parent();
 
                 while ($node->value() !== '(') {
+                    $node = $node->parent();
+                }
+
+                $bracketsAreClosed = true;
+
+                continue;
+            }
+
+            if ($term === ']') {
+                $node = $node->parent();
+
+                while ($node->value() !== '[') {
                     $node = $node->parent();
                 }
 
@@ -108,6 +125,9 @@ class StringToTreeConverter
                             $node = $node->parent();
 
                             if ($node->value() == '(') {
+                                $done = true;
+                            }
+                            if ($node->value() == '[') {
                                 $done = true;
                             }
                         }
@@ -146,6 +166,7 @@ class StringToTreeConverter
             '/' => 8,
             '^' => 10,
             '(' => $nested ? 4 : 16,
+            '[' => $nested ? 4 : 16,
             ',' => 2,
             default => in_array($value, self::$functions) ? 12 : 18,
         };
