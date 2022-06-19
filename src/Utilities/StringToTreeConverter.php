@@ -74,32 +74,15 @@ class StringToTreeConverter
         // Loop over all terms
         /** @var string $term */
         foreach ($terms as $term) {
-            if ($node->value() === '(' && !$bracketsAreClosed) {
+            if (in_array($node->value(), ['(', '[']) && !$bracketsAreClosed) {
                 $node = $node->appendChild(new Node($term));
                 continue;
             }
 
-            if ($node->value() === '[' && !$bracketsAreClosed) {
-                $node = $node->appendChild(new Node($term));
-                continue;
-            }
-
-            if ($term === ')') {
+            if ($term === ')' || $term === ']') {
                 $node = $node->parent();
 
-                while ($node->value() !== '(') {
-                    $node = $node->parent();
-                }
-
-                $bracketsAreClosed = true;
-
-                continue;
-            }
-
-            if ($term === ']') {
-                $node = $node->parent();
-
-                while ($node->value() !== '[') {
+                while ($node->value() !== '(' && $node->value() !== '[') {
                     $node = $node->parent();
                 }
 
@@ -124,9 +107,6 @@ class StringToTreeConverter
                         } else {
                             $node = $node->parent();
 
-                            if ($node->value() == '(') {
-                                $done = true;
-                            }
                             if ($node->value() == '[') {
                                 $done = true;
                             }
