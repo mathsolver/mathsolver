@@ -38,8 +38,7 @@ class MoveNegativeExponentsIntoFractions extends Step
     public function shouldRun(Node $node): bool
     {
         return $node->value() === '^'
-            && is_numeric($node->child(0)->value())
-            && is_numeric($node->children()->last()->value())
-            && $node->children()->last()->value() < 0;
+            && is_numeric($node->child(1)->value())
+            && $node->child(1)->value() < 0;
     }
 }

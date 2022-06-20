@@ -15,11 +15,13 @@ it('moves powers with negative exponents into fractions with powers', function (
     expect($result)->toEqual(StringToTreeConverter::run('frac[1, 3^5]'));
 });
 
-it('does not run when there arent real numbers', function () {
+it('moves powers with letters', function () {
     $tree = StringToTreeConverter::run('x^-2');
     $result = MoveNegativeExponentsIntoFractions::run($tree);
-    expect($result)->toEqual(StringToTreeConverter::run('x^-2'));
+    expect($result)->toEqual(StringToTreeConverter::run('frac[1, x^2]'));
+});
 
+it('does not run with letters in the exponent', function () {
     $tree = StringToTreeConverter::run('5^x');
     $result = MoveNegativeExponentsIntoFractions::run($tree);
     expect($result)->toEqual(StringToTreeConverter::run('5^x'));
