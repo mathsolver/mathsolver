@@ -45,6 +45,11 @@ it('minus from the denominator to the numerator', function () {
     expect($fraction)->toEqual(new Fraction(-1, 3));
 });
 
+it('can divide zero by a negative number', function () {
+    $fraction = (new Fraction(0, -1))->simplify();
+    expect($fraction)->toEqual(new Fraction(0, 1));
+});
+
 test('sometimes it cant be simplified', function () {
     $fraction = (new Fraction(3, 4))->simplify();
     expect($fraction)->toEqual(new Fraction(3, 4));

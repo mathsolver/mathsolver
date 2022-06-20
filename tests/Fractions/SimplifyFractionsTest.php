@@ -43,6 +43,12 @@ it('divides by negative numbers', function () {
     expect($result)->toEqual(StringToTreeConverter::run('-2'));
 });
 
+it('divides zero by negative numbers', function () {
+    $tree = StringToTreeConverter::run('frac[0, -1]');
+    $result = SimplifyFractions::run($tree);
+    expect($result)->toEqual(StringToTreeConverter::run('0'));
+});
+
 it('removes negative divided by negative', function () {
     $tree = StringToTreeConverter::run('frac[-1, -3]');
     $result = SimplifyFractions::run($tree);
