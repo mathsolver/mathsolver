@@ -28,7 +28,6 @@ class Runner
         Exponents\AppendPowersToBrackets::class,
         Exponents\CalculateLogarithms::class,
         Exponents\CalculatePowersOfRealNumbers::class,
-        Exponents\ConvertFractionsIntoNegativeExponents::class,
         Exponents\ExponentOfZero::class,
         Exponents\MoveNegativeExponentsIntoFractions::class,
         Exponents\MultiplyExponents::class,
