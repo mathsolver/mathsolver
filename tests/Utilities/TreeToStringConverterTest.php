@@ -1,6 +1,7 @@
 <?php
 
 use MathSolver\Utilities\Node;
+use MathSolver\Utilities\StringToTreeConverter;
 use MathSolver\Utilities\TreeToStringConverter;
 
 it('can convert a tree to a string', function () {
@@ -385,4 +386,22 @@ it('adds brackets around multiple powers', function () {
 
     $result = TreeToStringConverter::run($root, $mathjax = true);
     expect($result)->toBe('x^{y^{z}}');
+});
+
+it('can convert fractions', function () {
+    $tree = StringToTreeConverter::run('frac[3, 5]');
+    $result = TreeToStringConverter::run($tree, $mathjax = false);
+    expect($result)->toBe('3/5');
+});
+
+it('can parse non-numeric numerators', function () {
+    $tree = StringToTreeConverter::run('frac[x + 3, 2]');
+    $result = TreeToStringConverter::run($tree, $mathjax = false);
+    expect($result)->toBe('(x+3)/2');
+});
+
+it('can parse non-numeric denominators', function () {
+    $tree = StringToTreeConverter::run('frac[5, y - 3]');
+    $result = TreeToStringConverter::run($tree, $mathjax = false);
+    expect($result)->toBe('5/(y-3)');
 });

@@ -48,6 +48,10 @@ class TreeToStringConverter
                 return "\\frac{{$numerator}}{{$denominator}}";
             }
 
+            if (!$mathjax && $node->value() === 'frac') {
+                return self::convertFractions($node);
+            }
+
             if ($mathjax && $node->value() === 'deriv') {
                 $inside = self::run($node->child(0), $mathjax);
                 $respect = $node->child(1)?->value() ?? 'x';
@@ -91,5 +95,28 @@ class TreeToStringConverter
             ->rtrim($node->value()) // Remove the last parent node value (3+4+ -> 3+4)
             ->replace('+-', '-')
             ->when($node->value() == '(', fn ($string) => "({$string})"); // Add brackets if necessary
+    }
+
+    /**
+     * Convert a fraction-tree to a string.
+     */
+    public static function convertFractions(Node $fraction): string
+    {
+        // Wrap numerator in brackets
+        if ($fraction->child(0)->children()->count() === 0) {
+            $numerator = self::run($fraction->child(0));
+        } else {
+            $numerator = '(' . self::run($fraction->child(0)) . ')';
+        }
+
+        // Wrap denominator in brackets
+        if ($fraction->child(1)->children()->count() === 0) {
+            $denominator = self::run($fraction->child(1));
+        } else {
+            $denominator = '(' . self::run($fraction->child(1)) . ')';
+        }
+
+        // Return fraction syntax
+        return $numerator . '/' . $denominator;
     }
 }
