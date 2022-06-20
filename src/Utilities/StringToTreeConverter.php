@@ -2,6 +2,7 @@
 
 namespace MathSolver\Utilities;
 
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
 class StringToTreeConverter
@@ -29,7 +30,21 @@ class StringToTreeConverter
      */
     public static function run(string $expression): Node
     {
-        $terms = Str::of($expression) // Get a stringable object
+        $terms = self::getTerms($expression);
+
+        $tree = self::buildTree($terms);
+
+        $tree = self::cleanFunctionBrackets($tree);
+
+        return self::convertRootSymbols($tree);
+    }
+
+    /**
+     * Find all terms/symbols of the math expression.
+     */
+    public static function getTerms(string $expression): Collection
+    {
+        return Str::of($expression) // Get a stringable object
             ->replace(' ', '') // Remove spaces
             ->replaceMatches('/([a-z0-9π)])-/', '$1+-') // Replace - with +-
             ->replaceMatches('/-([^0-9])/', '-1$1') // Replace - with -1
@@ -64,7 +79,13 @@ class StringToTreeConverter
                 return collect($terms)->filter(fn ($term) => !empty($term) || $term == '0')->flatMap(fn ($term) => [$term, '*'])->slice(0, -1)->toArray();
             })
             ->filter(fn ($term) => !empty($term) || $term == '0'); // Filter out empty values
+    }
 
+    /**
+     * Build a math tree from a collection of terms.
+     */
+    public static function buildTree(Collection $terms): Node
+    {
         // Instantiate the first node
         $node = new Node($terms->first());
         $terms->shift();
@@ -126,9 +147,7 @@ class StringToTreeConverter
         }
 
         // Return the root node
-        $node = $node->root();
-        $node = self::cleanFunctionBrackets($node);
-        return self::convertRootSymbols($node);
+        return $node->root();
     }
 
     /**
