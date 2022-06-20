@@ -37,6 +37,7 @@ class Runner
         Fractions\AddFractions::class,
         Fractions\ConvertDecimalsIntoFractions::class,
         Fractions\MultiplyFractions::class,
+        Fractions\ParseFractions::class,
         Fractions\RemoveNestedFractionsInDenominator::class,
         Fractions\RemoveNestedFractionsInNumerator::class,
         Fractions\SimplifyFractions::class,
