@@ -491,3 +491,18 @@ it('can parse functions with an expression afterwards', function () {
     $result = StringToTreeConverter::run('sin[45]x');
     expect($result)->toEqual($times);
 });
+
+it('can parse double minus', function () {
+    $root = new Node(75);
+    $result = StringToTreeConverter::run('--75');
+    expect($result)->toEqual($root);
+});
+
+it('can parse double minus in expressions', function () {
+    $plus = new Node('+');
+    $plus->appendChild(new Node(10));
+    $plus->appendChild(new Node(30));
+
+    $result = StringToTreeConverter::run('10 - -30');
+    expect($result)->toEqual($plus);
+});
