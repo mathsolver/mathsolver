@@ -80,14 +80,11 @@ class StringToTreeConverter
             }
 
             if ($term === ')' || $term === ']') {
-                $node = $node->parent();
-
                 while ($node->value() !== '(' && $node->value() !== '[') {
                     $node = $node->parent();
                 }
 
                 $bracketsAreClosed = true;
-
                 continue;
             }
 
