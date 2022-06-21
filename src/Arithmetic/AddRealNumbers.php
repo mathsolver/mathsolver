@@ -13,7 +13,7 @@ class AddRealNumbers extends Step
     public function handle(Node $node): Node
     {
         // Find all numbers and add them up
-        $total = (int) $node->numericChildren()
+        $total = (float) $node->numericChildren()
             ->each(fn ($child) => $node->removeChild($child))
             ->reduce(fn ($total, $number) => $number->value() + $total, 0);
 

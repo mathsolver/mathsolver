@@ -44,3 +44,9 @@ it('does not run when it cannot do anything', function () {
     $result = AddRealNumbers::run($tree);
     expect($result)->toEqual(StringToTreeConverter::run('5 + x'));
 });
+
+it('adds demical numbers', function() {
+    $tree = StringToTreeConverter::run('5.5 + 0.3');
+    $result = AddRealNumbers::run($tree);
+    expect($result)->toEqual(StringToTreeConverter::run('5.8'));
+});
