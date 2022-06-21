@@ -169,13 +169,13 @@ it('can simplify roots', function (string $input, string $expected) {
     $expected = StringToTreeConverter::run($expected);
     expect($result)->toEqual($expected);
 })->with([
-    ['sqrt(18)', '3sqrt(2)'],
-    ['sqrt(20)', '2sqrt(5)'],
-    ['2 * sqrt(8)', '4sqrt(2)'],
-    ['3sqrt(9)', '9'],
-    ['cbrt(512)', '8'],
+    ['sqrt[18]', '3sqrt[2]'],
+    ['sqrt[20]', '2sqrt[5]'],
+    ['2 * sqrt[8]', '4sqrt[2]'],
+    ['3sqrt[9]', '9'],
+    ['cbrt[512]', '8'],
     ['2 * root[2 * 8, 2]', '8'],
-    ['x^0.5', 'sqrt(x)'],
+    ['x^0.5', 'sqrt[x]'],
 ]);
 
 it('can calculate with fractions', function (string $input, string $expected) {
@@ -294,26 +294,26 @@ it('records steps', function () {
     expect($result)->toEqual([
         'result' => StringToTreeConverter::run('47ab'),
         'steps' => [
-            ['type' => 'simplify', 'name' => 'Multiply real numbers', 'result' => '42ab+5ab'],
-            ['type' => 'simplify', 'name' => 'Add like terms', 'result' => '47ab'],
+            ['name' => 'Multiply real numbers', 'result' => '42ab+5ab'],
+            ['name' => 'Add like terms', 'result' => '47ab'],
         ],
     ]);
 });
 
 it('can record steps with mathjax', function () {
-    $tree = StringToTreeConverter::run('sqrt(8)');
+    $tree = StringToTreeConverter::run('sqrt[8]');
 
     // Without mathjax
     $result = Runner::run($tree, $mathjax = false);
     expect($result)->toEqual([
-        'result' => StringToTreeConverter::run('2sqrt(2)'),
-        'steps' => [['type' => 'simplify', 'name' => 'Simplify roots', 'result' => '2root[2,2]']],
+        'result' => StringToTreeConverter::run('2sqrt[2]'),
+        'steps' => [['name' => 'Simplify roots', 'result' => '2root[2,2]']],
     ]);
 
     // With mathjax
     $result = Runner::run($tree, $mathjax = true);
     expect($result)->toEqual([
-        'result' => StringToTreeConverter::run('2sqrt(2)'),
-        'steps' => [['type' => 'simplify', 'name' => 'Simplify roots', 'result' => '2\sqrt{2}']],
+        'result' => StringToTreeConverter::run('2sqrt[2]'),
+        'steps' => [['name' => 'Simplify roots', 'result' => '2\sqrt{2}']],
     ]);
 });

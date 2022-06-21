@@ -93,7 +93,7 @@ These are all available options in short:
 ```php
 use MathSolver\Math;
 
-Math::from('sqrt(18)')->config(['mathjax' => true])->simplify()->string(); // 3\sqrt{2}
+Math::from('sqrt[18]')->config(['mathjax' => true])->simplify()->string(); // 3\sqrt{2}
 ```
 
 ### Steps

@@ -18,12 +18,12 @@ it('converts automatically to a string', function () {
 });
 
 it('has mathjax disabled by default', function () {
-    $result = Math::from('sqrt(18)')->simplify()->string();
+    $result = Math::from('sqrt[18]')->simplify()->string();
     expect($result)->toBe('3root[2,2]');
 });
 
 it('can use mathjax', function () {
-    $result = Math::from('sqrt(20)')->config(['mathjax' => true])->simplify()->string();
+    $result = Math::from('sqrt[20]')->config(['mathjax' => true])->simplify()->string();
     expect($result)->toBe('2\sqrt{5}');
 });
 
@@ -60,14 +60,14 @@ it('can record steps with simplifications', function () {
 
 it('can record steps with mathjax', function () {
     // Without mathjax
-    $result = Math::from('sqrt(8)')->config(['steps' => true, 'mathjax' => false])->simplify()->string();
+    $result = Math::from('sqrt[8]')->config(['steps' => true, 'mathjax' => false])->simplify()->string();
     expect($result)->toBe([
         'result' => '2root[2,2]',
         'steps' => [['type' => 'simplify', 'name' => 'Simplify roots', 'result' => '2root[2,2]']],
     ]);
 
     // With mathjax
-    $result = Math::from('sqrt(8)')->config(['steps' => true, 'mathjax' => true])->simplify()->string();
+    $result = Math::from('sqrt[8]')->config(['steps' => true, 'mathjax' => true])->simplify()->string();
     expect($result)->toBe([
         'result' => '2\sqrt{2}',
         'steps' => [['type' => 'simplify', 'name' => 'Simplify roots', 'result' => '2\sqrt{2}']],

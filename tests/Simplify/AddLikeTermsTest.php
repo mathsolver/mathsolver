@@ -75,7 +75,7 @@ it('combines with powers without coefficients', function () {
     expect($result)->toEqual(StringToTreeConverter::run('2 * y^3'));
 });
 
-it('does not run when there are multiple numbers in a product', function () {
+it('does not run when there are multiple numbers in a factor', function () {
     $tree = StringToTreeConverter::run('3p + 3*5');
     $result = AddLikeTerms::run($tree);
     expect($result)->toEqual(StringToTreeConverter::run('3p + 3*5'));
@@ -91,10 +91,4 @@ it('works by subtracting fractions', function () {
     $tree = StringToTreeConverter::run('frac[1, 2]y + frac[-1, 4]y');
     $result = AddLikeTerms::run($tree);
     expect($result)->toEqual(StringToTreeConverter::run('frac[1, 4]y'));
-});
-
-it('does not run if there are multiple numbers', function () {
-    $tree = StringToTreeConverter::run('frac[1, 2]y - frac[1, 4]y');
-    $result = AddLikeTerms::run($tree);
-    expect($result)->toEqual(StringToTreeConverter::run('frac[1, 2]y - frac[1, 4]y'));
 });

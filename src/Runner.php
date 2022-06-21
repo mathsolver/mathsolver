@@ -58,16 +58,15 @@ class Runner
 
         $tree = self::sortTree($tree);
 
-        while (TreeToStringConverter::run($tree) !== $oldTree) {
-            $oldTree = TreeToStringConverter::run($tree);
+        while (serialize($tree) !== $oldTree) {
+            $oldTree = serialize($tree);
 
             foreach (self::$steps as $step) {
-                $previousTree = TreeToStringConverter::run($tree);
+                $previousTree = serialize($tree);
                 $tree = self::sortTree($step::run($tree));
 
-                if (TreeToStringConverter::run($tree) !== $previousTree) {
+                if (serialize($tree) !== $previousTree) {
                     $steps[] = [
-                        'type' => 'simplify',
                         'name' => (string) Str::of($step)->classBasename()->headline()->lower()->ucfirst(),
                         'result' => TreeToStringConverter::run($tree, $mathjax),
                     ];

@@ -170,7 +170,7 @@ class StringToTreeConverter
     }
 
     /**
-     * Remove the brackets inside functions such as sin(90), tan(45) and sqrt(9).
+     * Remove the brackets inside functions such as sin(90), tan(45) and sqrt[9].
      */
     protected static function cleanFunctionBrackets(Node $node): Node
     {
@@ -192,7 +192,7 @@ class StringToTreeConverter
     }
 
     /**
-     * Convert sqrt(x) and cbrt(x) to root[x, 2] and root[x, 3].
+     * Convert sqrt[x] and cbrt[x] to root[x, 2] and root[x, 3].
      */
     protected static function convertRootSymbols(Node $node): Node
     {

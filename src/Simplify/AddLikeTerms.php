@@ -48,8 +48,17 @@ class AddLikeTerms extends Step
             return false;
         }
 
-        $childrenWithChildrenWithMultipleNumberProducts = $node->children()->filter(fn ($child) => $child->numericChildren(false)->count() < 2);
-        return $childrenWithChildrenWithMultipleNumberProducts->count() === $node->children()->count();
+        $termsWithOneNumericFactor = $node
+            ->children()
+            ->filter(
+                fn (Node $term) => $term->value() !== '*' || $term
+                    ->children()
+                    ->filter(fn (Node $factor) => $factor->isNumeric())
+                    ->count() < 2
+            )
+            ->count();
+
+        return $termsWithOneNumericFactor == $node->children()->count();
     }
 
     /**
