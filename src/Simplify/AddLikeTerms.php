@@ -74,7 +74,7 @@ class AddLikeTerms extends Step
                     $fraction = $times->numericChildren(false)->first();
                     $coefficient = new Fraction($fraction->child(0)->value(), $fraction->child(1)->value());
                 } else {
-                    $coefficient = new Fraction($times->numericChildren(false)->first()?->value() ?? 1);
+                    $coefficient = Fraction::fromFloat($times->numericChildren(false)->first()?->value() ?? 1);
                 }
 
                 $terms = $times->nonNumericChildren(false)->map(fn (Node $child) => $child->toString()); /** @var Collection<string> $terms */

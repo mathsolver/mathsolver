@@ -92,3 +92,9 @@ it('works by subtracting fractions', function () {
     $result = AddLikeTerms::run($tree);
     expect($result)->toEqual(StringToTreeConverter::run('frac[1, 4]y'));
 });
+
+it('works with decimal numbers', function () {
+    $tree = StringToTreeConverter::run('0.5x + 1.2x');
+    $result = AddLikeTerms::run($tree);
+    expect($result)->toEqual(StringToTreeConverter::run('frac[17, 10]x'));
+});

@@ -155,4 +155,17 @@ class Fraction
     {
         return new self($this->numerator % $this->denominator, $this->denominator);
     }
+
+    /**
+     * Parse a float and convert it to a fraction.
+     */
+    public static function fromFloat(float $value): self
+    {
+        $amountOfDecimals = strlen((string) str($value)->explode('.')->last());
+
+        $numerator = pow(10, $amountOfDecimals) * $value;
+        $denominator = pow(10, $amountOfDecimals);
+
+        return (new self($numerator, $denominator))->simplify();
+    }
 }

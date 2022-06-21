@@ -175,7 +175,7 @@ it('can simplify roots', function (string $input, string $expected) {
     ['3sqrt[9]', '9'],
     ['cbrt[512]', '8'],
     ['2 * root[2 * 8, 2]', '8'],
-    ['x^0.5', 'sqrt[x]'],
+    ['x^(1/2)', 'sqrt[x]'],
 ]);
 
 it('can calculate with fractions', function (string $input, string $expected) {
@@ -196,8 +196,6 @@ it('can calculate with fractions', function (string $input, string $expected) {
     ['1 - frac[2, 5]', 'frac[3, 5]'],
     ['4^-2', 'frac[1, 16]'],
     ['3^-1', 'frac[1, 3]'],
-    ['0.5', 'frac[1, 2]'],
-    ['0.375', 'frac[3, 8]'],
     ['frac[frac[2, 3], 5]', 'frac[2, 15]'],
     ['frac[7, frac[2, 8]]', '28'],
     ['frac[5, frac[2, 3]]', 'frac[15, 2]'],

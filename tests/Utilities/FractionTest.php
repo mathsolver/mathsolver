@@ -119,3 +119,8 @@ it('can get the fraction part', function (int $numerator, int $denominator, int 
     [100, 25, 0],
     [4, 9, 4],
 ]);
+
+it('can parse a float', function () {
+    $fraction = Fraction::fromFloat(0.5);
+    expect($fraction)->toEqual(new Fraction(1, 2));
+});

@@ -34,7 +34,6 @@ class Runner
         Exponents\MultiplyLikeFactorsAndConvertBrokenExponentsIntoRoots::class,
         Exponents\SimplifyRoots::class,
         Fractions\AddFractions::class,
-        Fractions\ConvertDecimalsIntoFractions::class,
         Fractions\MultiplyFractions::class,
         Fractions\ParseFractions::class,
         Fractions\RemoveNestedFractionsInDenominator::class,

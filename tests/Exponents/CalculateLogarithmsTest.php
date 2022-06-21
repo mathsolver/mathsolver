@@ -18,7 +18,7 @@ it('wont calculate if there isnt an aboslute value', function () {
 it('can calculate logarithmes of decimals', function () {
     $tree = StringToTreeConverter::run('log[3, 9]');
     $result = CalculateLogarithms::run($tree);
-    expect($result)->toEqual(StringToTreeConverter::run('0.5'));
+    expect($result)->toEqual(StringToTreeConverter::run('frac[1, 2]'));
 });
 
 test('the base defaults to 10', function () {

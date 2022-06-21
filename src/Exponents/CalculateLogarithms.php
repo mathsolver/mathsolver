@@ -2,6 +2,7 @@
 
 namespace MathSolver\Exponents;
 
+use MathSolver\Utilities\Fraction;
 use MathSolver\Utilities\Node;
 use MathSolver\Utilities\Step;
 
@@ -24,7 +25,7 @@ class CalculateLogarithms extends Step
 
         // Check if it is an exact value
         if (round($result, 4) === $result) {
-            return new Node($result);
+            return Fraction::fromFloat($result)->node();
         }
 
         return $node;
