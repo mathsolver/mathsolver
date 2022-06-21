@@ -4,13 +4,12 @@ use MathSolver\Fractions\ParseFractions;
 use MathSolver\Runner;
 use MathSolver\Utilities\StringToTreeConverter;
 
-it('can do arithmetic', function (string $input, string $expected) {
+it('can add and subtract', function (string $input, string $expected) {
     $tree = StringToTreeConverter::run($input);
     $result = Runner::run($tree)['result'];
     $expected = ParseFractions::run(StringToTreeConverter::run($expected));
     expect($result)->toEqual($expected);
 })->with([
-    // Add and Subtract
     ['53 + 8', '61'],
     ['173 + 6', '179'],
     ['800 + 30', '830'],
@@ -104,8 +103,14 @@ it('can do arithmetic', function (string $input, string $expected) {
     ['-11 - (14 + -9)', '-16'],
     ['-75 + -18 + -23', '-116'],
     ['101 - (39 + -12)', '74'],
+]);
 
-    // Multiply and Divide
+it('multiply and divide', function (string $input, string $expected) {
+    $tree = StringToTreeConverter::run($input);
+    $result = Runner::run($tree)['result'];
+    $expected = ParseFractions::run(StringToTreeConverter::run($expected));
+    expect($result)->toEqual($expected);
+})->with([
     ['7 * 4', '28'],
     ['3 * 8', '24'],
     ['5 * 3', '15'],
@@ -182,8 +187,6 @@ it('can do arithmetic', function (string $input, string $expected) {
     ['(-12 * -5) - (-20 / 2)', '70'],
     ['8 / (2 * -4) - 12 / 2', '-7'],
     ['8 - ((10 - 10) / 4 + 5 * -2)', '18'],
-
-    // Order of Operations
     ['9 + 6 * 5', '39'],
     ['(9 + 3) * 7 - 80', '4'],
     ['20 - 2 * 8 - 4', '0'],
@@ -212,8 +215,14 @@ it('can do arithmetic', function (string $input, string $expected) {
     ['-3 - (3 - 3) * 3 - 3', '-6'],
     ['-3 * -3 * -3 - 3', '-30'],
     ['-3 * -3 - 3 * -3 - 3 * -3', '27'],
+]);
 
-    // Fractions
+it('can calculate with fractions', function (string $input, string $expected) {
+    $tree = StringToTreeConverter::run($input);
+    $result = Runner::run($tree)['result'];
+    $expected = ParseFractions::run(StringToTreeConverter::run($expected));
+    expect($result)->toEqual($expected);
+})->with([
     ['15/25', '3/5'],
     ['15/27', '5/9'],
     ['18/36', '1/2'],
