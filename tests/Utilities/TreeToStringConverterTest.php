@@ -405,3 +405,15 @@ it('can parse non-numeric denominators', function () {
     $result = TreeToStringConverter::run($tree, $mathjax = false);
     expect($result)->toBe('5/(y-3)');
 });
+
+it('adds larger brackets in mathjax around fractions', function () {
+    $tree = StringToTreeConverter::run('sin[frac[x, y]]');
+    $result = TreeToStringConverter::run($tree, $mathjax = true);
+    expect($result)->toBe('\text{sin}\left[\frac{x}{y}\right]');
+});
+
+it('adds larger brackets around the deriv function', function () {
+    $tree = StringToTreeConverter::run('deriv[frac[x, y]]');
+    $result = TreeToStringConverter::run($tree, $mathjax = true);
+    expect($result)->toBe('\frac{d}{dx}\left[\frac{x}{y}\right]');
+});

@@ -55,7 +55,8 @@ class TreeToStringConverter
             if ($mathjax && $node->value() === 'deriv') {
                 $inside = self::run($node->child(0), $mathjax);
                 $respect = $node->child(1)?->value() ?? 'x';
-                return '\frac{d}{d' . $respect . '}' . "[{$inside}]";
+                $isFraction = $node->contains('frac');
+                return '\frac{d}{d' . $respect . '}' . ($isFraction ? '\left[' : '[') . $inside . ($isFraction ? '\right]' : ']');
             }
 
             if ($mathjax && $node->value() === 'log') {
@@ -65,7 +66,8 @@ class TreeToStringConverter
             }
 
             $children = $node->children()->map(fn ($child) => self::run($child, $mathjax))->implode(',');
-            return ($mathjax ? '\text{' . $node->value() . '}' : $node->value()) . "[{$children}]";
+            $isFraction = $node->contains('frac');
+            return ($mathjax ? '\text{' . $node->value() . '}' : $node->value()) . ($isFraction ? '\left[' : '[') . $children . ($isFraction ? '\right]' : ']');
         }
 
         if ($mathjax && $node->value() === '^') {
