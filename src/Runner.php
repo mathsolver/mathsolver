@@ -40,6 +40,7 @@ class Runner
         Fractions\RemoveNestedFractionsInNumerator::class,
         Fractions\SimplifyFractions::class,
         Functions\GenerateRandomNumber::class,
+        Functions\RoundNumbers::class,
         Simplify\AddLikeTerms::class,
         Simplify\ExpandBrackets::class,
         Simplify\ExpandBracketsWithPlus::class,

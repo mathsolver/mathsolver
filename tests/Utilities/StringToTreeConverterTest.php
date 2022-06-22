@@ -304,6 +304,7 @@ it('can parse this list of functions', function (string $functionName) {
     $result = StringToTreeConverter::run("{$functionName}[2, 5]");
     expect($result)->toEqual($function);
 })->with([
+    'calc',
     'cos',
     'deriv',
     'frac',

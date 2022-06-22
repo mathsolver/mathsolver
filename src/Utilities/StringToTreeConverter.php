@@ -13,6 +13,7 @@ class StringToTreeConverter
      * @var array<string>
      */
     public static array $functions = [
+        'calc',
         'cbrt',
         'cos',
         'deriv',

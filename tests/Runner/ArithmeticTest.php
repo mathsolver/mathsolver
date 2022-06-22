@@ -418,3 +418,15 @@ it('can calculate with decimal numbers', function (string $input, string $expect
     ['3.14 * 12.78', '40.1292'],
     ['1.98 * 0.87', '1.7226'],
 ]);
+
+it('can do calculations and round numbers', function (string $input, string $expected) {
+    $tree = StringToTreeConverter::run($input);
+    $result = Runner::run($tree)['result'];
+    $expected = ParseFractions::run(StringToTreeConverter::run($expected));
+    expect($result)->toEqual($expected);
+})->with([
+    ['calc[8.86, 1]', '8.9'],
+    ['calc[12.314, 2]', '12.31'],
+    ['calc[7.653685, 3]', '7.654'],
+    ['calc[123.498, 0]', '123'],
+]);
