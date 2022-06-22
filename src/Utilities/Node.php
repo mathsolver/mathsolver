@@ -219,6 +219,9 @@ class Node
         return $this->children()[$index];
     }
 
+    /**
+     * Check whether the node's children contain a certain value.
+     */
     public function contains(string $value): bool
     {
         // Check if its own value is the searched one
