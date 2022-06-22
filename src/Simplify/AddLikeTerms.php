@@ -74,15 +74,6 @@ class AddLikeTerms extends Step
                         && (float) $node->child(1)->value() === floor($node->child(1)->value());
                 }
 
-                if ($node->value() === '*') {
-                    $fraction = $node->numericChildren()->first();
-
-                    if ($fraction?->value() === 'frac' && $fraction->isNumeric()) {
-                        return (float) $fraction->child(0)->value() === floor($fraction->child(0)->value())
-                            && (float) $fraction->child(1)->value() === floor($fraction->child(1)->value());
-                    }
-                }
-
                 return true;
             })
             ->map(fn ($child) => $this->wrapInMultiplication($child))
