@@ -412,8 +412,32 @@ it('adds larger brackets in mathjax around fractions', function () {
     expect($result)->toBe('\text{sin}\left[\frac{x}{y}\right]');
 });
 
+it('does not add larger brackets if there is no mathjax', function () {
+    $tree = StringToTreeConverter::run('sin[frac[x, y]]');
+    $result = TreeToStringConverter::run($tree, $mathjax = false);
+    expect($result)->toBe('sin[x/y]');
+});
+
 it('adds larger brackets around the deriv function', function () {
     $tree = StringToTreeConverter::run('deriv[frac[x, y]]');
     $result = TreeToStringConverter::run($tree, $mathjax = true);
     expect($result)->toBe('\frac{d}{dx}\left[\frac{x}{y}\right]');
+});
+
+it('does not add larger brackets around the deriv function if there is no mathjax', function () {
+    $tree = StringToTreeConverter::run('deriv[frac[x, y]]');
+    $result = TreeToStringConverter::run($tree, $mathjax = false);
+    expect($result)->toBe('deriv[x/y]');
+});
+
+it('adds larger brackets around fractions', function () {
+    $tree = StringToTreeConverter::run('(frac[2, 3])');
+    $result = TreeToStringConverter::run($tree, $mathjax = true);
+    expect($result)->toBe('\left(\frac{2}{3}\right)');
+});
+
+it('does not add larger brackets around fractions if there is no mathjax', function () {
+    $tree = StringToTreeConverter::run('(frac[2, 3])');
+    $result = TreeToStringConverter::run($tree, $mathjax = false);
+    expect($result)->toBe('(2/3)');
 });

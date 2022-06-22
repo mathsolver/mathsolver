@@ -66,7 +66,7 @@ class TreeToStringConverter
             }
 
             $children = $node->children()->map(fn ($child) => self::run($child, $mathjax))->implode(',');
-            $isFraction = $node->contains('frac');
+            $isFraction = $node->contains('frac') && $mathjax;
             return ($mathjax ? '\text{' . $node->value() . '}' : $node->value()) . ($isFraction ? '\left[' : '[') . $children . ($isFraction ? '\right]' : ']');
         }
 
@@ -96,7 +96,9 @@ class TreeToStringConverter
             ->pipe(fn ($children) => Str::of(implode('', $children->toArray()))) // Convert to a string
             ->rtrim($node->value()) // Remove the last parent node value (3+4+ -> 3+4)
             ->replace('+-', '-')
-            ->when($node->value() == '(', fn ($string) => "({$string})"); // Add brackets if necessary
+            ->when($node->value() == '(', function (string $string) use ($node, $mathjax) {  // Add brackets if necessary
+                return $node->contains('frac') && $mathjax ? '\left('.$string.'\right)' : "({$string})";
+            });
     }
 
     /**
