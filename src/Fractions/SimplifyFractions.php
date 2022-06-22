@@ -26,6 +26,8 @@ class SimplifyFractions extends Step
     {
         return $node->value() === 'frac'
             && is_numeric($node->child(0)->value())
-            && is_numeric($node->child(1)->value());
+            && (float) $node->child(0)->value() === floor($node->child(0)->value())
+            && is_numeric($node->child(1)->value())
+            && (float) $node->child(1)->value() === floor($node->child(1)->value());
     }
 }

@@ -263,3 +263,17 @@ it('resets the indexes of its children', function () {
     expect(array_key_exists(0, $root->children()->toArray()))->toBeTrue();
     expect($root->child(0))->toBe($variable);
 });
+
+it('knows if it is a child of a value', function () {
+    $root = new Node('*');
+    $node = $root->appendChild(new Node('+'));
+    $child = $node->appendChild(new Node(3));
+
+    expect($node->isChildOf('*'))->toBeTrue();
+    expect($node->isChildOf('+'))->toBeFalse();
+    expect($node->isChildOf('3'))->toBeFalse();
+
+    expect($child->isChildOf('*'))->toBeTrue();
+    expect($child->isChildOf('+'))->toBeTrue();
+    expect($child->isChildOf('3'))->toBeFalse();
+});

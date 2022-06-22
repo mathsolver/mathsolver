@@ -17,6 +17,7 @@ class Runner
      */
     protected static array $steps = [
         Arithmetic\AddRealNumbers::class,
+        Arithmetic\DivideRealNumbers::class,
         Arithmetic\MultiplyByZero::class,
         Arithmetic\MultiplyRealNumbers::class,
         Derivative\CoefficientRule::class,

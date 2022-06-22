@@ -232,4 +232,20 @@ class Node
         // Run this function recursively through all children
         return $this->children()->map(fn ($child) => $child->contains($value))->contains(true);
     }
+
+    /**
+     * Check whether a node is a (nested) child of some other node.
+     */
+    public function isChildOf(string $value): bool
+    {
+        if (is_null($this->parent())) {
+            return false;
+        }
+
+        if ($this->parent()->value() === $value) {
+            return true;
+        }
+
+        return $this->parent()->isChildOf($value);
+    }
 }

@@ -67,6 +67,24 @@ class AddLikeTerms extends Step
     protected function calculateTotals(): void
     {
         $this->node->children()
+            // Fractions can only contain integers
+            ->filter(function (Node $node) {
+                if ($node->value() === 'frac' && $node->isNumeric()) {
+                    return (float) $node->child(0)->value() === floor($node->child(0)->value())
+                        && (float) $node->child(1)->value() === floor($node->child(1)->value());
+                }
+
+                if ($node->value() === '*') {
+                    $fraction = $node->numericChildren()->first();
+
+                    if ($fraction?->value() === 'frac' && $fraction->isNumeric()) {
+                        return (float) $fraction->child(0)->value() === floor($fraction->child(0)->value())
+                            && (float) $fraction->child(1)->value() === floor($fraction->child(1)->value());
+                    }
+                }
+
+                return true;
+            })
             ->map(fn ($child) => $this->wrapInMultiplication($child))
             ->filter(fn ($child) => $child->value() === '*')
             ->each(function (Node $times) {

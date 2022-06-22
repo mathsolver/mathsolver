@@ -18,7 +18,18 @@ class AddFractions extends Step
 
         // Find all fractions and convert them to an array
         // of [numerator, denominator]
-        $fractions = $node->children()->filter(fn (Node $child) => $child->isNumeric());
+        $fractions = $node->children()->filter(function (Node $child) {
+            if (!$child->isNumeric()) {
+                return false;
+            }
+
+            if ($child->value() === 'frac') {
+                return (float) $child->child(0)->value() === floor($child->child(0)->value())
+                    && (float) $child->child(1)->value() === floor($child->child(1)->value());
+            }
+
+            return (float) $child->value() === floor($child->value());
+        });
 
         // Don't do anything if there are no fractions
         if ($fractions->count() < 2) {

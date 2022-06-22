@@ -60,3 +60,9 @@ it('simplifies fractions in an already existing multiplication', function () {
     $result = SimplifyFractions::run($tree);
     expect($result)->toEqual(StringToTreeConverter::run('5 * 3'));
 });
+
+it('does not run with floats', function () {
+    $tree = StringToTreeConverter::run('frac[2, 0.5]');
+    $result = SimplifyFractions::run($tree);
+    expect($result)->toEqual(StringToTreeConverter::run('frac[2, 0.5]'));
+});

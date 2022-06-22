@@ -38,3 +38,15 @@ it('does not reorder', function () {
     $result = AddFractions::run($tree);
     expect($result)->toEqual(StringToTreeConverter::run('frac[1, 3] + x'));
 });
+
+it('does not run with floats in fractions', function () {
+    $tree = StringToTreeConverter::run('frac[1, 3.5] + 2');
+    $result = AddFractions::run($tree);
+    expect($result)->toEqual(StringToTreeConverter::run('frac[1, 3.5] + 2'));
+});
+
+it('does not run with floats', function () {
+    $tree = StringToTreeConverter::run('frac[1, 2] + 0.5');
+    $result = AddFractions::run($tree);
+    expect($result)->toEqual(StringToTreeConverter::run('frac[1, 2] + 0.5'));
+});
