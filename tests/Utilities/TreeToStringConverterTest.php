@@ -279,7 +279,7 @@ it('converts to a differentiate function', function () {
     $power->appendChild(new Node(5));
 
     $result = TreeToStringConverter::run($deriv, $mathjax = true);
-    expect($result)->toBe('\frac{d}{dx}[x^{5}]');
+    expect($result)->toBe('\tfrac{d}{dx}[x^{5}]');
 });
 
 it('converts to a differentiate function with respect to a variable', function () {
@@ -290,7 +290,7 @@ it('converts to a differentiate function with respect to a variable', function (
     $deriv->appendChild(new Node('y'));
 
     $result = TreeToStringConverter::run($deriv, $mathjax = true);
-    expect($result)->toBe('\frac{d}{dy}[y^{2}]');
+    expect($result)->toBe('\tfrac{d}{dy}[y^{2}]');
 });
 
 it('removes brackets around exponents', function () {
@@ -421,7 +421,7 @@ it('does not add larger brackets if there is no mathjax', function () {
 it('adds larger brackets around the deriv function', function () {
     $tree = StringToTreeConverter::run('deriv[frac[x, y]]');
     $result = TreeToStringConverter::run($tree, $mathjax = true);
-    expect($result)->toBe('\frac{d}{dx}\left[\frac{x}{y}\right]');
+    expect($result)->toBe('\tfrac{d}{dx}\left[\frac{x}{y}\right]');
 });
 
 it('does not add larger brackets around the deriv function if there is no mathjax', function () {

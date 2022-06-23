@@ -56,7 +56,7 @@ class TreeToStringConverter
                 $inside = self::run($node->child(0), $mathjax);
                 $respect = $node->child(1)?->value() ?? 'x';
                 $isFraction = $node->contains('frac');
-                return '\frac{d}{d' . $respect . '}' . ($isFraction ? '\left[' : '[') . $inside . ($isFraction ? '\right]' : ']');
+                return '\tfrac{d}{d' . $respect . '}' . ($isFraction ? '\left[' : '[') . $inside . ($isFraction ? '\right]' : ']');
             }
 
             if ($mathjax && $node->value() === 'log') {
