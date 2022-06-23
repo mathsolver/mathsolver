@@ -441,3 +441,9 @@ it('does not add larger brackets around fractions if there is no mathjax', funct
     $result = TreeToStringConverter::run($tree, $mathjax = false);
     expect($result)->toBe('(2/3)');
 });
+
+it('removes negative one times a bracket', function () {
+    $tree = StringToTreeConverter::run('-1(x)');
+    $result = TreeToStringConverter::run($tree, $mathjax = false);
+    expect($result)->toBe('-(x)');
+});

@@ -28,7 +28,7 @@ class TreeToStringConverter
                 ->replace(')*(', ')(') // Remove * symbol between ) and (
                 ->replaceMatches('/(?<=[a-z])\*(?=[a-z])/', '') // Remove * symbol with two letters
                 ->replaceMatches('/([0-9])\*([a-z])/', '$1$2') // Remove * symbol with a number and a letter
-                ->replaceMatches('/-1(\x5c)/', '-$1') // Replace "-1" by "-" (for example: "-1\sqrt{5}" -> "-\sqrt{5}")
+                ->replaceMatches('/-1(\x5c|\()/', '-$1') // Replace "-1" by "-" (for example: "-1\sqrt{5}" -> "-\sqrt{5}")
                 ->replaceMatches('/-1([a-z])/', '-$1'); // Replace "-1" by "-" (for example: "-1x" -> "-x")
         }
 
