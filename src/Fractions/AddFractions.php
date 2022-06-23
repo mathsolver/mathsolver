@@ -7,6 +7,8 @@ use MathSolver\Utilities\Step;
 
 class AddFractions extends Step
 {
+    use FindValues;
+
     /**
      * Add fractions (with different denominators) together,
      * using the following formula.
@@ -73,25 +75,5 @@ class AddFractions extends Step
             ->each(fn (Node $factor) => $denominator->appendChild((clone $factor)->wrapInBrackets('*'))); // Multiply them together
 
         return $denominator;
-    }
-
-    /**
-     * Return the numerator if it is a fraction and else just the node.
-     */
-    protected function findNumerator(Node $fraction): Node
-    {
-        return $fraction->value() === 'frac'
-            ? $fraction->child(0)
-            : $fraction;
-    }
-
-    /**
-     * Return the denominator if it is a fraction and else just 1.
-     */
-    protected function findDenominator(Node $fraction): Node
-    {
-        return $fraction->value() === 'frac'
-            ? $fraction->child(1)
-            : new Node(1);
     }
 }
