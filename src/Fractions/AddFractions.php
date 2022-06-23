@@ -8,7 +8,10 @@ use MathSolver\Utilities\Step;
 class AddFractions extends Step
 {
     /**
-     * Add fractions (with different denominators) together.
+     * Add fractions (with different denominators) together,
+     * using the following formula.
+     *
+     * a/b + c/d = (ad + bc) / (bd)
      */
     public function handle(Node $node): Node
     {
@@ -22,7 +25,8 @@ class AddFractions extends Step
     }
 
     /**
-     * Run this function when two fractions are added, or a fraction with a letter/number.
+     * Run this function when two or more fractions are added,
+     * or one fraction with a letter/number/expression.
      */
     public function shouldRun(Node $node): bool
     {
@@ -47,13 +51,11 @@ class AddFractions extends Step
         foreach ($node->children() as $child) {
             $times = $numerator->appendChild(new Node('*'));
 
-            $node->children() // Get all fractions
+            $node->children() // Get all terms
                 ->filter(fn (Node $fraction) => $fraction !== $child) // Filter out current one
                 ->map(fn (Node $fraction) => $this->findDenominator($fraction)) // Get the denominators
                 ->prepend($this->findNumerator($child)) // Append the current numerator
-                ->each(function (Node $factor) use ($times) {
-                    $times->appendChild($factor->clone()->wrapInBrackets('*'));
-                });
+                ->each(fn (Node $factor) => $times->appendChild($factor->clone()->wrapInBrackets('*'))); // Append each numerator/denominators-pair to the times
         }
 
         return $numerator;
@@ -66,11 +68,9 @@ class AddFractions extends Step
     {
         $denominator = new Node('*');
 
-        $node->children()
-            ->map(fn (Node $fraction) => $this->findDenominator($fraction))
-            ->each(function (Node $factor) use ($denominator) {
-                $denominator->appendChild((clone $factor)->wrapInBrackets('*'));
-            });
+        $node->children() // Get all children
+            ->map(fn (Node $fraction) => $this->findDenominator($fraction)) // Find their denominators
+            ->each(fn (Node $factor) => $denominator->appendChild((clone $factor)->wrapInBrackets('*'))); // Multiply them together
 
         return $denominator;
     }
