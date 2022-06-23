@@ -277,3 +277,18 @@ it('knows if it is a child of a value', function () {
     expect($child->isChildOf('+'))->toBeTrue();
     expect($child->isChildOf('3'))->toBeFalse();
 });
+
+it('can wrap a node in brackets', function () {
+    $brackets = new Node('(');
+    $brackets->appendChild(new Node('+'));
+    expect((new Node('+'))->wrapInBrackets('*'))->toEqual($brackets);
+
+    $times = new Node('*');
+    expect((new Node('*'))->wrapInBrackets('+'))->toEqual($times);
+});
+
+it('can clone a node', function () {
+    $node = new Node(8);
+    expect($node->clone())->toEqual($node);
+    expect($node->clone())->not()->toBe($node);
+});

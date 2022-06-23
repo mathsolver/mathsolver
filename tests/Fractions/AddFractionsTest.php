@@ -4,49 +4,31 @@ use MathSolver\Fractions\AddFractions;
 use MathSolver\Utilities\StringToTreeConverter;
 
 it('can add fractions', function () {
-    $tree = StringToTreeConverter::run('frac[1, 5] + frac[2, 5]');
+    $tree = StringToTreeConverter::run('frac[1, 4] + frac[2, 4]');
     $result = AddFractions::run($tree);
-    expect($result)->toEqual(StringToTreeConverter::run('frac[3, 5]'));
+    expect($result)->toEqual(StringToTreeConverter::run('frac[1 * 4 + 2 * 4, 4 * 4]'));
 });
 
-it('can add fractions with different numerators', function () {
-    $tree = StringToTreeConverter::run('frac[1, 3] + frac[1, 4]');
+it('can add fractions with letters', function () {
+    $tree = StringToTreeConverter::run('frac[a, b] + frac[c, d]');
     $result = AddFractions::run($tree);
-    expect($result)->toEqual(StringToTreeConverter::run('frac[7, 12]'));
+    expect($result)->toEqual(StringToTreeConverter::run('frac[ad + cb, bd]'));
 });
 
-it('does not add fractions with letters', function () {
-    $tree = StringToTreeConverter::run('frac[x, 2] + frac[2, 4]');
+it('can add fractions with expressions', function () {
+    $tree = StringToTreeConverter::run('frac[1 + x, 4] + frac[2, 4]');
     $result = AddFractions::run($tree);
-    expect($result)->toEqual(StringToTreeConverter::run('frac[x, 2] + frac[2, 4]'));
+    expect($result)->toEqual(StringToTreeConverter::run('frac[(1 + x) * 4 + 2 * 4, 4 * 4]'));
 });
 
-it('adds fractions and numbers', function () {
-    $tree = StringToTreeConverter::run('frac[1, 3] + 4');
+it('works with a denominator of one', function () {
+    $tree = StringToTreeConverter::run('2 + frac[1, 2]');
     $result = AddFractions::run($tree);
-    expect($result)->toEqual(StringToTreeConverter::run('frac[13, 3]'));
+    expect($result)->toEqual(StringToTreeConverter::run('frac[2*2 + 1*1, 1*2]'));
 });
 
-it('can add up more than two fractions', function () {
-    $tree = StringToTreeConverter::run('frac[1, 3] + frac[3, 4] + frac[2, 8]');
+it('works with multiple fractions', function () {
+    $tree = StringToTreeConverter::run('frac[a, b] + frac[c, d] + frac[e, f]');
     $result = AddFractions::run($tree);
-    expect($result)->toEqual(StringToTreeConverter::run('frac[4, 3]'));
-});
-
-it('does not reorder', function () {
-    $tree = StringToTreeConverter::run('frac[1, 3] + x');
-    $result = AddFractions::run($tree);
-    expect($result)->toEqual(StringToTreeConverter::run('frac[1, 3] + x'));
-});
-
-it('does not run with floats in fractions', function () {
-    $tree = StringToTreeConverter::run('frac[1, 3.5] + 2');
-    $result = AddFractions::run($tree);
-    expect($result)->toEqual(StringToTreeConverter::run('frac[1, 3.5] + 2'));
-});
-
-it('does not run with floats', function () {
-    $tree = StringToTreeConverter::run('frac[1, 2] + 0.5');
-    $result = AddFractions::run($tree);
-    expect($result)->toEqual(StringToTreeConverter::run('frac[1, 2] + 0.5'));
+    expect($result)->toEqual(StringToTreeConverter::run('frac[adf + cbf + ebd, bdf]'));
 });

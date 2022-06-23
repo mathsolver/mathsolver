@@ -2,7 +2,6 @@
 
 namespace MathSolver\Fractions;
 
-use MathSolver\Utilities\Fraction;
 use MathSolver\Utilities\Node;
 use MathSolver\Utilities\Step;
 
@@ -13,45 +12,11 @@ class AddFractions extends Step
      */
     public function handle(Node $node): Node
     {
-        // Instantiate a new fraction
-        $fraction = new Fraction(0, 1);
-
-        // Find all fractions and convert them to an array
-        // of [numerator, denominator]
-        $fractions = $node->children()->filter(function (Node $child) {
-            if (!$child->isNumeric()) {
-                return false;
-            }
-
-            if ($child->value() === 'frac') {
-                return (float) $child->child(0)->value() === floor($child->child(0)->value())
-                    && (float) $child->child(1)->value() === floor($child->child(1)->value());
-            }
-
-            return (float) $child->value() === floor($child->value());
-        });
-
-        // Don't do anything if there are no fractions
-        if ($fractions->count() < 2) {
-            return $node;
-        }
-
-        $fractions = $fractions
-            ->each(fn (Node $fraction) => $node->removeChild($fraction))
-            ->map(
-                fn (Node $fraction) => $fraction->value() === 'frac'
-                ? [$fraction->child(0)->value(), $fraction->child(1)->value()]
-                : [$fraction->value(), 1]
-            );
-
-        // Add each fraction up
-        foreach ($fractions as $fractionArray) {
-            $fraction = $fraction->add($fractionArray[0], $fractionArray[1]);
-        }
-
-        // Append the new fraction
-        $node->appendChild($fraction->node());
-        return $node;
+        // Build the new fraction
+        $fraction = new Node('frac');
+        $fraction->appendChild($this->getNumerator($node));
+        $fraction->appendChild($this->getDenominator($node));
+        return $fraction;
     }
 
     /**
@@ -59,6 +24,71 @@ class AddFractions extends Step
      */
     public function shouldRun(Node $node): bool
     {
-        return $node->value() === '+';
+        if ($node->value() !== '+') {
+            return false;
+        }
+
+        $fractionsCount = $node->children()->filter(fn (Node $child) => $child->value() === 'frac')->count();
+        return $fractionsCount > 0;
+    }
+
+    /**
+     * Loop over each fraction and multiply the denominators
+     * of the other fractions by the numerator of the current
+     * fraction.
+     */
+    protected function getNumerator(Node $node): Node
+    {
+        $numerator = new Node('+');
+
+        foreach ($node->children() as $child) {
+            $times = $numerator->appendChild(new Node('*'));
+
+            $node->children() // Get all fractions
+                ->filter(fn (Node $fraction) => $fraction !== $child) // Filter out current one
+                ->map(fn (Node $fraction) => $this->findDenominator($fraction)) // Get the denominators
+                ->prepend($this->findNumerator($child)) // Append the current numerator
+                ->each(function (Node $factor) use ($times) {
+                    $times->appendChild($factor->clone()->wrapInBrackets('*'));
+                });
+        }
+
+        return $numerator;
+    }
+
+    /**
+     * Multiply all denominators by eachother to get the new denominator.
+     */
+    protected function getDenominator(Node $node): Node
+    {
+        $denominator = new Node('*');
+
+        $node->children()
+            ->map(fn (Node $fraction) => $this->findDenominator($fraction))
+            ->each(function (Node $factor) use ($denominator) {
+                $denominator->appendChild((clone $factor)->wrapInBrackets('*'));
+            });
+
+        return $denominator;
+    }
+
+    /**
+     * Return the numerator if it is a fraction and else just the node.
+     */
+    protected function findNumerator(Node $fraction): Node
+    {
+        return $fraction->value() === 'frac'
+            ? $fraction->child(0)
+            : $fraction;
+    }
+
+    /**
+     * Return the denominator if it is a fraction and else just 1.
+     */
+    protected function findDenominator(Node $fraction): Node
+    {
+        return $fraction->value() === 'frac'
+            ? $fraction->child(1)
+            : new Node(1);
     }
 }

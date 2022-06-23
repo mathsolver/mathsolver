@@ -248,4 +248,28 @@ class Node
 
         return $this->parent()->isChildOf($value);
     }
+
+    /**
+     * Deterine whether to wrap this node in brackets, based on the parent's value.
+     */
+    public function wrapInBrackets(string $parent): self
+    {
+        if (
+            ($this->value() === '+' && $parent === '*') ||
+            ($this->value() === '+' && $parent === '^') ||
+            ($this->value() === '*' && $parent === '^')
+        ) {
+            return tap(new self('('))->appendChild($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Return a clone of this node.
+     */
+    public function clone(): self
+    {
+        return unserialize(serialize($this));
+    }
 }
