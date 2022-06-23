@@ -27,7 +27,7 @@ it('adds brackets if it is in a product', function () {
     expect($result)->toEqual(StringToTreeConverter::run('2(deriv[x^2] + deriv[3x])'));
 });
 
-it('adds brackets if it is in a power', function() {
+it('adds brackets if it is in a power', function () {
     $tree = StringToTreeConverter::run('2^deriv[x^2 + 3x]');
     $result = SumRule::run($tree);
     expect($result)->toEqual(StringToTreeConverter::run('2^(deriv[x^2] + deriv[3x])'));
