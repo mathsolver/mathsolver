@@ -3,8 +3,6 @@
 namespace MathSolver;
 
 use Illuminate\Support\Str;
-use MathSolver\Sorting\SortFactors;
-use MathSolver\Sorting\SortTerms;
 use MathSolver\Utilities\Node;
 use MathSolver\Utilities\TreeToStringConverter;
 
@@ -47,6 +45,8 @@ class Runner
         Simplify\ExpandBracketsWithPlus::class,
         Simplify\RemoveBrackets::class,
         Simplify\RemoveRedundantNumbers::class,
+        Sorting\SortFactors::class,
+        Sorting\SortTerms::class,
     ];
 
     /**
@@ -57,14 +57,12 @@ class Runner
         $steps = [];
         $oldTree = '';
 
-        $tree = self::sortTree($tree);
-
         while (serialize($tree) !== $oldTree) {
             $oldTree = serialize($tree);
 
             foreach (self::$steps as $step) {
                 $previousTree = serialize($tree);
-                $tree = self::sortTree($step::run($tree));
+                $tree = $step::run($tree);
 
                 if (serialize($tree) !== $previousTree) {
                     $steps[] = [
@@ -76,13 +74,5 @@ class Runner
         }
 
         return ['result' => $tree, 'steps' => $steps];
-    }
-
-    /**
-     * Sort all factors and terms in a tree.
-     */
-    protected static function sortTree(Node $tree): Node
-    {
-        return SortTerms::run(SortFactors::run($tree));
     }
 }
