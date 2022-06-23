@@ -8,19 +8,21 @@ use MathSolver\Utilities\Step;
 class AddFractions extends Step
 {
     /**
-     * Add fractions with different denominators together.
+     * Add fractions (with different denominators) together.
      */
     public function handle(Node $node): Node
     {
-        // Build the new fraction
         $fraction = new Node('frac');
+
         $fraction->appendChild($this->getNumerator($node));
+
         $fraction->appendChild($this->getDenominator($node));
+
         return $fraction;
     }
 
     /**
-     * Only run in additions.
+     * Run this function when two fractions are added, or a fraction with a letter/number.
      */
     public function shouldRun(Node $node): bool
     {
@@ -29,6 +31,7 @@ class AddFractions extends Step
         }
 
         $fractionsCount = $node->children()->filter(fn (Node $child) => $child->value() === 'frac')->count();
+
         return $fractionsCount > 0;
     }
 
