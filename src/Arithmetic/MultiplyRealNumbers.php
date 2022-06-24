@@ -14,17 +14,15 @@ class MultiplyRealNumbers extends Step
      */
     public function handle(Node $node): Node
     {
-        $total = $node->numericChildren()
-            ->each(fn ($child) => $node->removeChild($child))
-            ->reduce(fn ($total, $number) => $number->value() * $total, 1);
+        $total = 1;
 
-        if ($node->children()->count() === 0) {
-            return new Node($total);
+        foreach ($node->numericChildren() as $child) {
+            $node->removeChild($child);
+
+            $total *= $child->value();
         }
 
-        if ($total !== 1) {
-            $node->appendChild(new Node($total), $top = true);
-        }
+        $node->appendChild(new Node($total), true);
 
         return $node;
     }

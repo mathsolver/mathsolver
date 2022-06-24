@@ -12,7 +12,9 @@ class DivideRealNumbers extends Step
      */
     public function handle(Node $node): Node
     {
-        return new Node($node->child(0)->value() / $node->child(1)->value());
+        $quotient = $node->child(0)->value() / $node->child(1)->value();
+
+        return new Node($quotient);
     }
 
     /**
@@ -22,7 +24,7 @@ class DivideRealNumbers extends Step
     {
         return $node->value() === 'frac'
             && $node->isChildOf('calc')
-            && is_numeric($node->child(0)->value())
-            && is_numeric($node->child(1)->value());
+            && $node->child(0)->isNumeric()
+            && $node->child(1)->isNumeric();
     }
 }

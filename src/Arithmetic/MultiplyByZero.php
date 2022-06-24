@@ -12,7 +12,7 @@ class MultiplyByZero extends Step
      *
      * For example: 7 * 0 -> 0, 0 * y -> 0.
      */
-    public function handle(Node $parentNode): Node
+    public function handle(Node $node): Node
     {
         return new Node(0);
     }
