@@ -10,7 +10,7 @@ class MultiplyFractions extends Step
     use FindValues;
 
     /**
-     * Add fractions with different denominators together.
+     * Multiply fractions (with different denominators).
      */
     public function handle(Node $node): Node
     {

@@ -21,6 +21,7 @@ class ParseFractions extends Step
 
         $fraction->appendChild($node->child(0));
         $fraction->appendChild($node->child(1));
+
         return $fraction;
     }
 

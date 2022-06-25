@@ -9,20 +9,20 @@ trait FindValues
     /**
      * Return the numerator if it is a fraction and else just the node.
      */
-    protected function findNumerator(Node $fraction): Node
+    protected function findNumerator(Node $node): Node
     {
-        return $fraction->value() === 'frac'
-            ? $fraction->child(0)
-            : $fraction;
+        return $node->value() === 'frac'
+            ? $node->child(0)
+            : $node;
     }
 
     /**
      * Return the denominator if it is a fraction and else just 1.
      */
-    protected function findDenominator(Node $fraction): Node
+    protected function findDenominator(Node $node): Node
     {
-        return $fraction->value() === 'frac'
-            ? $fraction->child(1)
+        return $node->value() === 'frac'
+            ? $node->child(1)
             : new Node(1);
     }
 }
