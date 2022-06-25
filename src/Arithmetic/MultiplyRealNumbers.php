@@ -33,6 +33,6 @@ class MultiplyRealNumbers extends Step
     public function shouldRun(Node $node): bool
     {
         return $node->value() === '*'
-            && $node->numericChildren()->count() > 0;
+            && $node->numericChildren()->count() > 1;
     }
 }
