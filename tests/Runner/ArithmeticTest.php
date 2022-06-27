@@ -446,3 +446,17 @@ it('can do calculations and round numbers', function (string $input, string $exp
     ['calc[6.32 / 0.51 * 0.04, 2]', '0.5'],
     ['calc[(10101 / 1101) / (1011 / 101), 2]', '0.92'],
 ]);
+
+it('can calculate powers', function (string $input, string $expected) {
+    $tree = StringToTreeConverter::run($input);
+    $result = Runner::run($tree)['result'];
+    $expected = ParseFractions::run(StringToTreeConverter::run($expected));
+    expect($result)->toEqual($expected);
+})->with([
+    ['2^2', '4'],
+    ['4^2', '16'],
+    ['16^2', '256'],
+    ['5 * 4^2', '80'],
+    ['5^2 * 4', '100'],
+    ['5^2 - 4^2', '9'],
+]);
