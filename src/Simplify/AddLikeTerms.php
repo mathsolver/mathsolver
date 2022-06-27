@@ -86,7 +86,7 @@ class AddLikeTerms extends Step
                     $coefficient = Fraction::fromFloat($times->numericChildren(false)->first()?->value() ?? 1);
                 }
 
-                $terms = $times->nonNumericChildren(false)->map(fn (Node $child) => $child->toString()); /** @var Collection<string> $terms */
+                $terms = $times->nonNumericChildren(false)->map(fn (Node $child) => serialize($child)); /** @var Collection<string> $terms */
                 $this->pushToTotals($coefficient, $terms);
             })
             ->each(fn ($times) => $this->node->removeChild($times));
@@ -154,7 +154,7 @@ class AddLikeTerms extends Step
             $node->appendChild($coefficient->simplify()->node());
         }
 
-        $terms->map(fn ($term) => Node::fromString($term))
+        $terms->map(fn ($term) => unserialize($term)->clone())
             ->each(fn ($term) => $node->appendChild($term));
 
         if ($node->children()->count() === 1) {

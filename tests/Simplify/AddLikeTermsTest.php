@@ -98,3 +98,9 @@ it('works with decimal numbers', function () {
     $result = AddLikeTerms::run($tree);
     expect($result)->toEqual(StringToTreeConverter::run('frac[17, 10]x'));
 });
+
+it('does not convert fractions to divisions', function () {
+    $tree = StringToTreeConverter::run('3 + frac[1, x]');
+    $result = AddLikeTerms::run($tree);
+    expect($result)->toEqual(StringToTreeConverter::run('3 + frac[1, x]'));
+});
