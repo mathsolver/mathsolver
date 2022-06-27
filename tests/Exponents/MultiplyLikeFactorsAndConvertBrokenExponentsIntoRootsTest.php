@@ -174,3 +174,9 @@ it('works with negative exponents', function () {
     $result = MultiplyLikeFactorsAndConvertBrokenExponentsIntoRoots::run($tree);
     expect($result)->toEqual(StringToTreeConverter::run('sqrt[x]^-1'));
 });
+
+it('does not remove fractions', function () {
+    $tree = StringToTreeConverter::run('frac[1, 2]^3');
+    $result = MultiplyLikeFactorsAndConvertBrokenExponentsIntoRoots::run($tree);
+    expect($result)->toEqual(StringToTreeConverter::run('frac[1, 2]^3'));
+});
