@@ -90,7 +90,7 @@ class MultiplyLikeFactorsAndConvertBrokenExponentsIntoRoots extends Step
             $degree = $node->child(1)->value();
 
             return [
-                'value' => serialize($node->child(0)),
+                'value' => serialize($node->child(0)->setParent(null)),
                 'exponent' => new Fraction(1, $degree),
             ];
         }
@@ -100,7 +100,7 @@ class MultiplyLikeFactorsAndConvertBrokenExponentsIntoRoots extends Step
             $fraction = new Fraction($node->child(1)->value(), $node->child(0)->child(1)->value());
 
             return [
-                'value' => serialize($node->child(0)->child(0)),
+                'value' => serialize($node->child(0)->child(0)->setParent(null)),
                 'exponent' => $fraction,
             ];
         }
@@ -108,7 +108,7 @@ class MultiplyLikeFactorsAndConvertBrokenExponentsIntoRoots extends Step
         // Exponent is 1 (no power)
         if ($node->value() !== '^') {
             return [
-                'value' => serialize($node),
+                'value' => serialize($node->setParent(null)),
                 'exponent' => new Fraction(1),
             ];
         }
@@ -116,7 +116,7 @@ class MultiplyLikeFactorsAndConvertBrokenExponentsIntoRoots extends Step
         // Exponent is natural number
         if ($node->child(1)->value() !== 'frac') {
             return [
-                'value' => serialize($node->child(0)),
+                'value' => serialize($node->child(0)->setParent(null)),
                 'exponent' => new Fraction($node->child(1)->value()),
             ];
         }
@@ -126,7 +126,7 @@ class MultiplyLikeFactorsAndConvertBrokenExponentsIntoRoots extends Step
         $denominator = $node->child(1)->child(1)->value();
 
         return [
-            'value' => serialize($node->child(0)),
+            'value' => serialize($node->child(0)->setParent(null)),
             'exponent' => new Fraction($numerator, $denominator),
         ];
     }
