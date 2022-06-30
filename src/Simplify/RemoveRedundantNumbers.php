@@ -41,7 +41,7 @@ class RemoveRedundantNumbers extends Step
      */
     public function shouldRun(Node $node): bool
     {
-        return ($node->value() === '+' || $node->value() === '*' || $node->value() === '^')
+        return in_array($node->value(), ['+', '*', '^'])
             && $node->numericChildren()->count() == 1;
     }
 }
