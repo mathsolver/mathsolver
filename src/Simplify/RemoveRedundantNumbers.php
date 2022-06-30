@@ -21,11 +21,6 @@ class RemoveRedundantNumbers extends Step
             })
             ->each(fn ($child) => $node->removeChild($child));
 
-        // Return a zero or one if no other children are left
-        if ($node->children()->count() === 0) {
-            return $node->value() === '+' ? new Node(0) : new Node(1);
-        }
-
         // Remove the first child if no other children are left
         if ($node->children()->count() === 1) {
             $node = $node->children()->first();
