@@ -8,69 +8,30 @@ use MathSolver\Utilities\Step;
 
 class AddLikeTerms extends Step
 {
+    /**
+     * Determine whether to run the second part of this function, based on the first part.
+     *
+     * This is to not change the order of terms when not actually changing anything.
+     */
     public bool $shouldRun = false;
 
+    /**
+     * Add like terms: 7x + 5x => 12x, y^3 + y^3 => 2y^3.
+     */
     public function handle(Node $node): Node
     {
-        /*
-        For each term:
-            Find the non-numeric factors
-            Serialize those factors
-            Look them up in an array:
-                If the non-numeric does not exist yet:
-                    Add it with the numeric factors as the value
-                Else:
-                    Append the numeric factors to the list of values
-
-        For each new term:
-            Create a new product
-            Append the unserialized non-numeric factors to that product
-            Add the numeric factors up and append the result to the product
-
-        Return the final plus-node
-        */
-
         $clone = $node->clone();
-        $totals = new Collection();
 
-        $node->children()
-            ->filter(fn (Node $child) => !is_numeric($child->value()) && $child->numericChildren()->count() < 2)
-            ->filter(fn (Node $child) => $child->value() !== 'frac' && $child->children()->filter(fn (Node $child) => $child->value() === 'frac')->count() === 0)
-            ->each(fn (Node $child) => $node->removeChild($child))
-            ->map(fn (Node $child) => $child->value() === '*' ? $child : tap(new Node('*'))->appendChild($child))
-            ->each(function (Node $product) use ($totals) {
-                $coefficient = $product->numericChildren()->first()?->value() ?? 1;
-                $factors = $this->serializeFactors($product->nonNumericChildren());
-
-                if ($totals->has($factors)) {
-                    $this->shouldRun = true;
-                    $totals->put($factors, $totals->get($factors) + $coefficient);
-                } else {
-                    $totals->put($factors, $coefficient);
-                }
-            });
+        $totals = $this->calculateTotals($node);
 
         if (!$this->shouldRun) {
             return $clone;
         }
 
+        // Append the returned value unless it equals 0
         $totals->each(function (float $coefficient, string $factors) use ($node) {
-            $factors = unserialize($factors);
-
-            if ($coefficient == 1 && $factors->count() == 1) {
-                $node->appendChild($factors->first());
-                return;
-            }
-
-            if ($coefficient == 0) {
-                return;
-            }
-
-            $product = $node->appendChild(new Node('*'));
-            $product->setChildren($factors);
-
-            if ($coefficient != 1) {
-                $product->appendChild(new Node($coefficient), true);
+            if ($child = $this->buildTerm($coefficient, $factors)) {
+                $node->appendChild($child);
             }
         });
 
@@ -81,16 +42,100 @@ class AddLikeTerms extends Step
         return $node;
     }
 
+    /**
+     * Run in additions.
+     */
     public function shouldRun(Node $node): bool
     {
         return $node->value() === '+';
     }
 
+    /**
+     * Loop over each term, and do the following:
+     * - If the term is already in the $totals collection, add the new coefficient up
+     * - If not, then add the coefficient to the $totals collection.
+     */
+    protected function calculateTotals(Node $node): Collection
+    {
+        $totals = new Collection();
+
+        foreach ($node->children() as $child) {
+            // Skip anything that is a number or contains more than one number
+            if (is_numeric($child->value()) || $child->numericChildren()->count() > 1) {
+                continue;
+            }
+
+            // Skip anything that is a fraction or that contains a fraction
+            if ($child->value() === 'frac' || $child->children()->filter(fn (Node $child) => $child->value() === 'frac')->count() > 0) {
+                continue;
+            }
+
+            // Remove the term from its parent
+            $node->removeChild($child);
+
+            // Wrap the term in a product
+            if ($child->value() !== '*') {
+                $child = tap(new Node('*'))->appendChild($child);
+            }
+
+            // Find the coefficient and the factors
+            $coefficient = $child->numericChildren()->first()?->value() ?? 1;
+            $factors = $this->serializeFactors($child->nonNumericChildren());
+
+            // Add the coefficient and the factors to the $totals collection
+            if ($totals->has($factors)) {
+                $this->shouldRun = true;
+                $oldCoefficient = (float) $totals->get($factors);
+                $totals->put($factors, $oldCoefficient + $coefficient);
+            } else {
+                $totals->put($factors, $coefficient);
+            }
+        }
+
+        return $totals;
+    }
+
+    /**
+     * Serialize a collection of factors.
+     *
+     * Set the parent to null, as that shouldn't have influence on the serialized value.
+     */
     protected function serializeFactors(Collection $factors): string
     {
-        // Set the parent to null, as that shouldn't have influence on the serialized value
-        $factors = $factors->map(fn (Node $factor) => $factor->clone()->setParent(null))->sortBy(fn (Node $node) => $node->value())->values();
+        $factors = $factors
+            ->map(fn (Node $factor) => $factor->clone()->setParent(null))
+            ->sortBy(fn (Node $node) => $node->value())
+            ->values();
 
         return serialize($factors);
+    }
+
+    /**
+     * Multiply the non-numeric factors by the computed coefficient.
+     */
+    protected function buildTerm(float $coefficient, string $serializedFactors): Node|null
+    {
+        $factors = unserialize($serializedFactors);
+
+        // Don't return a product, just the first factor
+        if ($coefficient == 1 && $factors->count() == 1) {
+            return $factors->first();
+        }
+
+        // Multiply by zero, so the factors don't matter
+        if ($coefficient == 0) {
+            return null;
+        }
+
+        // Build a product and append the factors
+        $product = new Node('*');
+        $product->setChildren($factors);
+
+        // Only append the coefficient if is it not 1
+        if ($coefficient != 1) {
+            $product->appendChild(new Node($coefficient), true);
+        }
+
+        return $product;
     }
 }
