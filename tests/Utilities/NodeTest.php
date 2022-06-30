@@ -292,3 +292,18 @@ it('can clone a node', function () {
     expect($node->clone())->toEqual($node);
     expect($node->clone())->not()->toBe($node);
 });
+
+it('can clone a node with children', function () {
+    $node = new Node('+');
+    $child = $node->appendChild(new Node('*'));
+    $child->appendChild(new Node(4));
+
+    expect($node->clone())->toEqual($node);
+    expect($node->clone())->not()->toBe($node);
+
+    $clone = $node->clone();
+    expect($clone->child(0)->parent())->toBe($clone);
+
+    $clone = $node->clone();
+    expect($clone->child(0)->child(0)->parent())->toBe($clone->child(0));
+});
