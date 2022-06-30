@@ -15,16 +15,16 @@ it('does not leave additions', function () {
     expect($result)->toEqual(StringToTreeConverter::run('2x'));
 });
 
-it('returns a zero if no other children are left', function () {
-    $tree = StringToTreeConverter::run('0 + 0');
+it('does not remove numbers when other numbers are present', function () {
+    $tree = StringToTreeConverter::run('8 + 0');
     $result = RemoveRedundantNumbers::run($tree);
-    expect($result)->toEqual(StringToTreeConverter::run('0'));
+    expect($result)->toEqual(StringToTreeConverter::run('8 + 0'));
 });
 
 it('removes multiplication by one', function () {
-    $tree = StringToTreeConverter::run('3x * 6 * 1');
+    $tree = StringToTreeConverter::run('x * y * 1');
     $result = RemoveRedundantNumbers::run($tree);
-    expect($result)->toEqual(StringToTreeConverter::run('3x * 6'));
+    expect($result)->toEqual(StringToTreeConverter::run('x * y'));
 });
 
 it('does not leave multiplications', function () {
@@ -33,10 +33,10 @@ it('does not leave multiplications', function () {
     expect($result)->toEqual(StringToTreeConverter::run('x'));
 });
 
-it('returns a one if no other children are left', function () {
-    $tree = StringToTreeConverter::run('1 * 1');
+it('does not return a one when other numbers are present', function () {
+    $tree = StringToTreeConverter::run('7 * 1');
     $result = RemoveRedundantNumbers::run($tree);
-    expect($result)->toEqual(StringToTreeConverter::run(1));
+    expect($result)->toEqual(StringToTreeConverter::run('7 * 1'));
 });
 
 it('removes power of one', function () {
@@ -46,7 +46,13 @@ it('removes power of one', function () {
 });
 
 it('does not remove powers with a base of one', function () {
-    $tree = StringToTreeConverter::run('1^5');
+    $tree = StringToTreeConverter::run('1^x');
     $result = RemoveRedundantNumbers::run($tree);
-    expect($result)->toEqual(StringToTreeConverter::run('1^5'));
+    expect($result)->toEqual(StringToTreeConverter::run('1^x'));
+});
+
+it('does not remove exponents when other numbers are present', function () {
+    $tree = StringToTreeConverter::run('2^1');
+    $result = RemoveRedundantNumbers::run($tree);
+    expect($result)->toEqual(StringToTreeConverter::run('2^1'));
 });
