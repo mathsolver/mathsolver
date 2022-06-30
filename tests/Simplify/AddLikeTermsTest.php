@@ -33,6 +33,12 @@ it('combines multiple letters in one term', function () {
     expect($result)->toEqual(StringToTreeConverter::run('12xy'));
 });
 
+it('combines multiple unsorted letters in one term', function () {
+    $tree = StringToTreeConverter::run('9xy + 3yx');
+    $result = AddLikeTerms::run($tree);
+    expect($result)->toEqual(StringToTreeConverter::run('12xy'));
+});
+
 it('combines multiple letters in one term with more than one term', function () {
     $tree = StringToTreeConverter::run('8x + 7xy + 5xy + 6xy + 6x');
     $result = AddLikeTerms::run($tree);
@@ -55,6 +61,12 @@ it('filters out zeros', function () {
     $tree = StringToTreeConverter::run('8x - 4y + 4y');
     $result = AddLikeTerms::run($tree);
     expect($result)->toEqual(StringToTreeConverter::run('8x'));
+});
+
+it('leaves zero if it is the only term', function () {
+    $tree = StringToTreeConverter::run('2x - 2x');
+    $result = AddLikeTerms::run($tree);
+    expect($result)->toEqual(StringToTreeConverter::run('0'));
 });
 
 it('removes leading ones', function () {
@@ -81,26 +93,36 @@ it('does not run when there are multiple numbers in a factor', function () {
     expect($result)->toEqual(StringToTreeConverter::run('3p + 3*5'));
 });
 
-it('works with fractions', function () {
+it('does not work with fractions', function () {
     $tree = StringToTreeConverter::run('frac[3, 2]x + frac[1, 2]x');
     $result = AddLikeTerms::run($tree);
-    expect($result)->toEqual(StringToTreeConverter::run('2x'));
-});
-
-it('works by subtracting fractions', function () {
-    $tree = StringToTreeConverter::run('frac[1, 2]y + frac[-1, 4]y');
-    $result = AddLikeTerms::run($tree);
-    expect($result)->toEqual(StringToTreeConverter::run('frac[1, 4]y'));
+    expect($result)->toEqual(StringToTreeConverter::run('frac[3, 2]x + frac[1, 2]x'));
 });
 
 it('works with decimal numbers', function () {
     $tree = StringToTreeConverter::run('0.5x + 1.2x');
     $result = AddLikeTerms::run($tree);
-    expect($result)->toEqual(StringToTreeConverter::run('frac[17, 10]x'));
+    expect($result)->toEqual(StringToTreeConverter::run('1.7x'));
 });
 
 it('does not convert fractions to divisions', function () {
     $tree = StringToTreeConverter::run('3 + frac[1, x]');
     $result = AddLikeTerms::run($tree);
     expect($result)->toEqual(StringToTreeConverter::run('3 + frac[1, x]'));
+});
+
+it('does not change the order', function () {
+    $tree = StringToTreeConverter::run('x + 3');
+    $result = AddLikeTerms::run($tree);
+    expect($result)->toEqual(StringToTreeConverter::run('x + 3'));
+
+    $tree = StringToTreeConverter::run('3 + x');
+    $result = AddLikeTerms::run($tree);
+    expect($result)->toEqual(StringToTreeConverter::run('3 + x'));
+});
+
+it('does not add up numbers', function () {
+    $tree = StringToTreeConverter::run('5 + 8');
+    $result = AddLikeTerms::run($tree);
+    expect($result)->toEqual(StringToTreeConverter::run('5 + 8'));
 });
