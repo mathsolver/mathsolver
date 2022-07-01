@@ -496,3 +496,18 @@ it('can calculate squares', function (string $input, string $expected) {
     ['-(-8)^2 + 4 * -3^2', '-100'],
     ['-1 - 5 * (-2/25)^2', '-129/125'],
 ]);
+
+it('can calculate square roots', function (string $input, string $expected) {
+    $tree = StringToTreeConverter::run($input);
+    $result = Runner::run($tree)['result'];
+    $expected = ParseFractions::run(StringToTreeConverter::run($expected));
+    expect($result)->toEqual($expected);
+})->with([
+    ['sqrt[9]', '3'],
+    ['sqrt[121]', '11'],
+    ['sqrt[1]', '1'],
+    ['sqrt[0]', '0'],
+    ['sqrt[256]', '16'],
+    ['sqrt[400]', '20'],
+    ['sqrt[625]', '25'],
+]);
