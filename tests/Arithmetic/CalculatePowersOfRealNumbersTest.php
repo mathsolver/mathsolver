@@ -1,6 +1,6 @@
 <?php
 
-use MathSolver\Exponents\CalculatePowersOfRealNumbers;
+use MathSolver\Arithmetic\CalculatePowersOfRealNumbers;
 use MathSolver\Utilities\StringToTreeConverter;
 
 it('calculates powers of real numbers', function () {

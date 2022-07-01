@@ -15,6 +15,7 @@ class Runner
      */
     protected static array $steps = [
         Arithmetic\AddRealNumbers::class,
+        Arithmetic\CalculatePowersOfRealNumbers::class,
         Arithmetic\DivideRealNumbers::class,
         Arithmetic\MultiplyByZero::class,
         Arithmetic\MultiplyRealNumbers::class,
@@ -26,7 +27,6 @@ class Runner
         Derivative\SumRule::class,
         Exponents\AppendPowersToBrackets::class,
         Exponents\CalculateLogarithms::class,
-        Exponents\CalculatePowersOfRealNumbers::class,
         Exponents\ExponentOfZero::class,
         Exponents\MoveNegativeExponentsIntoFractions::class,
         Exponents\MultiplyExponents::class,

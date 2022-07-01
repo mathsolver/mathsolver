@@ -1,12 +1,18 @@
 <?php
 
-namespace MathSolver\Exponents;
+namespace MathSolver\Arithmetic;
 
 use MathSolver\Utilities\Node;
 use MathSolver\Utilities\Step;
 
 class CalculatePowersOfRealNumbers extends Step
 {
+    public static ?string $docs = <<<'MARKDOWN'
+        When there is a power of numbers, you can calculate it:
+
+        $$ 4^3 = 4 * 4 * 4 = 64 $$
+        MARKDOWN;
+
     /**
      * Calculate the powers of real numbers, such as 9^3 -> 729.
      */
