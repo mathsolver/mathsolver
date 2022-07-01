@@ -9,6 +9,12 @@ class MultiplyFractions extends Step
 {
     use FindValues;
 
+    public static ?string $docs = <<<'MARKDOWN'
+        You can multiply fractions by using this formula:
+
+        $$ \frac{a}{b} * \frac{c}{d} = \frac{ac}{bd} $$
+        MARKDOWN;
+
     /**
      * Multiply fractions (with different denominators).
      */

@@ -9,6 +9,12 @@ class AddFractions extends Step
 {
     use FindValues;
 
+    public static ?string $docs = <<<'MARKDOWN'
+        You can add fractions by using this formula:
+
+        $$ \frac{a}{b} + \frac{c}{d} = \frac{ad + bc}{bd} $$
+        MARKDOWN;
+
     /**
      * Add fractions (with different denominators) together,
      * using the following formula.
