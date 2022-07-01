@@ -287,6 +287,15 @@ it('can wrap a node in brackets', function () {
     expect((new Node('*'))->wrapInBrackets('+'))->toEqual($times);
 });
 
+it('adds brackets with negative bases', function () {
+    $brackets = new Node('(');
+    $brackets->appendChild(new Node(-6));
+    expect((new Node('-6'))->wrapInBrackets('^'))->toEqual($brackets);
+
+    $six = new Node(6);
+    expect((new Node(6))->wrapInBrackets('^'))->toEqual($six);
+});
+
 it('can clone a node', function () {
     $node = new Node(8);
     expect($node->clone())->toEqual($node);

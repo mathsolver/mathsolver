@@ -257,7 +257,8 @@ class Node
         if (
             ($this->value() === '+' && $parent === '*') ||
             ($this->value() === '+' && $parent === '^') ||
-            ($this->value() === '*' && $parent === '^')
+            ($this->value() === '*' && $parent === '^') ||
+            (is_numeric($this->value()) and $this->value() < 0 and $parent === '^')
         ) {
             return tap(new self('('))->appendChild($this);
         }
