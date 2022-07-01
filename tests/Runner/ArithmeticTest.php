@@ -459,4 +459,5 @@ it('can calculate powers', function (string $input, string $expected) {
     ['5 * 4^2', '80'],
     ['5^2 * 4', '100'],
     ['5^2 - 4^2', '9'],
+    ['8^2 - 16 * (1/2)^2', '60'],
 ]);

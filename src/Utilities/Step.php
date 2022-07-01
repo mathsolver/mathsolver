@@ -48,6 +48,12 @@ abstract class Step
             return $result;
         }
 
+        // Set the parent to null if there was no parent in the
+        // first place. This is only needed for the root node.
+        if (is_null($parent)) {
+            $result->setParent(null);
+        }
+
         // If the result and the parent are both a multiplication,
         // the children of the $result should be returned so it
         // doesn't end up with a nested multiplication.

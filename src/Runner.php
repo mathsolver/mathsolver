@@ -25,6 +25,7 @@ class Runner
         Derivative\PowerRule::class,
         Derivative\RootRule::class,
         Derivative\SumRule::class,
+        Exponents\AppendExponentsToFractions::class,
         Exponents\AppendPowersToBrackets::class,
         Exponents\CalculateLogarithms::class,
         Exponents\ExponentOfZero::class,
