@@ -7,6 +7,16 @@ use MathSolver\Utilities\Step;
 
 class AddRealNumbers extends Step
 {
+    public static ?string $docs = <<<'MARKDOWN'
+        You can add all numbers up:
+
+        $$ 5 + 6 + 3 = 14 $$
+
+        You can do the same with minus:
+
+        $$ 19 - 3 + 4 = 20 $$
+        MARKDOWN;
+
     /**
      * Add all real numbers together. For example 9 + 5 -> 14.
      */

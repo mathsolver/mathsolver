@@ -7,6 +7,16 @@ use MathSolver\Utilities\Step;
 
 class MultiplyByZero extends Step
 {
+    public static ?string $docs = <<<'MARKDOWN'
+        Every number multiplied by zero gives zero:
+
+        $$ 5 * 3 * \boldsymbol 0 * 9 = 0 $$
+
+        This also applies to letters:
+
+        $$ \boldsymbol 0xy = 0 $$
+        MARKDOWN;
+
     /**
      * Replace all multiplications with a zero with a zero.
      *

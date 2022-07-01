@@ -7,6 +7,12 @@ use MathSolver\Utilities\Step;
 
 class MultiplyRealNumbers extends Step
 {
+    public static ?string $docs = <<<'MARKDOWN'
+        You can multiply all numbers together:
+
+        $$ 3 * 7 * 4 = 84 $$
+        MARKDOWN;
+
     /**
      * Multiply all real numbers.
      *
