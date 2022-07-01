@@ -34,9 +34,9 @@ it('can simplify one-degree-roots', function () {
 });
 
 it('wont simplify roots of negative numbers with even exponents', function () {
-    $tree = StringToTreeConverter::run('root[-16, 2]');
+    $tree = StringToTreeConverter::run('sqrt[-16]');
     $result = SimplifyRoots::run($tree);
-    expect($result)->toEqual(StringToTreeConverter::run('root[-16, 2]'));
+    expect($result)->toEqual(StringToTreeConverter::run('sqrt[-16]'));
 });
 
 it('adds brackets if it is in a power', function () {
@@ -45,19 +45,25 @@ it('adds brackets if it is in a power', function () {
     expect($result)->toEqual(StringToTreeConverter::run('2^(2*sqrt[2])'));
 });
 
+it('can calculate the square root of zero', function () {
+    $tree = StringToTreeConverter::run('sqrt[0]');
+    $result = SimplifyRoots::run($tree);
+    expect($result)->toEqual(StringToTreeConverter::run('0'));
+});
+
 it('can simplify roots of negative numbers with odd exponents', function (string $input, string $output) {
     $tree = StringToTreeConverter::run($input);
     $result = SimplifyRoots::run($tree);
     expect($result)->toEqual(StringToTreeConverter::run($output));
 })->with([
-    ['root[-27, 3]', '-3'],
-    ['root[-9, 3]', 'root[-9, 3]'],
-    ['root[-16, 3]', '-2cbrt[2]'],
-    ['2root[-16, 3]', '2 * -2cbrt[2]'],
+    ['cbrt[-27]', '-3'],
+    ['cbrt[-9]', 'cbrt[-9]'],
+    ['cbrt[-16]', '-2cbrt[2]'],
+    ['2cbrt[-16]', '2 * -2cbrt[2]'],
 ]);
 
 it('can simplify square roots', function ($start, $outside, $inside) {
-    $tree = StringToTreeConverter::run("root[{$start} , 2]");
+    $tree = StringToTreeConverter::run("sqrt[{$start}]");
     $result = SimplifyRoots::run($tree);
     expect($result)->toEqual(StringToTreeConverter::run("{$outside} * root[{$inside}, 2]"));
 })->with([
@@ -74,9 +80,9 @@ it('can simplify square roots', function ($start, $outside, $inside) {
 ]);
 
 it('can simplify cube roots', function ($start, $outside, $inside) {
-    $tree = StringToTreeConverter::run("root[{$start} , 3]");
+    $tree = StringToTreeConverter::run("cbrt[{$start}]");
     $result = SimplifyRoots::run($tree);
-    expect($result)->toEqual(StringToTreeConverter::run("{$outside} * root[{$inside}, 3]"));
+    expect($result)->toEqual(StringToTreeConverter::run("{$outside} * cbrt[{$inside}]"));
 })->with([
     [48, 2, 6],
     [192, 4, 3],

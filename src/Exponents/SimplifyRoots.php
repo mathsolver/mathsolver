@@ -16,6 +16,10 @@ class SimplifyRoots extends Step
      */
     public function handle(Node $node): Node
     {
+        if ($node->child(0)->value() == 0) {
+            return new Node(0);
+        }
+
         $degree = $node->children()->last()->value();
 
         $factors = $this->isNegative($node)
