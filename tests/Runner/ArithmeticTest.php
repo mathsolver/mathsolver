@@ -447,7 +447,7 @@ it('can do calculations and round numbers', function (string $input, string $exp
     ['calc[(10101 / 1101) / (1011 / 101), 2]', '0.92'],
 ]);
 
-it('can calculate powers', function (string $input, string $expected) {
+it('can calculate squares', function (string $input, string $expected) {
     $tree = StringToTreeConverter::run($input);
     $result = Runner::run($tree)['result'];
     $expected = ParseFractions::run(StringToTreeConverter::run($expected));
@@ -471,4 +471,28 @@ it('can calculate powers', function (string $input, string $expected) {
     ['(17 + 3)^2 / 80 - 40', '-35'],
     ['-1/6 - (5/9 + (2/3)^2) * (1/2)^2', '-5/12'],
     ['(1/5 + 3/10)^2 - (1/2)^2', '0'],
+    ['(-9)^2', '81'],
+    ['-11^2', '-121'],
+    ['13^2', '169'],
+    ['-(-13)^2', '-169'],
+    ['(-15)^2', '225'],
+    ['(-1/6)^2', '1/36'],
+    ['6^2 + (-3)^2', '45'],
+    ['3 * -5^2', '-75'],
+    ['-3 * (-5)^2', '-75'],
+    ['8^2 - 1^2', '63'],
+    ['-7^2 + 3 * 4^2', '-1'],
+    ['-(-1/4)^2 + 1/2 * 1/4', '1/16'],
+    ['-5 * -8^2', '320'],
+    ['5 - 8^2', '-59'],
+    ['5 * (-8)^2', '320'],
+    ['(5 * -8)^2', '1600'],
+    ['-(5 - 8)^2', '-9'],
+    ['-5 - (-8)^2', '-69'],
+    ['-5^2 + 8 * 3^2', '47'],
+    ['(-8)^2 / 4^2', '4'],
+    ['18 / (-(1/3)^2)', '-162'],
+    ['5/18 - (-1/3)^2', '1/6'],
+    ['-(-8)^2 + 4 * -3^2', '-100'],
+    ['-1 - 5 * (-2/25)^2', '-129/125'],
 ]);
