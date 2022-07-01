@@ -11,6 +11,14 @@ class CalculatePowersOfRealNumbers extends Step
         When there is a power of numbers, you can calculate it:
 
         $$ 4^3 = 4 * 4 * 4 = 64 $$
+
+        Keep in mind that powers with negative bases will become negative:
+
+        $$ -7^2 = -7 * 7 = -49 $$
+
+        But bases in brackets will become positive:
+
+        $$ (-5)^2 = -5 * -5 = 25 $$
         MARKDOWN;
 
     /**
