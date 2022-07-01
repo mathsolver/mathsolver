@@ -85,12 +85,12 @@ class ExpandBracketsWithPlus extends Step
                 $times = $plus->appendChild(new Node('*'));
 
                 $child2->value() === '*'
-                    ? $child2->children()->each(fn ($child) => $times->appendChild(clone $child))
-                    : $times->appendChild(clone $child2);
+                    ? $child2->children()->each(fn ($child) => $times->appendChild($child->clone()))
+                    : $times->appendChild($child2->clone());
 
                 $child1->value() === '*'
-                    ? $child1->children()->each(fn ($child) => $times->appendChild(clone $child))
-                    : $times->appendChild(clone $child1);
+                    ? $child1->children()->each(fn ($child) => $times->appendChild($child->clone()))
+                    : $times->appendChild($child1->clone());
             });
         });
     }
