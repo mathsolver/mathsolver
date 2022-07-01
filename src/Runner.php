@@ -67,6 +67,7 @@ class Runner
                 if (serialize($tree) !== $previousTree) {
                     $steps[] = [
                         'name' => (string) Str::of($step)->classBasename()->headline()->lower()->ucfirst(),
+                        'docs' => $step::$docs,
                         'result' => TreeToStringConverter::run($tree, $mathjax),
                     ];
                 }

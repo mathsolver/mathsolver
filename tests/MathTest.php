@@ -1,6 +1,11 @@
 <?php
 
+use MathSolver\Arithmetic\MultiplyRealNumbers;
+use MathSolver\Exponents\MultiplyLikeFactorsAndConvertBrokenExponentsIntoRoots;
+use MathSolver\Exponents\SimplifyRoots;
 use MathSolver\Math;
+use MathSolver\Simplify\AddLikeTerms;
+use MathSolver\Simplify\RemoveBrackets;
 
 it('can simplify expressions', function () {
     $result = (new Math('2x + 9x'))->simplify()->string();
@@ -51,9 +56,9 @@ it('can record steps with simplifications', function () {
     expect($result)->toBe([
         'result' => '34x^2',
         'steps' => [
-            ['name' => 'Multiply real numbers', 'result' => '4x^2+30xx'],
-            ['name' => 'Multiply like factors and convert broken exponents into roots', 'result' => '4x^2+30x^2'],
-            ['name' => 'Add like terms', 'result' => '34x^2'],
+            ['name' => 'Multiply real numbers', 'docs' => MultiplyRealNumbers::$docs, 'result' => '4x^2+30xx'],
+            ['name' => 'Multiply like factors and convert broken exponents into roots', 'docs' => MultiplyLikeFactorsAndConvertBrokenExponentsIntoRoots::$docs, 'result' => '4x^2+30x^2'],
+            ['name' => 'Add like terms', 'docs' => AddLikeTerms::$docs, 'result' => '34x^2'],
         ],
     ]);
 });
@@ -63,14 +68,14 @@ it('can record steps with mathjax', function () {
     $result = Math::from('sqrt[8]')->config(['steps' => true, 'mathjax' => false])->simplify()->string();
     expect($result)->toBe([
         'result' => '2root[2,2]',
-        'steps' => [['name' => 'Simplify roots', 'result' => '2root[2,2]']],
+        'steps' => [['name' => 'Simplify roots', 'docs' => SimplifyRoots::$docs, 'result' => '2root[2,2]']],
     ]);
 
     // With mathjax
     $result = Math::from('sqrt[8]')->config(['steps' => true, 'mathjax' => true])->simplify()->string();
     expect($result)->toBe([
         'result' => '2\sqrt{2}',
-        'steps' => [['name' => 'Simplify roots', 'result' => '2\sqrt{2}']],
+        'steps' => [['name' => 'Simplify roots', 'docs' => SimplifyRoots::$docs, 'result' => '2\sqrt{2}']],
     ]);
 });
 
@@ -114,8 +119,8 @@ it('can record steps for substitution and simplification', function () {
         'result' => '6',
         'steps' => [
             ['type' => 'substitute', 'name' => 'Substitute \( x \) for \( 3 \)', 'result' => '2(3)'],
-            ['name' => 'Remove brackets', 'result' => '2*3'],
-            ['name' => 'Multiply real numbers', 'result' => '6'],
+            ['name' => 'Remove brackets', 'docs' => RemoveBrackets::$docs, 'result' => '2*3'],
+            ['name' => 'Multiply real numbers', 'docs' => MultiplyRealNumbers::$docs, 'result' => '6'],
         ],
     ]);
 });

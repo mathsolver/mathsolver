@@ -8,6 +8,20 @@ use MathSolver\Utilities\Step;
 
 class AddLikeTerms extends Step
 {
+    public static ?string $docs = <<<'MARKDOWN'
+        Sometimes terms can be combined together:
+
+        $$ 2x + 3x = 5x $$
+
+        This is only possible when the letters are the same:
+
+        $$ 2x - 3y + 7x + 5y = 9x + 2y $$
+
+        When letters do not have a leading coefficient, then you can use \\( 1 \\):
+
+        $$ x + 2x = 3x $$
+        MARKDOWN;
+
     /**
      * Determine whether to run the second part of this function, based on the first part.
      *

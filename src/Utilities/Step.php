@@ -6,6 +6,8 @@ use Illuminate\Support\Collection;
 
 abstract class Step
 {
+    public static ?string $docs = null;
+
     /**
      * Handle the actual execution of the process.
      *
@@ -73,7 +75,7 @@ abstract class Step
         if (
             ($result->value() === '+' && $parent?->value() === '*') ||
             ($result->value() === '+' && $parent?->value() === '^') ||
-            ($result->value() === '*' and $parent?->value() === '^')
+            ($result->value() === '*' && $parent?->value() === '^')
         ) {
             return tap(new Node('('))->appendChild($result);
         }
