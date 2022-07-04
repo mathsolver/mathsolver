@@ -47,7 +47,7 @@ class StringToTreeConverter
     {
         return Str::of($expression) // Get a stringable object
             ->replace(' ', '') // Remove spaces
-            ->replaceMatches('/([a-z0-9π)])-/', '$1+-') // Replace - with +-
+            ->replaceMatches('/([a-z0-9π\])])-/', '$1+-') // Replace - with +-
             ->replace('--', '')
             ->replaceMatches('/-([^0-9])/', '-1$1') // Replace - with -1
             ->replaceMatches('/([0-9a-z.])\(/', '$1*(') // 5x(3y - 4) -> 5x * (3y - 4)

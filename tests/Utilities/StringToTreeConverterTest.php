@@ -527,3 +527,16 @@ it('can parse double minus in expressions', function () {
     $result = StringToTreeConverter::run('10 - -30');
     expect($result)->toEqual($plus);
 });
+
+it('can parse the difference of two functions', function () {
+    $plus = new Node('+');
+    $sine = $plus->appendChild(new Node('sin'));
+    $sine->appendChild(new Node(45));
+    $times = $plus->appendChild(new Node('*'));
+    $times->appendChild(new Node(-1));
+    $tangent = $times->appendChild(new Node('tan'));
+    $tangent->appendChild(new Node(30));
+
+    $result = StringToTreeConverter::run('sin[45] - tan[30]');
+    expect($result)->toEqual($plus);
+});
