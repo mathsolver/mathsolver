@@ -497,7 +497,7 @@ it('can calculate squares', function (string $input, string $expected) {
     ['-1 - 5 * (-2/25)^2', '-129/125'],
 ]);
 
-it('can calculate square roots', function (string $input, string $expected) {
+it('can calculate with square roots', function (string $input, string $expected) {
     $tree = StringToTreeConverter::run($input);
     $result = Runner::run($tree)['result'];
     $expected = ParseFractions::run(StringToTreeConverter::run($expected));
@@ -511,4 +511,11 @@ it('can calculate square roots', function (string $input, string $expected) {
     ['sqrt[400]', '20'],
     ['sqrt[625]', '25'],
     ['sqrt[1/9]', '1/3'],
+    ['sqrt[4/25]', '2/5'],
+    ['sqrt[9] - sqrt[25]', '-2'],
+    ['9 + sqrt[25]', '14'],
+    ['9 * sqrt[25]', '45'],
+    ['sqrt[9] * sqrt[25]', '15'],
+    ['2 * sqrt[9] + 3 * sqrt[25]', '21'],
+    ['(sqrt[25])^2', '25'],
 ]);
