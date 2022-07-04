@@ -510,4 +510,5 @@ it('can calculate square roots', function (string $input, string $expected) {
     ['sqrt[256]', '16'],
     ['sqrt[400]', '20'],
     ['sqrt[625]', '25'],
+    ['sqrt[1/9]', '1/3'],
 ]);

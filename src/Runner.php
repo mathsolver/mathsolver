@@ -27,6 +27,7 @@ class Runner
         Derivative\SumRule::class,
         Exponents\AppendExponentsToFractions::class,
         Exponents\AppendPowersToBrackets::class,
+        Exponents\AppendRootsToFractions::class,
         Exponents\CalculateLogarithms::class,
         Exponents\ExponentOfZero::class,
         Exponents\MoveNegativeExponentsIntoFractions::class,
