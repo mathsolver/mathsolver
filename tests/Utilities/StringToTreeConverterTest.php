@@ -454,6 +454,26 @@ it('can parse brackets inside a function', function () {
     expect($result)->toEqual($function);
 });
 
+it('can parse nested function brackets', function () {
+    $sine = new Node('sin');
+    $tangent = $sine->appendChild(new Node('tan'));
+    $tangent->appendChild(new Node(3));
+
+    $result = StringToTreeConverter::run('sin[tan[3]]');
+    expect($result)->toEqual($sine);
+});
+
+it('can parse nested function brackets with multiple arguments', function () {
+    $fraction = new Node('frac');
+    $sine = $fraction->appendChild(new Node('sin'));
+    $sine->appendChild(new Node(5));
+    $tangent = $fraction->appendChild(new Node('tan'));
+    $tangent->appendChild(new Node(3));
+
+    $result = StringToTreeConverter::run('frac[sin[5], tan[3]]');
+    expect($result)->toEqual($fraction);
+});
+
 it('converts sqrt to root', function () {
     $root = new Node('root');
     $root->appendChild(new Node('x'));

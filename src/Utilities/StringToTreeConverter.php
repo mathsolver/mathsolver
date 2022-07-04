@@ -111,7 +111,7 @@ class StringToTreeConverter
                 continue;
             }
 
-            if (self::getPrecedence($node->value()) > self::getPrecedence($term)) {
+            if (self::getPrecedence($node->value()) > self::getPrecedence($term) && !in_array($term, self::$functions)) {
                 $done = false;
 
                 while (!$done) {
