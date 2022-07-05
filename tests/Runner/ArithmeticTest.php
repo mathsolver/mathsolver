@@ -518,4 +518,13 @@ it('can calculate with square roots', function (string $input, string $expected)
     ['sqrt[9] * sqrt[25]', '15'],
     ['2 * sqrt[9] + 3 * sqrt[25]', '21'],
     ['(sqrt[25])^2', '25'],
+    ['sqrt[16] - sqrt[49]', '-3'],
+    ['sqrt[25] + 1/2 * sqrt[36]', '8'],
+    ['sqrt[144] - 3 * sqrt[100]', '-18'],
+    ['sqrt[4] + sqrt[1] + sqrt[0]', '3'],
+    ['sqrt[4] * sqrt[1] * sqrt[0]', '0'],
+    ['3 * sqrt[625] - 2 * sqrt[900]', '15'],
+    ['sqrt[1/4] + 10 * sqrt[1/25]', '5/2'],
+    ['6 * sqrt[4/9] - 5 * sqrt[81/100]', '-1/2'],
+    ['sqrt[25/4] * sqrt[36/25]', '3'],
 ]);
