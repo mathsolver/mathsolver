@@ -5,6 +5,7 @@ namespace MathSolver\Utilities;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use MathSolver\Exponents\ConvertRootSymbols;
+use MathSolver\Functions\RemoveFunctionBrackets;
 
 class StringToTreeConverter
 {
@@ -36,7 +37,7 @@ class StringToTreeConverter
 
         $tree = self::buildTree($terms);
 
-        $tree = self::cleanFunctionBrackets($tree);
+        $tree = RemoveFunctionBrackets::run($tree);
 
         return ConvertRootSymbols::run($tree);
     }
@@ -169,27 +170,5 @@ class StringToTreeConverter
             ',' => 2,
             default => in_array($value, self::$functions) ? 12 : 18,
         };
-    }
-
-    /**
-     * Remove the brackets inside functions such as sin(90), tan(45) and sqrt[9].
-     */
-    protected static function cleanFunctionBrackets(Node $node): Node
-    {
-        // Run this function recursively
-        $node->setChildren($node->children()->map(fn ($child) => self::cleanFunctionBrackets($child))->flatten());
-
-        // Check if the node is a function
-        if (in_array($node->value(), self::$functions)) {
-            // Move all children of the brackets node to the function node
-            $node->child(0)->children()->each(function ($child) use ($node) {
-                $node->appendChild($child);
-            });
-
-            // Remove the brackets node
-            $node->removeChild($node->child(0));
-        }
-
-        return $node;
     }
 }
