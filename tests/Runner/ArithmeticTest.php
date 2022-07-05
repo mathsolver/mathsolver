@@ -1,13 +1,12 @@
 <?php
 
-use MathSolver\Fractions\ParseFractions;
 use MathSolver\Runner;
 use MathSolver\Utilities\StringToTreeConverter;
 
 it('can add and subtract', function (string $input, string $expected) {
     $tree = StringToTreeConverter::run($input);
     $result = Runner::run($tree)['result'];
-    $expected = ParseFractions::run(StringToTreeConverter::run($expected));
+    $expected = StringToTreeConverter::run($expected);
     expect($result)->toEqual($expected);
 })->with([
     ['53 + 8', '61'],
@@ -108,7 +107,7 @@ it('can add and subtract', function (string $input, string $expected) {
 it('multiply and divide', function (string $input, string $expected) {
     $tree = StringToTreeConverter::run($input);
     $result = Runner::run($tree)['result'];
-    $expected = ParseFractions::run(StringToTreeConverter::run($expected));
+    $expected = StringToTreeConverter::run($expected);
     expect($result)->toEqual($expected);
 })->with([
     ['7 * 4', '28'],
@@ -220,7 +219,7 @@ it('multiply and divide', function (string $input, string $expected) {
 it('can calculate with fractions', function (string $input, string $expected) {
     $tree = StringToTreeConverter::run($input);
     $result = Runner::run($tree)['result'];
-    $expected = ParseFractions::run(StringToTreeConverter::run($expected));
+    $expected = StringToTreeConverter::run($expected);
     expect($result)->toEqual($expected);
 })->with([
     ['15/25', '3/5'],
@@ -331,7 +330,7 @@ it('can calculate with fractions', function (string $input, string $expected) {
 it('can calculate with decimal numbers', function (string $input, string $expected) {
     $tree = StringToTreeConverter::run($input);
     $result = Runner::run($tree)['result'];
-    $expected = ParseFractions::run(StringToTreeConverter::run($expected));
+    $expected = StringToTreeConverter::run($expected);
     expect($result)->toEqual($expected);
 })->with([
     ['500 + 3', '503'],
@@ -422,7 +421,7 @@ it('can calculate with decimal numbers', function (string $input, string $expect
 it('can do calculations and round numbers', function (string $input, string $expected) {
     $tree = StringToTreeConverter::run($input);
     $result = Runner::run($tree)['result'];
-    $expected = ParseFractions::run(StringToTreeConverter::run($expected));
+    $expected = StringToTreeConverter::run($expected);
     expect($result)->toEqual($expected);
 })->with([
     ['calc[8.86, 1]', '8.9'],
@@ -450,7 +449,7 @@ it('can do calculations and round numbers', function (string $input, string $exp
 it('can calculate squares', function (string $input, string $expected) {
     $tree = StringToTreeConverter::run($input);
     $result = Runner::run($tree)['result'];
-    $expected = ParseFractions::run(StringToTreeConverter::run($expected));
+    $expected = StringToTreeConverter::run($expected);
     expect($result)->toEqual($expected);
 })->with([
     ['2^2', '4'],
@@ -500,7 +499,7 @@ it('can calculate squares', function (string $input, string $expected) {
 it('can calculate with square roots', function (string $input, string $expected) {
     $tree = StringToTreeConverter::run($input);
     $result = Runner::run($tree)['result'];
-    $expected = ParseFractions::run(StringToTreeConverter::run($expected));
+    $expected = StringToTreeConverter::run($expected);
     expect($result)->toEqual($expected);
 })->with([
     ['sqrt[9]', '3'],
