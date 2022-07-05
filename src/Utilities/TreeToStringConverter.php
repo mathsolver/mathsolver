@@ -85,6 +85,9 @@ class TreeToStringConverter
             if ($node->child(0)->value() === 'root') {
                 return "({$base})^{{$exponent}}";
             }
+            if ($node->child(0)->value() === 'frac') {
+                return "\\left({$base}\\right)^{{$exponent}}";
+            }
 
             return "{$base}^{{$exponent}}";
         }

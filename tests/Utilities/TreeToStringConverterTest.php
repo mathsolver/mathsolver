@@ -365,6 +365,17 @@ it('adds brackets around roots inside powers', function () {
     expect($result)->toBe('(\sqrt{x})^{-1}');
 });
 
+it('adds brackets around fractions inside powers', function () {
+    $power = new Node('^');
+    $root = $power->appendChild(new Node('frac'));
+    $root->appendChild(new Node('x'));
+    $root->appendChild(new Node(2));
+    $power->appendChild(new Node(4));
+
+    $result = TreeToStringConverter::run($power, $mathjax = true);
+    expect($result)->toBe('\left(\frac{x}{2}\right)^{4}');
+});
+
 it('removes times symbol between fractions and brackets', function () {
     $times = new Node('*');
     $frac = $times->appendChild(new Node('frac'));
