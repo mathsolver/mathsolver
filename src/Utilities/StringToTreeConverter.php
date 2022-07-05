@@ -4,6 +4,7 @@ namespace MathSolver\Utilities;
 
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use MathSolver\Exponents\ConvertRootSymbols;
 
 class StringToTreeConverter
 {
@@ -37,7 +38,7 @@ class StringToTreeConverter
 
         $tree = self::cleanFunctionBrackets($tree);
 
-        return self::convertRootSymbols($tree);
+        return ConvertRootSymbols::run($tree);
     }
 
     /**
@@ -190,25 +191,5 @@ class StringToTreeConverter
         }
 
         return $node;
-    }
-
-    /**
-     * Convert sqrt[x] and cbrt[x] to root[x, 2] and root[x, 3].
-     */
-    protected static function convertRootSymbols(Node $node): Node
-    {
-        // Run this function recursively
-        $node->setChildren($node->children()->map(fn ($child) => self::convertRootSymbols($child))->flatten());
-
-        // Check if the value is "sqrt" or "cbrt"
-        if ($node->value() !== 'sqrt' && $node->value() !== 'cbrt') {
-            return $node;
-        }
-
-        // Create a new root node with the degree applied
-        $root = new Node('root');
-        $root->appendChild($node->child(0));
-        $root->appendChild(new Node($node->value() === 'sqrt' ? 2 : 3));
-        return $root;
     }
 }
