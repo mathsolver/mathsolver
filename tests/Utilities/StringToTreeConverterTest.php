@@ -94,7 +94,7 @@ it('can convert with multiple times and plus', function () {
 });
 
 it('can convert with divide', function () {
-    $root = new Node('/');
+    $root = new Node('frac');
     $root->appendChild(new Node(8));
     $root->appendChild(new Node(2));
 
@@ -103,7 +103,7 @@ it('can convert with divide', function () {
 });
 
 it('can convert with divide and minus', function () {
-    $root = new Node('/');
+    $root = new Node('frac');
     $root->appendChild(new Node(-8));
     $root->appendChild(new Node(2));
 
@@ -114,9 +114,9 @@ it('can convert with divide and minus', function () {
 it('can convert with multiple operators', function () {
     $root = new Node('+');
     $root->appendChild(new Node(5));
-    $divide = $root->appendChild(new Node('/'));
-    $divide->appendChild(new Node(-6));
-    $divide->appendChild(new Node(2));
+    $fraction = $root->appendChild(new Node('frac'));
+    $fraction->appendChild(new Node(-6));
+    $fraction->appendChild(new Node(2));
     $times = $root->appendChild(new Node('*'));
     $times->appendChild(new Node(3));
     $times->appendChild(new Node(4));
@@ -210,7 +210,7 @@ it('can convert with complex brackets', function () {
 });
 
 it('can convert with nested brackets', function () {
-    $root = new Node('/');
+    $root = new Node('frac');
     $root->appendChild(new Node(2));
     $outerBrackets = $root->appendChild(new Node('('));
     $outerPlus = $outerBrackets->appendChild(new Node('+'));

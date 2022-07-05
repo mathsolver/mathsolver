@@ -36,7 +36,6 @@ class Runner
         Exponents\SimplifyRoots::class,
         Fractions\AddFractions::class,
         Fractions\MultiplyFractions::class,
-        Fractions\ParseFractions::class,
         Fractions\RemoveNestedFractionsInDenominator::class,
         Fractions\RemoveNestedFractionsInNumerator::class,
         Fractions\SimplifyFractions::class,

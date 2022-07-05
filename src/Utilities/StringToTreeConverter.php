@@ -5,6 +5,7 @@ namespace MathSolver\Utilities;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use MathSolver\Exponents\ConvertRootSymbols;
+use MathSolver\Fractions\ParseFractions;
 use MathSolver\Functions\RemoveFunctionBrackets;
 
 class StringToTreeConverter
@@ -29,7 +30,8 @@ class StringToTreeConverter
     ];
 
     /**
-     * Convert a math expression to a math tree.
+     * Convert a math expression to a math tree and run
+     * some steps to clean the tree.
      */
     public static function run(string $expression): Node
     {
@@ -38,8 +40,8 @@ class StringToTreeConverter
         $tree = self::buildTree($terms);
 
         $tree = RemoveFunctionBrackets::run($tree);
-
-        return ConvertRootSymbols::run($tree);
+        $tree = ConvertRootSymbols::run($tree);
+        return ParseFractions::run($tree);
     }
 
     /**
