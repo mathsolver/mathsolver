@@ -258,7 +258,7 @@ class Node
             ($this->value() === '+' && $parent === '*') ||
             ($this->value() === '+' && $parent === '^') ||
             ($this->value() === '*' && $parent === '^') ||
-            (is_numeric($this->value()) and $this->value() < 0 and $parent === '^')
+            (is_numeric($this->value()) && $this->value() < 0 && $parent === '^')
         ) {
             return tap(new self('('))->appendChild($this);
         }
@@ -272,5 +272,14 @@ class Node
     public function clone(): self
     {
         return unserialize(serialize($this));
+    }
+
+    /**
+     * Check whether a node's value is an integer.
+     */
+    public function isInt(): bool
+    {
+        return is_numeric($this->value())
+            && floor($this->value()) === (float) $this->value();
     }
 }

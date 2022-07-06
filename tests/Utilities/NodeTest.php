@@ -316,3 +316,17 @@ it('can clone a node with children', function () {
     $clone = $node->clone();
     expect($clone->child(0)->child(0)->parent())->toBe($clone->child(0));
 });
+
+it('knows if it is an integer', function () {
+    $node = new Node('7');
+    expect($node->isInt())->toBeTrue();
+
+    $node = new Node('x');
+    expect($node->isInt())->toBeFalse();
+
+    $node = new Node('-4');
+    expect($node->isInt())->toBeTrue();
+
+    $node = new Node('6.3');
+    expect($node->isInt())->toBeFalse();
+});
