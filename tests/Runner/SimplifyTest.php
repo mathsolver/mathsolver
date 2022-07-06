@@ -28,4 +28,5 @@ it('simplifies products and adds like terms', function (string $input, string $e
     ['15a * 3a', '45a^2'],
     ['15a * 3b', '45ab'],
     ['-1/3x * -1/2x', 'x^2/6'],
+    ['-2/3 * -3/4y', 'y/2'],
 ]);

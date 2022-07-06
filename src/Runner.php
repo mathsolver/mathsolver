@@ -39,6 +39,7 @@ class Runner
         Fractions\RemoveNestedFractionsInDenominator::class,
         Fractions\RemoveNestedFractionsInNumerator::class,
         Fractions\SimplifyFractions::class,
+        Fractions\SimplifyNumericFactors::class,
         Functions\GenerateRandomNumber::class,
         Functions\RoundNumbers::class,
         Simplify\AddLikeTerms::class,
