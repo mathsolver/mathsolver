@@ -26,3 +26,9 @@ it('does not work with floats', function () {
     $result = SimplifyNumericFactors::run($tree);
     expect($result)->toEqual(StringToTreeConverter::run('frac[0.5x, 1.5y]'));
 });
+
+it('does not run with only numbers', function () {
+    $tree = StringToTreeConverter::run('frac[4, 6]');
+    $result = SimplifyNumericFactors::run($tree);
+    expect($result)->toEqual(StringToTreeConverter::run('frac[4, 6]'));
+});

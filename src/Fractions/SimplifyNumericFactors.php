@@ -16,11 +16,7 @@ class SimplifyNumericFactors extends Step
         $numeratorNumber = $node->child(0)->numericChildren()->first() ?? $node->child(0);
         $denominatorNumber = $node->child(1)->numericChildren()->first() ?? $node->child(1);
 
-        if ((float) $numeratorNumber->value() !== floor($numeratorNumber->value()) || (float) $denominatorNumber !== floor($denominatorNumber->value())) {
-            return $node;
-        }
-
-        $fraction = Fraction::fromFloat($numeratorNumber->value(), $denominatorNumber->value())->simplify();
+        $fraction = (new Fraction($numeratorNumber->value(), $denominatorNumber->value()))->simplify();
         $newNumerator = $fraction->numerator();
         $newDenominator = $fraction->denominator();
 
@@ -41,8 +37,8 @@ class SimplifyNumericFactors extends Step
     public function shouldRun(Node $node): bool
     {
         return $node->value() === 'frac'
-            && (($node->child(0)->value() === '*' && $node->child(0)->numericChildren()->count() > 0) || is_numeric($node->child(0)->value()))
-            && (($node->child(1)->value() === '*' && $node->child(1)->numericChildren()->count() > 0) || is_numeric($node->child(1)->value()))
-            && !(is_numeric($node->child(0)->value()) && is_numeric($node->child(1)->value()));
+            && (($node->child(0)->value() === '*' && $node->child(0)->children()->filter(fn (Node $child) => $child->isInt())->count() > 0) || $node->child(0)->isInt())
+            && (($node->child(1)->value() === '*' && $node->child(1)->children()->filter(fn (Node $child) => $child->isInt())->count() > 0) || $node->child(1)->isInt())
+            && !($node->child(0)->isInt() && $node->child(1)->isInt());
     }
 }
