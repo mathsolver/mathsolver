@@ -149,3 +149,15 @@ it('simplifies products and adds like terms', function (string $input, string $e
     ['3a - 2b - 2b * -a + 5a * -2b', '3a - 2b - 8ab'],
     ['3a - 2b - 2b - a + 5b - 2b', '2a - b'],
 ]);
+
+it('expands brackets', function (string $input, string $expected) {
+    $tree = StringToTreeConverter::run($input);
+    $result = Runner::run($tree)['result'];
+    $expected = StringToTreeConverter::run($expected);
+    expect($result)->toEqual($expected);
+})->with([
+    ['5(a + c)', '5a + 5c'],
+    ['8(2a + b)', '16a + 8b'],
+    ['a(3b + c)', '3ab + ac'],
+    ['x(2y + 3)', '3x + 2xy'],
+]);
