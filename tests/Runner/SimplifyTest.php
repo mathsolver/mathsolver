@@ -160,4 +160,5 @@ it('expands brackets', function (string $input, string $expected) {
     ['8(2a + b)', '16a + 8b'],
     ['a(3b + c)', '3ab + ac'],
     ['x(2y + 3)', '3x + 2xy'],
+    ['3/2(4x + 2y)', '6x + 3y'],
 ]);
