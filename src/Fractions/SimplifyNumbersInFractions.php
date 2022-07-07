@@ -27,6 +27,8 @@ class SimplifyNumbersInFractions extends Step
             }
         }
 
+        $numeratorCount = $numbers->count();
+
         // Denominator
         if ($fraction->child(1)->isInt()) {
             $numbers->push($fraction->child(1));
@@ -40,6 +42,12 @@ class SimplifyNumbersInFractions extends Step
                     $numbers->push($term->children()->filter(fn (Node $factor) => $factor->isInt())->first());
                 }
             }
+        }
+
+        $denominatorCount = $numbers->count() - $numeratorCount;
+
+        if ($numeratorCount === 0 || $denominatorCount === 0) {
+            return $fraction;
         }
 
         $gcd = (int) $numbers

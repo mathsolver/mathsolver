@@ -21,12 +21,6 @@ it('does append a multiplication by one', function () {
     expect($result)->toEqual(StringToTreeConverter::run('frac[1x, 1y]'));
 });
 
-it('does not work with floats', function () {
-    $tree = StringToTreeConverter::run('frac[0.5x, 1.5y]');
-    $result = SimplifyNumbersInFractions::run($tree);
-    expect($result)->toEqual(StringToTreeConverter::run('frac[0.5x, 1.5y]'));
-});
-
 it('does not run with only numbers', function () {
     $tree = StringToTreeConverter::run('frac[4, 6]');
     $result = SimplifyNumbersInFractions::run($tree);
@@ -49,4 +43,18 @@ it('simplifies with additions in both numerator and denominator', function () {
     $tree = StringToTreeConverter::run('frac[3a + 6b, 9c + 12d]');
     $result = SimplifyNumbersInFractions::run($tree);
     expect($result)->toEqual(StringToTreeConverter::run('frac[1a + 2b, 3c + 4d]'));
+});
+
+it('does not work with floats', function () {
+    $tree = StringToTreeConverter::run('frac[0.5x, 1.5y]');
+    $result = SimplifyNumbersInFractions::run($tree);
+    expect($result)->toEqual(StringToTreeConverter::run('frac[0.5x, 1.5y]'));
+
+    $tree = StringToTreeConverter::run('frac[600, 1.5]');
+    $result = SimplifyNumbersInFractions::run($tree);
+    expect($result)->toEqual(StringToTreeConverter::run('frac[600, 1.5]'));
+
+    $tree = StringToTreeConverter::run('frac[1.5, 600]');
+    $result = SimplifyNumbersInFractions::run($tree);
+    expect($result)->toEqual(StringToTreeConverter::run('frac[1.5, 600]'));
 });
