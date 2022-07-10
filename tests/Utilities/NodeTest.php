@@ -282,6 +282,7 @@ it('can wrap a node in brackets', function () {
     $brackets = new Node('(');
     $brackets->appendChild(new Node('+'));
     expect((new Node('+'))->wrapInBrackets('*'))->toEqual($brackets);
+    expect((new Node('+'))->wrapInBrackets('*')->child(0)->parent())->toEqual($brackets);
 
     $times = new Node('*');
     expect((new Node('*'))->wrapInBrackets('+'))->toEqual($times);
