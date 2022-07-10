@@ -21,7 +21,7 @@ class RemoveNestedFractionsInDenominator extends Step
             $times = new Node('*');
 
             // Append the numerator of $fraction to the $times node
-            $times->appendChild($fraction->child(0));
+            $times->appendChild($fraction->child(0)->clone()->wrapInBrackets('*'));
             $fraction->replaceChild($fraction->child(0), $times);
             $times->child(-1)->setParent($times);
         }

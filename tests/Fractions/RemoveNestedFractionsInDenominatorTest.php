@@ -26,3 +26,9 @@ it('does not convert if the nested fraction is in the numerator', function () {
     $result = RemoveNestedFractionsInDenominator::run($tree);
     expect($result)->toEqual(StringToTreeConverter::run('frac[frac[3, 4], 2]'));
 });
+
+it('adds brackets if needed', function () {
+    $tree = StringToTreeConverter::run('frac[x + 2, frac[3, 5]]');
+    $result = RemoveNestedFractionsInDenominator::run($tree);
+    expect($result)->toEqual(StringToTreeConverter::run('frac[(x + 2) * 5, 3]'));
+});
