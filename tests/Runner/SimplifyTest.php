@@ -104,7 +104,7 @@ it('simplifies products and adds like terms', function (string $input, string $e
     ['x - y + x + y', '2x'],
     ['2x - 3 + 5x - 2', '7x - 5'],
     ['-x + y + x - y', '0'],
-    ['13/4x - 1 + 8 - 1/2x', 'frac[22x + 56, 8]'],
+    ['13/4x - 1 + 8 - 1/2x', 'frac[11x + 28, 4]'],
     ['-a - b - a + b', '-2a'],
     ['8a + 4 - 8a + 2', '6'],
     ['-2/3a - ab - 3ab + 1/5a', 'frac[-7a - 60ab, 15]'],
