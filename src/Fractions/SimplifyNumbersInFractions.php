@@ -16,38 +16,38 @@ class SimplifyNumbersInFractions extends Step
         if ($fraction->child(0)->isInt()) {
             $numbers->push($fraction->child(0));
         } elseif ($fraction->child(0)->value() === '*') {
-            $numbers->push($fraction->child(0)->children()->filter(fn (Node $factor) => $factor->isInt())->first());
+            $numbers->push($fraction->child(0)->children()->filter(fn (Node $factor) => $factor->isInt())->whenEmpty(fn (Collection $collection) => $collection->add(new Node(1)))->first());
         } elseif ($fraction->child(0)->value() === '+') {
             foreach ($fraction->child(0)->children() as $term) {
                 if ($term->isInt()) {
                     $numbers->push($term);
                 } elseif ($term->value() === '*') {
-                    $numbers->push($term->children()->filter(fn (Node $factor) => $factor->isInt())->first());
+                    $numbers->push($term->children()->filter(fn (Node $factor) => $factor->isInt())->whenEmpty(fn (Collection $collection) => $collection->add(new Node(1)))->first());
+                } else {
+                    $numbers->push(new Node(1));
                 }
             }
+        } else {
+            $numbers->push(new Node(1));
         }
-
-        $numeratorCount = $numbers->count();
 
         // Denominator
         if ($fraction->child(1)->isInt()) {
             $numbers->push($fraction->child(1));
         } elseif ($fraction->child(1)->value() === '*') {
-            $numbers->push($fraction->child(1)->children()->filter(fn (Node $factor) => $factor->isInt())->first());
+            $numbers->push($fraction->child(1)->children()->filter(fn (Node $factor) => $factor->isInt())->whenEmpty(fn (Collection $collection) => $collection->add(new Node(1)))->first());
         } elseif ($fraction->child(1)->value() === '+') {
             foreach ($fraction->child(1)->children() as $term) {
                 if ($term->isInt()) {
                     $numbers->push($term);
                 } elseif ($term->value() === '*') {
-                    $numbers->push($term->children()->filter(fn (Node $factor) => $factor->isInt())->first());
+                    $numbers->push($term->children()->filter(fn (Node $factor) => $factor->isInt())->whenEmpty(fn (Collection $collection) => $collection->add(new Node(1)))->first());
+                } else {
+                    $numbers->push(new Node(1));
                 }
             }
-        }
-
-        $denominatorCount = $numbers->count() - $numeratorCount;
-
-        if ($numeratorCount === 0 || $denominatorCount === 0) {
-            return $fraction;
+        } else {
+            $numbers->push(new Node(1));
         }
 
         $gcd = (int) $numbers

@@ -58,3 +58,43 @@ it('does not work with floats', function () {
     $result = SimplifyNumbersInFractions::run($tree);
     expect($result)->toEqual(StringToTreeConverter::run('frac[1.5, 600]'));
 });
+
+it('does not work if nothing can be done in products', function () {
+    $tree = StringToTreeConverter::run('frac[xy, 4]');
+    $result = SimplifyNumbersInFractions::run($tree);
+    expect($result)->toEqual(StringToTreeConverter::run('frac[xy, 4]'));
+
+    $tree = StringToTreeConverter::run('frac[5, xy]');
+    $result = SimplifyNumbersInFractions::run($tree);
+    expect($result)->toEqual(StringToTreeConverter::run('frac[5, xy]'));
+});
+
+it('does not work if nothing can be done in additions without products', function () {
+    $tree = StringToTreeConverter::run('frac[2x + y, 4]');
+    $result = SimplifyNumbersInFractions::run($tree);
+    expect($result)->toEqual(StringToTreeConverter::run('frac[2x + y, 4]'));
+
+    $tree = StringToTreeConverter::run('frac[4, 2x + y]');
+    $result = SimplifyNumbersInFractions::run($tree);
+    expect($result)->toEqual(StringToTreeConverter::run('frac[4, 2x + y]'));
+});
+
+it('does not work if nothing can be done in additions with products', function () {
+    $tree = StringToTreeConverter::run('frac[xy + yz, 2]');
+    $result = SimplifyNumbersInFractions::run($tree);
+    expect($result)->toEqual(StringToTreeConverter::run('frac[xy + yz, 2]'));
+
+    $tree = StringToTreeConverter::run('frac[2, xy + yz]');
+    $result = SimplifyNumbersInFractions::run($tree);
+    expect($result)->toEqual(StringToTreeConverter::run('frac[2, xy + yz]'));
+});
+
+it('does not work if nothing can be done outside additions or products', function () {
+    $tree = StringToTreeConverter::run('frac[x, 4]');
+    $result = SimplifyNumbersInFractions::run($tree);
+    expect($result)->toEqual(StringToTreeConverter::run('frac[x, 4]'));
+
+    $tree = StringToTreeConverter::run('frac[4, x]');
+    $result = SimplifyNumbersInFractions::run($tree);
+    expect($result)->toEqual(StringToTreeConverter::run('frac[4, x]'));
+});
