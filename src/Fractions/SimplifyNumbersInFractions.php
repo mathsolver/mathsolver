@@ -11,7 +11,13 @@ class SimplifyNumbersInFractions extends Step
     /**
      * A collection containing all number-nodes.
      */
-    public Collection $numbers;
+    protected Collection $numbers;
+
+    /**
+     * When this bool gets set to false, execution
+     * stops and the original fraction gets returned.
+     */
+    protected bool $shouldRun = true;
 
     /**
      * Simplify numbers in fractions.
@@ -27,6 +33,10 @@ class SimplifyNumbersInFractions extends Step
 
         $this->findNumbers($fraction->child(0)); // Numerator
         $this->findNumbers($fraction->child(1)); // Denominator
+
+        if (!$this->shouldRun) {
+            return $fraction;
+        }
 
         $gcd = $this->calculateGcd();
 
@@ -63,10 +73,12 @@ class SimplifyNumbersInFractions extends Step
         }
 
         if ($node->value() === '*') {
-            $number = $node->children()
-                ->filter(fn (Node $factor) => $factor->isInt())
-                ->whenEmpty(fn (Collection $collection) => $collection->add(new Node(1)))
-                ->first();
+            $number = $node->children()->filter(fn (Node $factor) => $factor->isInt())->first();
+
+            if (is_null($number)) {
+                $this->shouldRun = false;
+                return;
+            }
 
             $this->numbers->push($number);
 
@@ -81,7 +93,7 @@ class SimplifyNumbersInFractions extends Step
             return;
         }
 
-        $this->numbers->push(new Node(1));
+        $this->shouldRun = false;
     }
 
     /**
