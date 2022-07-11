@@ -8,14 +8,25 @@ use MathSolver\Utilities\Step;
 
 class SimplifyNumbersInFractions extends Step
 {
+    /**
+     * A collection containing all number-nodes.
+     */
     public Collection $numbers;
 
+    /**
+     * Simplify numbers in fractions.
+     *
+     * For example:
+     * - 2x / 4 => x / 2
+     * - (3x + 6) / 9 => (x + 2) / 3
+     * - 4x / 4 => x
+     */
     public function handle(Node $fraction): Node
     {
         $this->numbers = new Collection();
 
-        $this->findNumbers($fraction->child(0)); // numerator
-        $this->findNumbers($fraction->child(1)); // denominator
+        $this->findNumbers($fraction->child(0)); // Numerator
+        $this->findNumbers($fraction->child(1)); // Denominator
 
         $gcd = $this->calculateGcd();
 
@@ -28,13 +39,23 @@ class SimplifyNumbersInFractions extends Step
         return $fraction;
     }
 
+    /**
+     * Only run when it is a fraction.
+     *
+     * When both the numerator and the denominator are
+     * an integer, then another function should do the
+     * simplification, instead of this function.
+     */
     public function shouldRun(Node $node): bool
     {
         return $node->value() === 'frac'
             && !($node->child(0)->isInt() && $node->child(1)->isInt());
     }
 
-    protected function findNumbers(Node $node)
+    /**
+     * Find all numeric children in this node.
+     */
+    protected function findNumbers(Node $node): void
     {
         if ($node->isInt()) {
             $this->numbers->push($node);
@@ -55,10 +76,12 @@ class SimplifyNumbersInFractions extends Step
         }
     }
 
+    /**
+     * Calculate the GCD (Greatest Common Multiple) from all numeric nodes.
+     */
     protected function calculateGcd(): int
     {
         return (int) $this->numbers
-            ->filter()
             ->map(fn (Node $number) => (int) $number->value())
             ->reduce(fn ($gcd, $number) => !is_null($gcd) ? gmp_gcd($gcd, $number) : $number);
     }
