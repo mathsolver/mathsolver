@@ -69,13 +69,7 @@ class SimplifyNumbersInFractions extends Step
 
         if ($node->value() === '+') {
             foreach ($node->children() as $term) {
-                if ($term->isInt()) {
-                    $this->numbers->push($term);
-                } elseif ($term->value() === '*') {
-                    $this->numbers->push($term->children()->filter(fn (Node $factor) => $factor->isInt())->whenEmpty(fn (Collection $collection) => $collection->add(new Node(1)))->first());
-                } else {
-                    $this->numbers->push(new Node(1));
-                }
+                $this->findNumbers($term);
             }
 
             return;
