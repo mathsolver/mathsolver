@@ -14,16 +14,10 @@ class SimplifyNumbersInFractions extends Step
     {
         $this->numbers = new Collection();
 
-        // Numerator
-        $this->findNumbers($fraction->child(0));
+        $this->findNumbers($fraction->child(0)); // numerator
+        $this->findNumbers($fraction->child(1)); // denominator
 
-        // Denominator
-        $this->findNumbers($fraction->child(1));
-
-        $gcd = (int) $this->numbers
-            ->filter()
-            ->map(fn (Node $number) => (int) $number->value())
-            ->reduce(fn ($gcd, $number) => !is_null($gcd) ? gmp_gcd($gcd, $number) : $number);
+        $gcd = $this->calculateGcd();
 
         $this->numbers->filter()->each(fn (Node $number) => $number->setValue($number->value() / $gcd));
 
@@ -59,5 +53,13 @@ class SimplifyNumbersInFractions extends Step
         } else {
             $this->numbers->push(new Node(1));
         }
+    }
+
+    protected function calculateGcd(): int
+    {
+        return (int) $this->numbers
+            ->filter()
+            ->map(fn (Node $number) => (int) $number->value())
+            ->reduce(fn ($gcd, $number) => !is_null($gcd) ? gmp_gcd($gcd, $number) : $number);
     }
 }
