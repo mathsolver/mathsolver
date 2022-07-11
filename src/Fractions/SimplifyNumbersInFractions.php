@@ -8,54 +8,24 @@ use MathSolver\Utilities\Step;
 
 class SimplifyNumbersInFractions extends Step
 {
+    public Collection $numbers;
+
     public function handle(Node $fraction): Node
     {
-        $numbers = new Collection();
+        $this->numbers = new Collection();
 
         // Numerator
-        if ($fraction->child(0)->isInt()) {
-            $numbers->push($fraction->child(0));
-        } elseif ($fraction->child(0)->value() === '*') {
-            $numbers->push($fraction->child(0)->children()->filter(fn (Node $factor) => $factor->isInt())->whenEmpty(fn (Collection $collection) => $collection->add(new Node(1)))->first());
-        } elseif ($fraction->child(0)->value() === '+') {
-            foreach ($fraction->child(0)->children() as $term) {
-                if ($term->isInt()) {
-                    $numbers->push($term);
-                } elseif ($term->value() === '*') {
-                    $numbers->push($term->children()->filter(fn (Node $factor) => $factor->isInt())->whenEmpty(fn (Collection $collection) => $collection->add(new Node(1)))->first());
-                } else {
-                    $numbers->push(new Node(1));
-                }
-            }
-        } else {
-            $numbers->push(new Node(1));
-        }
+        $this->findNumbers($fraction->child(0));
 
         // Denominator
-        if ($fraction->child(1)->isInt()) {
-            $numbers->push($fraction->child(1));
-        } elseif ($fraction->child(1)->value() === '*') {
-            $numbers->push($fraction->child(1)->children()->filter(fn (Node $factor) => $factor->isInt())->whenEmpty(fn (Collection $collection) => $collection->add(new Node(1)))->first());
-        } elseif ($fraction->child(1)->value() === '+') {
-            foreach ($fraction->child(1)->children() as $term) {
-                if ($term->isInt()) {
-                    $numbers->push($term);
-                } elseif ($term->value() === '*') {
-                    $numbers->push($term->children()->filter(fn (Node $factor) => $factor->isInt())->whenEmpty(fn (Collection $collection) => $collection->add(new Node(1)))->first());
-                } else {
-                    $numbers->push(new Node(1));
-                }
-            }
-        } else {
-            $numbers->push(new Node(1));
-        }
+        $this->findNumbers($fraction->child(1));
 
-        $gcd = (int) $numbers
+        $gcd = (int) $this->numbers
             ->filter()
             ->map(fn (Node $number) => (int) $number->value())
             ->reduce(fn ($gcd, $number) => !is_null($gcd) ? gmp_gcd($gcd, $number) : $number);
 
-        $numbers->filter()->each(fn (Node $number) => $number->setValue($number->value() / $gcd));
+        $this->numbers->filter()->each(fn (Node $number) => $number->setValue($number->value() / $gcd));
 
         if ($fraction->child(1)->value() == 1) {
             return $fraction->child(0);
@@ -68,5 +38,26 @@ class SimplifyNumbersInFractions extends Step
     {
         return $node->value() === 'frac'
             && !($node->child(0)->isInt() && $node->child(1)->isInt());
+    }
+
+    protected function findNumbers(Node $node)
+    {
+        if ($node->isInt()) {
+            $this->numbers->push($node);
+        } elseif ($node->value() === '*') {
+            $this->numbers->push($node->children()->filter(fn (Node $factor) => $factor->isInt())->whenEmpty(fn (Collection $collection) => $collection->add(new Node(1)))->first());
+        } elseif ($node->value() === '+') {
+            foreach ($node->children() as $term) {
+                if ($term->isInt()) {
+                    $this->numbers->push($term);
+                } elseif ($term->value() === '*') {
+                    $this->numbers->push($term->children()->filter(fn (Node $factor) => $factor->isInt())->whenEmpty(fn (Collection $collection) => $collection->add(new Node(1)))->first());
+                } else {
+                    $this->numbers->push(new Node(1));
+                }
+            }
+        } else {
+            $this->numbers->push(new Node(1));
+        }
     }
 }
