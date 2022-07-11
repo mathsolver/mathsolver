@@ -59,9 +59,15 @@ class SimplifyNumbersInFractions extends Step
     {
         if ($node->isInt()) {
             $this->numbers->push($node);
-        } elseif ($node->value() === '*') {
+            return;
+        }
+
+        if ($node->value() === '*') {
             $this->numbers->push($node->children()->filter(fn (Node $factor) => $factor->isInt())->whenEmpty(fn (Collection $collection) => $collection->add(new Node(1)))->first());
-        } elseif ($node->value() === '+') {
+            return;
+        }
+
+        if ($node->value() === '+') {
             foreach ($node->children() as $term) {
                 if ($term->isInt()) {
                     $this->numbers->push($term);
@@ -71,9 +77,11 @@ class SimplifyNumbersInFractions extends Step
                     $this->numbers->push(new Node(1));
                 }
             }
-        } else {
-            $this->numbers->push(new Node(1));
+
+            return;
         }
+
+        $this->numbers->push(new Node(1));
     }
 
     /**
