@@ -63,7 +63,13 @@ class SimplifyNumbersInFractions extends Step
         }
 
         if ($node->value() === '*') {
-            $this->numbers->push($node->children()->filter(fn (Node $factor) => $factor->isInt())->whenEmpty(fn (Collection $collection) => $collection->add(new Node(1)))->first());
+            $number = $node->children()
+                ->filter(fn (Node $factor) => $factor->isInt())
+                ->whenEmpty(fn (Collection $collection) => $collection->add(new Node(1)))
+                ->first();
+
+            $this->numbers->push($number);
+
             return;
         }
 
