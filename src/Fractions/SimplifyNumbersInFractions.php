@@ -40,7 +40,7 @@ class SimplifyNumbersInFractions extends Step
 
         $gcd = $this->calculateGcd();
 
-        $this->numbers->filter()->each(fn (Node $number) => $number->setValue($number->value() / $gcd));
+        $this->numbers->each(fn (Node $number) => $number->setValue($number->value() / $gcd));
 
         if ($fraction->child(1)->value() == 1) {
             return $fraction->child(0);
