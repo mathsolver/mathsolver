@@ -93,7 +93,7 @@ class StringToTreeConverter
     public static function buildTree(Collection $terms): Node
     {
         // Instantiate the first node
-        $node = new Node($terms->first());
+        $node = new Node((string) $terms->first());
         $terms->shift();
 
         $bracketsAreClosed = false;
