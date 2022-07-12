@@ -540,3 +540,18 @@ it('can parse the difference of two functions', function () {
     $result = StringToTreeConverter::run('sin[45] - tan[30]');
     expect($result)->toEqual($plus);
 });
+
+it('parses nested brackets with powers', function () {
+    $power = new Node('^');
+    $outerBrackets = $power->appendChild(new Node('('));
+    $times = $outerBrackets->appendChild(new Node('*'));
+    $times->appendChild(new Node(3));
+    $innerBrackets = $times->appendChild(new Node('('));
+    $plus = $innerBrackets->appendChild(new Node('+'));
+    $plus->appendChild(new Node('x'));
+    $plus->appendChild(new Node(2));
+    $power->appendChild(new Node(2));
+
+    $result = StringToTreeConverter::run('(3(x + 2))^2');
+    expect($result)->toEqual($power);
+});
