@@ -280,3 +280,13 @@ it('simplifies products and sums with powers', function (string $input, string $
     ['a^3(2a - 1) + a^2(a^2 - 3a)', '3a^4 - 4a^3'],
     ['a^2(a^3 - 2a) - a^4(a - 1)', '-2a^3 + a^4'],
 ]);
+
+it('simplifies powers', function (string $input, string $expected) {
+    $tree = StringToTreeConverter::run($input);
+    $result = Runner::run($tree)['result'];
+    $expected = StringToTreeConverter::run($expected);
+    expect($result)->toEqual($expected);
+})->with([
+    ['(ab)^7', 'a^7b^7'],
+    ['(pq)^12', 'p^12q^12'],
+]);
