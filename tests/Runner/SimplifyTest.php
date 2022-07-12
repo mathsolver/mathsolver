@@ -289,4 +289,5 @@ it('simplifies powers', function (string $input, string $expected) {
 })->with([
     ['(ab)^7', 'a^7b^7'],
     ['(pq)^12', 'p^12q^12'],
+    ['(-4x)^2', '16x^2'],
 ]);

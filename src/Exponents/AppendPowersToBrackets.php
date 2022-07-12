@@ -31,7 +31,7 @@ class AppendPowersToBrackets extends Step
                     $brackets = $power->appendChild(new Node('('));
                     $brackets->appendChild($child);
                 } else {
-                    $power->appendChild($child);
+                    $power->appendChild($child->wrapInBrackets('^'));
                 }
 
                 $power->appendChild(clone $exponent);

@@ -20,3 +20,9 @@ it('does not append powers if there is a plus inside the brackets', function () 
     $result = AppendPowersToBrackets::run($tree);
     expect($result)->toEqual(StringToTreeConverter::run('(3y + 7)^3'));
 });
+
+it('adds brackets if needed', function () {
+    $tree = StringToTreeConverter::run('(-4x)^2');
+    $result = AppendPowersToBrackets::run($tree);
+    expect($result)->toEqual(StringToTreeConverter::run('(-4)^2 * x^2'));
+});
