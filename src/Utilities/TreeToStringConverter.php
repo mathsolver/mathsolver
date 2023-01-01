@@ -56,7 +56,7 @@ class TreeToStringConverter
                 $inside = self::run($node->child(0), $latex);
                 $respect = $node->child(1)?->value() ?? 'x';
                 $isFraction = $node->contains('frac');
-                return '\tfrac{d}{d' . $respect . '}' . ($isFraction ? '\left[' : '[') . $inside . ($isFraction ? '\right]' : ']');
+                return '\tfrac{d}{d' . $respect . '}' . ($isFraction ? '\left(' : '(') . $inside . ($isFraction ? '\right)' : ')');
             }
 
             if ($latex && $node->value() === 'log') {
@@ -65,9 +65,13 @@ class TreeToStringConverter
                 return '\log_{' . $base . '}[' . $parameter . ']';
             }
 
+            if (!$latex && $node->value() === 'root' && in_array($node->child(1)->value(), [2, 3])) {
+                return ($node->child(1)->value() == 2 ? 'sqrt' : 'cbrt') . '(' . self::run($node->child(0), $latex) . ')';
+            }
+
             $children = $node->children()->map(fn ($child) => self::run($child, $latex))->implode(',');
             $isFraction = $node->contains('frac') && $latex;
-            return ($latex ? '\text{' . $node->value() . '}' : $node->value()) . ($isFraction ? '\left[' : '[') . $children . ($isFraction ? '\right]' : ']');
+            return ($latex ? '\text{' . $node->value() . '}' : $node->value()) . ($isFraction ? '\left(' : '(') . $children . ($isFraction ? '\right)' : ')');
         }
 
         if ($latex && $node->value() === '^') {

@@ -174,7 +174,7 @@ it('can convert functions to a string', function () {
     $sine = new Node('sin');
     $sine->appendChild(new Node(45));
     $result = TreeToStringConverter::run($sine);
-    expect($result)->toBe('sin[45]');
+    expect($result)->toBe('sin(45)');
 
     $times = new Node('*');
     $times->appendChild(new Node(2));
@@ -184,17 +184,37 @@ it('can convert functions to a string', function () {
     $plus->appendChild(new Node(2));
     $plus->appendChild(new Node(3));
     $result = TreeToStringConverter::run($times);
-    expect($result)->toBe('2root[16,2+3]');
+    expect($result)->toBe('2root(16,2+3)');
 });
 
-it('can convert functions to mathjax', function () {
+it('writes sqrt and cbrt as such', function () {
+    $sqrt = new Node('root');
+    $sqrt->appendChild(new Node(6));
+    $sqrt->appendChild(new Node(2));
+    $result = TreeToStringConverter::run($sqrt);
+    expect($result)->toBe('sqrt(6)');
+
+    $cbrt = new Node('root');
+    $cbrt->appendChild(new Node(7));
+    $cbrt->appendChild(new Node(3));
+    $result = TreeToStringConverter::run($cbrt);
+    expect($result)->toBe('cbrt(7)');
+
+    $fourthRoot = new Node('root');
+    $fourthRoot->appendChild(new Node(10));
+    $fourthRoot->appendChild(new Node(4));
+    $result = TreeToStringConverter::run($fourthRoot);
+    expect($result)->toBe('root(10,4)');
+});
+
+it('can convert functions to latex', function () {
     $sine = new Node('sin');
     $sine->appendChild(new Node(45));
-    $result = TreeToStringConverter::run($sine, $mathjax = true);
-    expect($result)->toBe('\text{sin}[45]');
+    $result = TreeToStringConverter::run($sine, $latex = true);
+    expect($result)->toBe('\text{sin}(45)');
 });
 
-it('can convert roots to mathjax', function () {
+it('can convert roots to latex', function () {
     $times = new Node('*');
     $times->appendChild(new Node(2));
     $root = $times->appendChild(new Node('root'));
@@ -202,23 +222,23 @@ it('can convert roots to mathjax', function () {
     $plus = $root->appendChild(new Node('+'));
     $plus->appendChild(new Node(2));
     $plus->appendChild(new Node(3));
-    $result = TreeToStringConverter::run($times, $mathjax = true);
+    $result = TreeToStringConverter::run($times, $latex = true);
     expect($result)->toBe('2\sqrt[2+3]{16}');
 
     // Square root
     $root = new Node('root');
     $root->appendChild(new Node(36));
     $root->appendChild(new Node(2));
-    $result = TreeToStringConverter::run($root, $mathjax = true);
+    $result = TreeToStringConverter::run($root, $latex = true);
     expect($result)->toBe('\sqrt{36}');
 });
 
-it('can convert powers to mathjax', function () {
+it('can convert powers to latex', function () {
     $power = new Node('^');
     $power->appendChild(new Node(9));
     $power->appendChild(new Node(3));
 
-    $result = TreeToStringConverter::run($power, $mathjax = true);
+    $result = TreeToStringConverter::run($power, $latex = true);
     expect($result)->toBe('9^{3}');
 });
 
@@ -227,16 +247,16 @@ it('replaces -+ by -', function () {
     $power->appendChild(new Node(9));
     $power->appendChild(new Node(-3));
 
-    $result = TreeToStringConverter::run($power, $mathjax = true);
+    $result = TreeToStringConverter::run($power, $latex = true);
     expect($result)->toBe('9-3');
 });
 
-it('can convert fractions to mathjax', function () {
+it('can convert fractions to latex', function () {
     $power = new Node('frac');
     $power->appendChild(new Node(3));
     $power->appendChild(new Node(9));
 
-    $result = TreeToStringConverter::run($power, $mathjax = true);
+    $result = TreeToStringConverter::run($power, $latex = true);
     expect($result)->toBe('\frac{3}{9}');
 });
 
@@ -247,7 +267,7 @@ it('removes times between fractions and letters', function () {
     $fraction->appendChild(new Node(2));
     $times->appendChild(new Node('y'));
 
-    $result = TreeToStringConverter::run($times, $mathjax = true);
+    $result = TreeToStringConverter::run($times, $latex = true);
     expect($result)->toBe('\frac{1}{2}y');
 });
 
@@ -258,17 +278,17 @@ it('removes the one between a minus and a function', function () {
     $sine->appendChild(new Node(45));
 
     $result = TreeToStringConverter::run($times);
-    expect($result)->toBe('-sin[45]');
+    expect($result)->toBe('-sin(45)');
 });
 
-it('removes the one between a minus and a function in mathjax', function () {
+it('removes the one between a minus and a function in latex', function () {
     $times = new Node('*');
     $times->appendChild(new Node(-1));
     $root = $times->appendChild(new Node('root'));
     $root->appendChild(new Node(5));
     $root->appendChild(new Node(2));
 
-    $result = TreeToStringConverter::run($times, $mathjax = true);
+    $result = TreeToStringConverter::run($times, $latex = true);
     expect($result)->toBe('-\sqrt{5}');
 });
 
@@ -278,8 +298,8 @@ it('converts to a differentiate function', function () {
     $power->appendChild(new Node('x'));
     $power->appendChild(new Node(5));
 
-    $result = TreeToStringConverter::run($deriv, $mathjax = true);
-    expect($result)->toBe('\tfrac{d}{dx}[x^{5}]');
+    $result = TreeToStringConverter::run($deriv, $latex = true);
+    expect($result)->toBe('\tfrac{d}{dx}(x^{5})');
 });
 
 it('converts to a differentiate function with respect to a variable', function () {
@@ -289,8 +309,8 @@ it('converts to a differentiate function with respect to a variable', function (
     $power->appendChild(new Node(2));
     $deriv->appendChild(new Node('y'));
 
-    $result = TreeToStringConverter::run($deriv, $mathjax = true);
-    expect($result)->toBe('\tfrac{d}{dy}[y^{2}]');
+    $result = TreeToStringConverter::run($deriv, $latex = true);
+    expect($result)->toBe('\tfrac{d}{dy}(y^{2})');
 });
 
 it('removes brackets around exponents', function () {
@@ -301,10 +321,10 @@ it('removes brackets around exponents', function () {
     $times->appendChild(new Node(7));
     $times->appendChild(new Node('x'));
 
-    $result = TreeToStringConverter::run($power, $mathjax = false);
+    $result = TreeToStringConverter::run($power, $latex = false);
     expect($result)->toBe('x^(7x)');
 
-    $result = TreeToStringConverter::run($power, $mathjax = true);
+    $result = TreeToStringConverter::run($power, $latex = true);
     expect($result)->toBe('x^{7x}');
 });
 
@@ -324,22 +344,22 @@ it('does not remove double brackets around exponents', function () {
     $rightPlus->appendChild(new Node('x'));
     $rightPlus->appendChild(new Node(-5));
 
-    $result = TreeToStringConverter::run($power, $mathjax = false);
+    $result = TreeToStringConverter::run($power, $latex = false);
     expect($result)->toBe('2^((x+3)(x-5))');
 
-    $result = TreeToStringConverter::run($power, $mathjax = true);
+    $result = TreeToStringConverter::run($power, $latex = true);
     expect($result)->toBe('2^{(x+3)(x-5)}');
 });
 
-it('converts logarithms with mathjax', function () {
+it('converts logarithms with latex', function () {
     $log = new Node('log');
     $log->appendChild(new Node(8));
     $log->appendChild(new Node(2));
 
-    $result = TreeToStringConverter::run($log, $mathjax = false);
-    expect($result)->toBe('log[8,2]');
+    $result = TreeToStringConverter::run($log, $latex = false);
+    expect($result)->toBe('log(8,2)');
 
-    $result = TreeToStringConverter::run($log, $mathjax = true);
+    $result = TreeToStringConverter::run($log, $latex = true);
     expect($result)->toBe('\log_{2}[8]');
 });
 
@@ -350,7 +370,7 @@ it('removes the times symbol between letters and roots', function () {
     $root->appendChild(new Node('y'));
     $root->appendChild(new Node(2));
 
-    $result = TreeToStringConverter::run($times, $mathjax = true);
+    $result = TreeToStringConverter::run($times, $latex = true);
     expect($result)->toBe('x\sqrt{y}');
 });
 
@@ -361,7 +381,7 @@ it('adds brackets around roots inside powers', function () {
     $root->appendChild(new Node(2));
     $power->appendChild(new Node(-1));
 
-    $result = TreeToStringConverter::run($power, $mathjax = true);
+    $result = TreeToStringConverter::run($power, $latex = true);
     expect($result)->toBe('(\sqrt{x})^{-1}');
 });
 
@@ -372,7 +392,7 @@ it('adds brackets around fractions inside powers', function () {
     $root->appendChild(new Node(2));
     $power->appendChild(new Node(4));
 
-    $result = TreeToStringConverter::run($power, $mathjax = true);
+    $result = TreeToStringConverter::run($power, $latex = true);
     expect($result)->toBe('\left(\frac{x}{2}\right)^{4}');
 });
 
@@ -384,7 +404,7 @@ it('removes times symbol between fractions and brackets', function () {
     $brackets = $times->appendChild(new Node('('));
     $brackets->appendChild(new Node('x'));
 
-    $result = TreeToStringConverter::run($times, $mathjax = true);
+    $result = TreeToStringConverter::run($times, $latex = true);
     expect($result)->toBe('\frac{1}{2}(x)');
 });
 
@@ -395,66 +415,66 @@ it('adds brackets around multiple powers', function () {
     $power->appendChild(new Node('y'));
     $power->appendChild(new Node('z'));
 
-    $result = TreeToStringConverter::run($root, $mathjax = true);
+    $result = TreeToStringConverter::run($root, $latex = true);
     expect($result)->toBe('x^{y^{z}}');
 });
 
 it('can convert fractions', function () {
     $tree = StringToTreeConverter::run('frac[3, 5]');
-    $result = TreeToStringConverter::run($tree, $mathjax = false);
+    $result = TreeToStringConverter::run($tree, $latex = false);
     expect($result)->toBe('3/5');
 });
 
 it('can parse non-numeric numerators', function () {
     $tree = StringToTreeConverter::run('frac[x + 3, 2]');
-    $result = TreeToStringConverter::run($tree, $mathjax = false);
+    $result = TreeToStringConverter::run($tree, $latex = false);
     expect($result)->toBe('(x+3)/2');
 });
 
 it('can parse non-numeric denominators', function () {
     $tree = StringToTreeConverter::run('frac[5, y - 3]');
-    $result = TreeToStringConverter::run($tree, $mathjax = false);
+    $result = TreeToStringConverter::run($tree, $latex = false);
     expect($result)->toBe('5/(y-3)');
 });
 
-it('adds larger brackets in mathjax around fractions', function () {
+it('adds larger brackets in latex around fractions', function () {
     $tree = StringToTreeConverter::run('sin[frac[x, y]]');
-    $result = TreeToStringConverter::run($tree, $mathjax = true);
-    expect($result)->toBe('\text{sin}\left[\frac{x}{y}\right]');
+    $result = TreeToStringConverter::run($tree, $latex = true);
+    expect($result)->toBe('\text{sin}\left(\frac{x}{y}\right)');
 });
 
-it('does not add larger brackets if there is no mathjax', function () {
+it('does not add larger brackets if there is no latex', function () {
     $tree = StringToTreeConverter::run('sin[frac[x, y]]');
-    $result = TreeToStringConverter::run($tree, $mathjax = false);
-    expect($result)->toBe('sin[x/y]');
+    $result = TreeToStringConverter::run($tree, $latex = false);
+    expect($result)->toBe('sin(x/y)');
 });
 
 it('adds larger brackets around the deriv function', function () {
     $tree = StringToTreeConverter::run('deriv[frac[x, y]]');
-    $result = TreeToStringConverter::run($tree, $mathjax = true);
-    expect($result)->toBe('\tfrac{d}{dx}\left[\frac{x}{y}\right]');
+    $result = TreeToStringConverter::run($tree, $latex = true);
+    expect($result)->toBe('\tfrac{d}{dx}\left(\frac{x}{y}\right)');
 });
 
-it('does not add larger brackets around the deriv function if there is no mathjax', function () {
+it('does not add larger brackets around the deriv function if there is no latex', function () {
     $tree = StringToTreeConverter::run('deriv[frac[x, y]]');
-    $result = TreeToStringConverter::run($tree, $mathjax = false);
-    expect($result)->toBe('deriv[x/y]');
+    $result = TreeToStringConverter::run($tree, $latex = false);
+    expect($result)->toBe('deriv(x/y)');
 });
 
 it('adds larger brackets around fractions', function () {
     $tree = StringToTreeConverter::run('(frac[2, 3])');
-    $result = TreeToStringConverter::run($tree, $mathjax = true);
+    $result = TreeToStringConverter::run($tree, $latex = true);
     expect($result)->toBe('\left(\frac{2}{3}\right)');
 });
 
-it('does not add larger brackets around fractions if there is no mathjax', function () {
+it('does not add larger brackets around fractions if there is no latex', function () {
     $tree = StringToTreeConverter::run('(frac[2, 3])');
-    $result = TreeToStringConverter::run($tree, $mathjax = false);
+    $result = TreeToStringConverter::run($tree, $latex = false);
     expect($result)->toBe('(2/3)');
 });
 
 it('removes negative one times a bracket', function () {
     $tree = StringToTreeConverter::run('-1(x)');
-    $result = TreeToStringConverter::run($tree, $mathjax = false);
+    $result = TreeToStringConverter::run($tree, $latex = false);
     expect($result)->toBe('-(x)');
 });
