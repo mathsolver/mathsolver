@@ -54,7 +54,7 @@ class Runner
     /**
      * Run all steps to simplify, differentiate and solve.
      */
-    public static function run(Node $tree, bool $mathjax = false): array
+    public static function run(Node $tree, bool $mathjax = false): Node
     {
         $steps = [];
         $oldTree = '';
@@ -76,6 +76,7 @@ class Runner
             }
         }
 
+        return $tree;
         return ['result' => $tree, 'steps' => $steps];
     }
 }

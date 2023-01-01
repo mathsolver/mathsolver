@@ -8,23 +8,18 @@ use MathSolver\Simplify\AddLikeTerms;
 use MathSolver\Simplify\RemoveBrackets;
 
 it('can simplify expressions', function () {
-    $result = (new Math('2x + 9x'))->simplify()->string();
+    $result = Math::simplify('2x + 9x')->string();
     expect($result)->toBe('11x');
 });
 
-it('can be instantiated from a static method', function () {
-    $result = Math::from('2x + 3x')->simplify()->string();
-    expect($result)->toBe('5x');
-});
-
 it('converts automatically to a string', function () {
-    $result = (string) Math::from('7x * 3')->simplify();
+    $result = (string) Math::simplify('7x * 3');
     expect($result)->toBe('21x');
 });
 
 it('has mathjax disabled by default', function () {
-    $result = Math::from('sqrt[18]')->simplify()->string();
-    expect($result)->toBe('3root[2,2]');
+    $result = Math::simplify('sqrt(18)')->string();
+    expect($result)->toBe('3sqrt(2)');
 });
 
 it('can use mathjax', function () {
