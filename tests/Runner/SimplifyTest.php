@@ -150,7 +150,7 @@ it('simplifies products and adds like terms', function (string $input, string $e
     ['3a - 2b - 2b - a + 5b - 2b', '2a - b'],
 ]);
 
-it('expands brackets', function (string $input, string $expected) {
+it('expands single brackets', function (string $input, string $expected) {
     $tree = StringToTreeConverter::run($input);
     $result = Runner::run($tree)['result'];
     $expected = StringToTreeConverter::run($expected);
