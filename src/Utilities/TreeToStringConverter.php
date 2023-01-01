@@ -11,17 +11,17 @@ class TreeToStringConverter
      *
      * This class uses recursion methods to get all children.
      */
-    public static function run(Node $node, bool $mathjax = false): string
+    public static function run(Node $node, bool $latex = false): string
     {
         // Return the value if the node is empty
         if ($node->children()->isEmpty()) {
             return $node->value();
         }
 
-        $children = $node->children()->map(fn ($child) => self::run($child, $mathjax))->sort()->implode('');
+        $children = $node->children()->map(fn ($child) => self::run($child, $latex))->sort()->implode('');
 
         if ($node->value() === '*') {
-            return Str::of($node->children()->map(fn ($child) => self::run($child, $mathjax))->implode('*'))
+            return Str::of($node->children()->map(fn ($child) => self::run($child, $latex))->implode('*'))
                 ->replaceMatches('/([0-9a-z}])\*(\x5c)sqrt/', '$1$2sqrt') // Remove * symbol for roots
                 ->replaceMatches('/(\x5cfrac{.+}{.+})\*([a-z])/', '$1$2') // Remove * symbol between fractions and letters
                 ->replaceMatches('/([a-z0-9}])\*\(/', '$1(') // Remove * symbol between numbers/letters and (
@@ -33,47 +33,47 @@ class TreeToStringConverter
         }
 
         if (in_array($node->value(), StringToTreeConverter::$functions)) {
-            if ($mathjax && $node->value() === 'root') {
-                $base = self::run($node->child(0), $mathjax);
-                $degree = self::run($node->child(-1), $mathjax);
+            if ($latex && $node->value() === 'root') {
+                $base = self::run($node->child(0), $latex);
+                $degree = self::run($node->child(-1), $latex);
 
                 return $degree == 2
                     ? "\\sqrt{{$base}}"
                     : "\\sqrt[{$degree}]{{$base}}";
             }
 
-            if ($mathjax && $node->value() === 'frac') {
-                $numerator = self::run($node->child(0), $mathjax);
-                $denominator = self::run($node->child(-1), $mathjax);
+            if ($latex && $node->value() === 'frac') {
+                $numerator = self::run($node->child(0), $latex);
+                $denominator = self::run($node->child(-1), $latex);
                 return "\\frac{{$numerator}}{{$denominator}}";
             }
 
-            if (!$mathjax && $node->value() === 'frac') {
+            if (!$latex && $node->value() === 'frac') {
                 return self::convertFractions($node);
             }
 
-            if ($mathjax && $node->value() === 'deriv') {
-                $inside = self::run($node->child(0), $mathjax);
+            if ($latex && $node->value() === 'deriv') {
+                $inside = self::run($node->child(0), $latex);
                 $respect = $node->child(1)?->value() ?? 'x';
                 $isFraction = $node->contains('frac');
                 return '\tfrac{d}{d' . $respect . '}' . ($isFraction ? '\left[' : '[') . $inside . ($isFraction ? '\right]' : ']');
             }
 
-            if ($mathjax && $node->value() === 'log') {
-                $base = self::run($node->child(1), $mathjax);
-                $parameter = self::run($node->child(0), $mathjax);
+            if ($latex && $node->value() === 'log') {
+                $base = self::run($node->child(1), $latex);
+                $parameter = self::run($node->child(0), $latex);
                 return '\log_{' . $base . '}[' . $parameter . ']';
             }
 
-            $children = $node->children()->map(fn ($child) => self::run($child, $mathjax))->implode(',');
-            $isFraction = $node->contains('frac') && $mathjax;
-            return ($mathjax ? '\text{' . $node->value() . '}' : $node->value()) . ($isFraction ? '\left[' : '[') . $children . ($isFraction ? '\right]' : ']');
+            $children = $node->children()->map(fn ($child) => self::run($child, $latex))->implode(',');
+            $isFraction = $node->contains('frac') && $latex;
+            return ($latex ? '\text{' . $node->value() . '}' : $node->value()) . ($isFraction ? '\left[' : '[') . $children . ($isFraction ? '\right]' : ']');
         }
 
-        if ($mathjax && $node->value() === '^') {
-            $base = self::run($node->child(0), $mathjax);
+        if ($latex && $node->value() === '^') {
+            $base = self::run($node->child(0), $latex);
 
-            $exponent = self::run($node->child(-1), $mathjax);
+            $exponent = self::run($node->child(-1), $latex);
 
             if (str_starts_with($exponent, '(')) {
                 $exponent = substr($exponent, 1);
@@ -94,13 +94,13 @@ class TreeToStringConverter
 
         // Return a string of all children when the node is not empty
         return $node->children() // Get all children
-            ->map(fn ($child) => self::run($child, $mathjax)) // Get all children recursive
+            ->map(fn ($child) => self::run($child, $latex)) // Get all children recursive
             ->map(fn ($child) => $child . $node->value()) // Appendd the parent node value
             ->pipe(fn ($children) => Str::of(implode('', $children->toArray()))) // Convert to a string
             ->rtrim($node->value()) // Remove the last parent node value (3+4+ -> 3+4)
             ->replace('+-', '-')
-            ->when($node->value() == '(', function (string $string) use ($node, $mathjax) {  // Add brackets if necessary
-                return $node->contains('frac') && $mathjax ? '\left('.$string.'\right)' : "({$string})";
+            ->when($node->value() == '(', function (string $string) use ($node, $latex) {  // Add brackets if necessary
+                return $node->contains('frac') && $latex ? '\left('.$string.'\right)' : "({$string})";
             });
     }
 
