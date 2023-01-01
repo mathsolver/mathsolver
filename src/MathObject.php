@@ -24,6 +24,11 @@ class MathObject
         return TreeToStringConverter::run($this->tree);
     }
 
+    public function latex(): string
+    {
+        return TreeToStringConverter::run($this->tree, true);
+    }
+
     public function simplify(): self
     {
         $this->tree = Runner::run($this->tree);
